@@ -2,10 +2,10 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function ServiceMain() {
+export default function ChatMain() {
   return (
     <View style={styles.container}>
-      <Text>Open up ServiceMain.jsx to start working on your app!</Text>
+      <Text>Open up ChatMain.jsx to start working on your app!</Text>
       <StatusBar style='auto' />
     </View>
   );
