@@ -2,10 +2,10 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function MapMain() {
+export default function SearchMain() {
   return (
     <View style={styles.container}>
-      <Text>Open up MapMain.jsx to start working on your app!</Text>
+      <Text>Open up SearchMain.jsx to start working on your app!</Text>
       <StatusBar style='auto' />
     </View>
   );
