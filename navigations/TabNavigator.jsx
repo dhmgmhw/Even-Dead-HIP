@@ -19,18 +19,18 @@ const TabNavigator = () => {
         tabBarIcon: ({ focused }) => {
           let iconName = Platform.OS === 'ios' ? 'ios-' : 'md-';
           if (route.name === 'HomeMain') {
-            iconName += 'home-outline';
+            iconName += 'home';
           } else if (route.name === 'SearchMain') {
             iconName += 'search-outline';
           } else if (route.name === 'ChatMain') {
-            iconName += 'chatbox-outline';
+            iconName += 'chatbox';
           } else if (route.name === 'MyPageMain') {
-            iconName += 'library-outline';
+            iconName += 'library';
           }
           return (
             <Ionicons
               name={iconName}
-              color={focused ? 'black' : 'lightgrey'}
+              color={focused ? '#6864FF' : 'lightgrey'}
               size={26}
             />
           );
