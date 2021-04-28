@@ -14,7 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
-export default function ChatMain({ navigation }) {
+export default function ChatPage({ navigation }) {
   return (
     <>
       <Header
@@ -24,11 +24,17 @@ export default function ChatMain({ navigation }) {
           alignSelf: 'center',
           borderBottomWidth: 1,
         }}
-        leftComponent={''}
-        centerComponent={{
-          text: '채팅',
-          style: { fontSize: 20, fontWeight: '800' },
-        }}
+        leftComponent={
+          <Ionicons
+            onPress={() => {
+              navigation.goBack();
+            }}
+            name={'chevron-back'}
+            size={27}
+            color={'black'}
+          />
+        }
+        centerComponent={''}
         rightComponent={
           <Ionicons
             name={'search'}
@@ -37,16 +43,17 @@ export default function ChatMain({ navigation }) {
           />
         }
       />
+      <View style={styles.chatInfoBox}>
+        <View style={styles.bookBox}></View>
+        <View style={styles.userBox}></View>
+        <View style={styles.descBox}></View>
+      </View>
       <ScrollView style={styles.container}>
-        <Pressable
-          style={styles.chatBox}
-          onPress={() => {
-            navigation.navigate('ChatPage', navigation);
-          }}>
+        <View style={styles.chatBox}>
           <View style={styles.userBox}></View>
           <View style={styles.descBox}></View>
           <View style={styles.bookBox}></View>
-        </Pressable>
+        </View>
       </ScrollView>
     </>
   );
@@ -54,6 +61,13 @@ export default function ChatMain({ navigation }) {
 
 const styles = StyleSheet.create({
   container: { backgroundColor: 'white' },
+  chatInfoBox: {
+    width: diviceWidth,
+    height: 80,
+    borderWidth: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   chatBox: {
     width: diviceWidth,
     height: 80,
