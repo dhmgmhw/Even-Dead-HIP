@@ -91,7 +91,11 @@ export default function PostDetailPage({ navigation, route }) {
           <Text style={styles.bookDesc}>{detailData.description}</Text>
         </View>
       </ScrollView>
-      <Pressable style={styles.chatBox}>
+      <Pressable
+        style={styles.chatBox}
+        onPress={() => {
+          navigation.navigate('ChatPage');
+        }}>
         <Text
           style={{
             fontSize: 23,
