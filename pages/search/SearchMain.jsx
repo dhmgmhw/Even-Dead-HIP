@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Dimensions, ScrollView } from 'react-native';
 import { Header } from 'react-native-elements';
+import { Fab, Button, Icon } from 'native-base';
 
 import { Ionicons } from '@expo/vector-icons';
 
@@ -13,6 +14,7 @@ const diviceHeight = Dimensions.get('window').height;
 
 export default function SearchMain({ navigation }) {
   const [posts, setPosts] = useState(mocklist);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     // console.log(posts);
@@ -55,6 +57,24 @@ export default function SearchMain({ navigation }) {
           })}
         </Grid>
       </ScrollView>
+      <Fab
+        active={open}
+        direction='up'
+        containerStyle={{}}
+        style={{ backgroundColor: '#5067FF' }}
+        position='bottomRight'
+        onPress={() => (open ? setOpen(false) : setOpen(true))}>
+        <Icon name={'add'} />
+        <Button style={{ backgroundColor: '#34A34F' }}>
+          <Icon name='logo-whatsapp' />
+        </Button>
+        <Button style={{ backgroundColor: '#3B5998' }}>
+          <Icon name='logo-facebook' />
+        </Button>
+        <Button style={{ backgroundColor: '#DD5144' }}>
+          <Icon name='mail' />
+        </Button>
+      </Fab>
     </>
   );
 }
