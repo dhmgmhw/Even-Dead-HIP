@@ -91,17 +91,22 @@ export default function AddPage({ navigation }) {
         />
       </Item>
       <ScrollView>
-        {books.thumbnail == undefined ? <Text>없음</Text> : <Text>있음</Text>}
+        {books == '' ? <Text>없음</Text> : <Text>있음</Text>}
 
         {books.map((book, i) => {
+          const bookCover =
+            book.thumbnail == ''
+              ? require('../../assets/basicbookcover.png')
+              : { uri: book.thumbnail };
           return (
             <View key={i}>
               <Text>{book.title}</Text>
               <Text>{book.authors}</Text>
+              <Text>{book.contents}</Text>
               <Image
                 style={{ width: 100, height: 100 }}
                 resizeMode='contain'
-                source={{ uri: book.thumbnail }}
+                source={bookCover}
               />
             </View>
           );

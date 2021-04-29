@@ -1,25 +1,30 @@
 import React from 'react';
-import { StyleSheet, View, Dimensions, Image, Pressable } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  Image,
+  Pressable,
+  Text,
+} from 'react-native';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
-export default function PostComponent({ navigation, post }) {
+export default function OurTownComponent({ navigation, post }) {
   return (
     <Pressable
       onPress={() => {
         navigation.navigate('PostDetailPage', post);
       }}>
       <View style={styles.card}>
-        <View style={{ zIndex: 2 }}>
+        <View>
           <Image
             style={styles.cardImage}
             resizeMode='cover'
             source={{ uri: post.image }}
           />
         </View>
-        <View style={styles.cardBackBox}></View>
-        <View style={styles.cardBottomBox}></View>
       </View>
     </Pressable>
   );
@@ -27,8 +32,7 @@ export default function PostComponent({ navigation, post }) {
 
 const styles = StyleSheet.create({
   card: {
-    marginVertical: 20,
-    width: diviceWidth / 3,
+    width: 130,
     height: 170,
     shadowColor: '#000',
     shadowOffset: {
@@ -39,24 +43,14 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
   },
   cardImage: {
-    width: 90,
-    height: 130,
+    width: 110,
+    height: 160,
     borderRadius: 5,
     alignSelf: 'center',
   },
-  cardBackBox: {
-    height: 10,
-    width: 100,
-    backgroundColor: '#DBDBDB',
+  cardTitleBox: {
+    width: 130,
     alignSelf: 'center',
-    position: 'absolute',
-    top: 125,
-  },
-  cardBottomBox: {
-    height: 10,
-    width: 90,
-    alignSelf: 'center',
-    top: 5,
-    backgroundColor: '#c8c8c8',
+    marginTop: 7,
   },
 });

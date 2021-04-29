@@ -4,8 +4,8 @@ import { Platform } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import HomeMain from '../pages/home/HomeMain';
-import ChatMain from '../pages/chat/ChatMain';
 import SearchMain from '../pages/search/SearchMain';
+import ChatMain from '../pages/chat/ChatMain';
 import MyPageMain from '../pages/mypage/MyPageMain';
 
 import { Ionicons } from '@expo/vector-icons';
