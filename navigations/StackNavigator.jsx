@@ -6,6 +6,7 @@ import TabNavigator from './TabNavigator';
 // import SignUpPage from '../pages/login/SignUnPage';
 import PostDetailPage from '../pages/search/PostDetailPage';
 import ChatPage from '../pages/chat/ChatPage';
+import AddPage from '../pages/search/AddPage';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,7 @@ const StackNavigator = () => {
       <Stack.Screen name='SignUpPage' component={SignUpPage} /> */}
       <Stack.Screen name='PostDetailPage' component={PostDetailPage} />
       <Stack.Screen name='ChatPage' component={ChatPage} />
+      <Stack.Screen name='AddPage' component={AddPage} />
     </Stack.Navigator>
   );
 };
