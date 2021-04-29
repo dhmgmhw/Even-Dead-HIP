@@ -41,7 +41,7 @@ export default function ChatMain({ navigation }) {
         <Pressable
           style={styles.chatBox}
           onPress={() => {
-            navigation.navigate('ChatPage', navigation);
+            navigation.navigate('ChatPage');
           }}>
           <View style={styles.userBox}></View>
           <View style={styles.descBox}></View>

@@ -13,7 +13,7 @@ const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
 export default function ChatInputComponent() {
-  const [text, setText] = useState('메시지를 입력하세요');
+  const [text, setText] = useState('');
 
   const leaveMessage = async () => {
     await console.log('Hey');
