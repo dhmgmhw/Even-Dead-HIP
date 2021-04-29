@@ -5,9 +5,6 @@ import {
   View,
   Dimensions,
   ScrollView,
-  Pressable,
-  TextInput,
-  KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
