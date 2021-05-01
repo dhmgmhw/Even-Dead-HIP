@@ -86,9 +86,22 @@ export default function PostDetailPage({ navigation, route }) {
           <Image style={styles.bookImage} resizeMode='cover' source={image} />
         </View>
         <View style={styles.container}>
+          <Text style={styles.bookCate}>카테고리 {'>'} 인문</Text>
           <Text style={styles.bookTitle}>{detailData.title}</Text>
           <Text style={styles.bookAuthor}>{detailData.author}</Text>
+          <View
+            style={{
+              width: diviceWidth * 0.95,
+              height: 10,
+              backgroundColor: '#f3f3f3',
+              alignSelf: 'center',
+            }}></View>
+          <Text style={styles.subTitle}>작품소개</Text>
           <Text style={styles.bookDesc}>{detailData.description}</Text>
+          <Text style={styles.subTitle}>도서추천</Text>
+          <Text style={styles.bookDesc}>
+            여러분 꼭 한번 시간내서 보십쇼 정말 재밌습니다...
+          </Text>
         </View>
       </ScrollView>
       <Pressable
@@ -113,13 +126,10 @@ export default function PostDetailPage({ navigation, route }) {
 
 const styles = StyleSheet.create({
   bookImageBox: {
-    position: 'absolute',
     height: 250,
     width: diviceWidth / 2.5,
     alignSelf: 'center',
-    top: diviceHeight / 9,
     borderRadius: 5,
-    zIndex: 1,
     shadowColor: '#000',
     shadowOffset: {
       width: 1,
@@ -127,6 +137,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.5,
     shadowRadius: 5,
+    marginBottom: 15,
   },
   bookImage: {
     height: '100%',
@@ -134,19 +145,19 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   container: {
-    top: diviceHeight / 4,
     alignSelf: 'center',
     width: diviceWidth * 0.95,
     height: diviceHeight,
     backgroundColor: 'white',
-    borderRadius: 5,
+    borderRadius: 15,
     padding: 20,
-    paddingTop: 40,
+    marginBottom: 80,
   },
   bookTitle: {
     fontSize: 25,
     fontWeight: '700',
   },
+  subTitle: { fontSize: 20, fontWeight: '700' },
   chatBox: {
     width: diviceWidth,
     height: 70,
