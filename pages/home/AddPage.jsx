@@ -6,32 +6,123 @@ import {
   Dimensions,
   ScrollView,
   TextInput,
-  TouchableWithoutFeedback,
   Image,
   Pressable,
+  Keyboard,
 } from 'react-native';
-import { Header } from 'react-native-elements';
+import { Header, Overlay } from 'react-native-elements';
 import { Item } from 'native-base';
+
+import * as ImagePicker from 'expo-image-picker';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 import { Ionicons } from '@expo/vector-icons';
 import { getSearchBook } from '../../config/KakaoApi';
+import KakaoResultCardComponent from '../../components/home/KakaoResultCardComponent';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
 export default function AddPage({ navigation }) {
   const [text, setText] = useState();
+  const [bookTitle, setBookTitle] = useState('도서명 검색하기');
+
+  // 보낼거
+  const [title, setTitle] = useState('제목');
+  const [author, setAuthor] = useState('작가');
+  const [bookImg, setBookImg] = useState();
+  const [story, setStory] = useState();
+  const [publisher, setPublisher] = useState('출판사');
+  const [imageUri, setImageUri] = useState('');
+  const [genreInfo, setGenreInfo] = useState();
+  const [stateInfo, setStateInfo] = useState();
+  const [contentInfo, setContentInfo] = useState();
+
+  const [finderOpen, setFinderOpen] = useState(false);
+
   const [books, setBooks] = useState([]);
+
+  const toggleFinder = () => {
+    setFinderOpen(!finderOpen);
+  };
+
+  const submitInfo = () => {
+    console.log(
+      title,
+      bookImg,
+      author,
+      story,
+      genreInfo,
+      stateInfo,
+      contentInfo
+    );
+  };
 
   const bookTitleSearch = async () => {
     const result = await getSearchBook(text);
-    // console.log(result.documents);
     setBooks(result.documents);
+    Keyboard.dismiss();
     console.log(books);
   };
 
+  const getPermission = async () => {
+    if (Platform.OS !== 'web') {
+      const {
+        status,
+      } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        alert('사진을 업로드하려면 사진첩 권한이 필요합니다.');
+      }
+    }
+  };
+
+  const getImageUrl = async (imageData) => {
+    setImageUri(imageData.uri);
+  };
+
+  const pickImage = async () => {
+    let imageData = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 0.5,
+    });
+    if (imageData.cancelled == false) {
+      getImageUrl(imageData);
+      console.log(imageData);
+    } else {
+      console.log('cancelled!');
+    }
+  };
+
+  // const upload = async () => {
+  //   console.log('업로드 준비중!');
+  //   let data = {
+  //     title: title,
+  //     author: author,
+  //     bookImg: bookImg,
+  //     story: story,
+  //     genreInfo: genreInfo,
+  //     stateInfo: stateInfo,
+  //     contentInfo: contentInfo,
+  //   };
+  //   const response = await fetch(imageUri);
+  //   const blob = await response.blob();
+  //   const imageUrl = await imageUpload(blob);
+  //   data.image = imageUrl;
+  //   let result = await addDiary(data);
+  //   // 만약 올린게 정상적으로 true라는 값을 내려준다면!
+  //   if (result) {
+  //     Alert.alert('글이 성공적으로 등록되었습니다!');
+  //   }
+  // };
+
+  useEffect(() => {
+    getPermission();
+  }, []);
+
   return (
-    <View>
+    <View style={{ backgroundColor: 'white' }}>
       <Header
         containerStyle={{
           backgroundColor: 'white',
@@ -39,135 +130,258 @@ export default function AddPage({ navigation }) {
           borderBottomWidth: 1,
         }}
         leftComponent={
-          <Ionicons
+          <Text
             onPress={() => {
               navigation.goBack();
             }}
-            name={'chevron-back'}
-            size={27}
-            color={'black'}
-          />
+            style={styles.headerBtns}>
+            취소
+          </Text>
         }
-        centerComponent={'새로운 글'}
+        centerComponent={<Text style={styles.headerTitle}>도서등록</Text>}
         rightComponent={
-          <Ionicons
-            name={'search'}
-            size={27}
-            style={{ marginHorizontal: 10 }}
-          />
+          <Text
+            onPress={submitInfo}
+            style={[styles.headerBtns, { color: '#6864FF' }]}>
+            등록
+          </Text>
         }
       />
-      <Pressable
-        onPress={() => {
-          console.log('WTF');
-        }}
-        style={styles.chatInfoBox}>
-        <View style={styles.bookBox}></View>
-        <View style={styles.userBox}></View>
-        <View style={styles.descBox}></View>
-      </Pressable>
-      <Item style={styles.messageBox}>
-        <TextInput
-          style={{
-            paddingLeft: 20,
-            backgroundColor: '#eeeeee',
-            margin: 7,
-            height: 40,
-            borderWidth: 1,
-            borderColor: 'lightgrey',
-            borderRadius: 100,
-            width: diviceWidth * 0.8,
-          }}
-          onChangeText={setText}
-          value={text}
-          placeholder='메시지를 입력하세요'
-        />
+      <View style={styles.addPicsBox}>
+        {imageUri == '' ? (
+          <Pressable style={styles.bookPicBox} onPress={pickImage}>
+            <Text>+</Text>
+          </Pressable>
+        ) : (
+          <Pressable onPress={pickImage}>
+            <Image source={{ uri: imageUri }} style={styles.bookPicBox} />
+          </Pressable>
+        )}
+        <View>
+          <View style={styles.descBox}>
+            <Text>0/10</Text>
+          </View>
+          <View style={styles.descBox}>
+            <Text>도서의 상태가 잘 보이게 찍어주세요</Text>
+          </View>
+        </View>
+      </View>
+      <Text
+        style={{
+          fontSize: 20,
+          fontWeight: '700',
+          padding: 15,
+          paddingVertical: 10,
+        }}>
+        도서 제목
+      </Text>
+      <Pressable style={styles.bookSearchOpener} onPress={toggleFinder}>
+        <Text>{bookTitle}</Text>
         <Ionicons
           active
           onPress={bookTitleSearch}
           name='search'
-          size={27}
-          style={{ marginHorizontal: 10, color: '#202540' }}
+          size={20}
+          style={{ marginHorizontal: 10, color: 'grey' }}
         />
-      </Item>
-      <ScrollView>
-        {books == '' ? <Text>없음</Text> : <Text>있음</Text>}
+      </Pressable>
+      <View>
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: '700',
+            padding: 15,
+            paddingVertical: 10,
+          }}>
+          {title}
+        </Text>
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: '700',
+            padding: 15,
+            paddingVertical: 10,
+          }}>
+          {author}
+        </Text>
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: '700',
+            padding: 15,
+            paddingVertical: 10,
+          }}>
+          {publisher}
+        </Text>
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: '700',
+            padding: 15,
+            paddingVertical: 10,
+          }}>
+          {genreInfo}
+        </Text>
+        <Image
+          style={{ width: 200, height: 200 }}
+          resizeMode='contain'
+          source={
+            bookImg ? { uri: bookImg } : require('../../assets/nodata.png')
+          }
+        />
+        <View style={{ flexDirection: 'row' }}>
+          <DropDownPicker
+            items={[
+              { label: '수필', value: '수필' },
+              { label: '문학', value: '문학' },
+              { label: '언어', value: '언어' },
+              { label: '철학', value: '철학' },
+              { label: '만화', value: '만화' },
+              { label: '예술', value: '예술' },
+              { label: '종교', value: '종교' },
+              { label: '역사', value: '역사' },
+              { label: '만화', value: '만화' },
+              { label: '기타', value: '기타' },
+            ]}
+            labelStyle={{ fontFamily: 'SCDream3' }}
+            placeholder='카테고리를 선택해주세요'
+            containerStyle={{ height: 40, width: '50%' }}
+            onChangeItem={(item) => {
+              setGenreInfo(item.value);
+            }}
+          />
+          <DropDownPicker
+            items={[
+              { label: 'S', value: 'S' },
+              { label: 'A', value: 'A' },
+              { label: 'B', value: 'B' },
+              { label: 'C', value: 'C' },
+            ]}
+            labelStyle={{ fontFamily: 'SCDream3' }}
+            placeholder='상태를 선택해주세요'
+            containerStyle={{ height: 40, width: '50%' }}
+            onChangeItem={(item) => {
+              setStateInfo(item.value);
+            }}
+          />
+        </View>
+        <TextInput
+          style={styles.bookTitleBox}
+          onChangeText={setContentInfo}
+          value={contentInfo}
+          placeholder='책 간단 소개'
+        />
+      </View>
 
-        {books.map((book, i) => {
-          const bookCover =
-            book.thumbnail == ''
-              ? require('../../assets/basicbookcover.png')
-              : { uri: book.thumbnail };
-          return (
-            <View key={i}>
-              <Text>{book.title}</Text>
-              <Text>{book.authors}</Text>
-              <Text>{book.contents}</Text>
-              <Image
-                style={{ width: 100, height: 100 }}
-                resizeMode='contain'
-                source={bookCover}
+      <Overlay
+        overlayStyle={styles.overlayBox}
+        isVisible={finderOpen}
+        onBackdropPress={toggleFinder}>
+        <View
+          style={{ borderWidth: 2, borderColor: '#6864FF', marginBottom: 20 }}>
+          <Item>
+            <TextInput
+              style={styles.bookTitleBox}
+              onChangeText={setText}
+              value={text}
+              placeholder='도서명 입력하기'
+            />
+            <View style={styles.bookSearchBtn}>
+              <Ionicons
+                active
+                onPress={bookTitleSearch}
+                name='search'
+                size={20}
+                style={{ alignSelf: 'center', color: 'grey' }}
               />
             </View>
-          );
-        })}
-      </ScrollView>
+          </Item>
+        </View>
+        <View style={{ height: '90%' }}>
+          {books == '' ? (
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+              <Image
+                style={{ width: 200, height: 200, top: 120, opacity: 0.2 }}
+                resizeMode='contain'
+                source={require('../../assets/nodata.png')}
+              />
+            </View>
+          ) : (
+            <ScrollView>
+              {books.map((book, i) => {
+                return (
+                  <Pressable
+                    key={i}
+                    onPress={() => {
+                      setTitle(book.title);
+                      setAuthor(book.authors);
+                      setBookImg(book.thumbnail);
+                      setStory(book.contents);
+                      setPublisher(book.publisher);
+                      setFinderOpen(false);
+                    }}>
+                    <KakaoResultCardComponent book={book} />
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
+          )}
+        </View>
+      </Overlay>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { backgroundColor: 'white' },
-  chatInfoBox: {
-    width: diviceWidth,
-    height: 80,
-    borderWidth: 2,
-    flexDirection: 'row',
-    alignItems: 'center',
+  headerTitle: {
+    fontSize: 16,
   },
-  userBox: {
-    width: 60,
-    height: 60,
-    borderRadius: 100,
-    backgroundColor: 'grey',
+  headerBtns: {
+    paddingHorizontal: 10,
+    fontSize: 16,
+  },
+  container: { backgroundColor: 'white' },
+  addPicsBox: {
+    width: diviceWidth,
+    height: 130,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    flexDirection: 'row',
+  },
+  bookPicBox: {
+    width: 100,
+    height: 100,
+    margin: 15,
+    borderRadius: 5,
+    backgroundColor: '#C4C4C4',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   descBox: {
-    width: '60%',
-    height: 70,
+    width: 240,
+    height: '50%',
     backgroundColor: 'lightgrey',
   },
-  bookBox: {
-    width: 60,
-    height: 70,
-    backgroundColor: 'grey',
-  },
-  oppositeChatBox: {
+  bookSearchOpener: {
+    backgroundColor: '#e3e3e3',
     width: diviceWidth,
-    height: 80,
-    borderWidth: 2,
-    marginTop: 10,
+    height: 55,
+    marginBottom: 10,
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
-  myChatBox: {
-    width: diviceWidth,
-    height: 80,
-    borderWidth: 2,
-    marginTop: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
+  overlayBox: {
+    width: diviceWidth * 0.9,
+    height: diviceHeight * 0.7,
+    padding: 30,
   },
-  oppositeUserBox: {
-    width: 60,
-    height: 60,
-    borderRadius: 100,
-    backgroundColor: 'grey',
+  bookTitleBox: {
+    paddingLeft: 20,
+    height: 50,
+    width: '85%',
   },
-  oppositeTextBox: {
-    width: '60%',
-    height: 70,
-    backgroundColor: 'lightgrey',
+  bookSearchBtn: {
+    width: '15%',
   },
-  myTextBox: { width: '60%', height: 70, backgroundColor: 'lightgrey' },
 });
