@@ -15,10 +15,6 @@ const diviceHeight = Dimensions.get('window').height;
 export default function OurTownPage({ navigation }) {
   const [posts, setPosts] = useState(mocklist);
 
-  useEffect(() => {
-    // console.log(posts);
-  }, []);
-
   return (
     <>
       <Header
@@ -39,19 +35,10 @@ export default function OurTownPage({ navigation }) {
           text: '우리 동네 책장',
           style: { fontSize: 20, fontWeight: '800' },
         }}
-        rightComponent={
-          <View style={{ flexDirection: 'row' }}>
-            <Ionicons
-              name={'heart-outline'}
-              size={27}
-              style={{ marginHorizontal: 10 }}
-            />
-            <Ionicons name={'bookmark-outline'} size={27} />
-          </View>
-        }
+        rightComponent={''}
       />
       <ScrollView style={styles.container}>
-        <Grid style={{ flexWrap: 'wrap', marginTop: 30 }}>
+        <Grid style={{ flexWrap: 'wrap' }}>
           {posts.map((post, i) => {
             return (
               <PostComponent key={i} navigation={navigation} post={post} />
@@ -66,6 +53,6 @@ export default function OurTownPage({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    marginBottom: 20,
+    marginBottom: 25,
   },
 });
