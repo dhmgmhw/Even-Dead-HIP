@@ -21,91 +21,100 @@ const diviceHeight = Dimensions.get('window').height;
 export default function HomeMain({ navigation }) {
   const [posts, setPosts] = useState(mocklist);
 
-  useEffect(() => {
-    // console.log(posts);
-  }, []);
+  // useEffect(() => {
+  //  console.log(posts);
+  // }, []);
 
   return (
     <>
       <Header
         containerStyle={{
           backgroundColor: 'white',
-          alignSelf: 'center',
         }}
-        leftComponent={{
-          text: '송파구',
-          style: { fontSize: 20, fontWeight: '800' },
-        }}
+        leftComponent={
+          <Ionicons
+            name={'notifications-outline'}
+            size={25}
+            style={{ paddingHorizontal: 10 }}
+          />
+        }
         centerComponent={{
-          text: '니책내책',
-          style: { fontSize: 20, fontWeight: '800' },
+          text: '송파구',
+          style: { fontSize: 20, fontFamily: 'SCDream5', top: 3 },
         }}
-        rightComponent={''}
+        rightComponent={
+          <Ionicons
+            name={'search-outline'}
+            size={25}
+            style={{ paddingHorizontal: 10 }}
+          />
+        }
       />
-      <View
-        style={{
-          width: diviceWidth * 0.9,
-          height: 150,
-          backgroundColor: 'grey',
-          alignSelf: 'center',
-          marginVertical: 30,
-          borderRadius: 5,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <Text style={{ fontSize: 17 }}>자체제작 컨텐츠??</Text>
-      </View>
-      <View style={styles.subTitleBox}>
-        <Text style={{ fontSize: 20, fontWeight: '600' }}>우리 동네 책장</Text>
-        <Pressable
-          onPress={() => {
-            navigation.navigate('OurTownPage');
-          }}
-          style={styles.subTitleBtn}>
-          <Text
-            style={{ fontSize: 17, fontWeight: '600', top: 5, color: 'grey' }}>
-            {'>>'}
-          </Text>
-        </Pressable>
-      </View>
-      <View>
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          style={styles.ourTown}>
-          {posts.map((post, i) => {
-            return (
-              <OurTownComponent key={i} navigation={navigation} post={post} />
-            );
-          })}
-        </ScrollView>
-        <View style={styles.subTitleBox}>
-          <Text style={{ fontSize: 20, fontWeight: '600' }}>
-            우리 동네 인기 도서
-          </Text>
-          <Pressable style={styles.subTitleBtn}>
+      <ScrollView style={{ backgroundColor: 'white' }}>
+        <View style={styles.mainTitleBox}>
+          <View>
+            <Text style={styles.mainTitleText}>우리 동네</Text>
+            <Text style={styles.mainTitleText}>책장</Text>
+          </View>
+          <Pressable
+            onPress={() => {
+              navigation.navigate('OurTownPage');
+            }}
+            style={styles.subTitleBtn}>
             <Text
               style={{
-                fontSize: 17,
-                fontWeight: '600',
+                fontSize: 13,
+                fontWeight: '700',
                 top: 5,
                 color: 'grey',
               }}>
-              {'>>'}
+              더보기{'>'}
             </Text>
           </Pressable>
         </View>
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          style={styles.ourTown}>
-          {posts.map((post, i) => {
-            return (
-              <OurTownComponent key={i} navigation={navigation} post={post} />
-            );
-          })}
-        </ScrollView>
-      </View>
+        <View>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            style={styles.ourTown}>
+            {posts.map((post, i) => {
+              return (
+                <OurTownComponent key={i} navigation={navigation} post={post} />
+              );
+            })}
+          </ScrollView>
+          <View style={styles.subTitleBox}>
+            <Text style={{ fontSize: 20, fontWeight: '600' }}>
+              새로 등록된 도서
+            </Text>
+            <Pressable
+              onPress={() => {
+                navigation.navigate('OurTownPage');
+              }}
+              style={styles.subTitleBtn}>
+              <Text
+                style={{
+                  fontSize: 13,
+                  fontWeight: '700',
+                  top: 5,
+                  color: 'grey',
+                }}>
+                더보기{'>'}
+              </Text>
+            </Pressable>
+          </View>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            style={styles.newBooksScroll}>
+            {posts.map((post, i) => {
+              return (
+                <OurTownComponent key={i} navigation={navigation} post={post} />
+              );
+            })}
+          </ScrollView>
+        </View>
+      </ScrollView>
       <Button
         style={styles.addBtn}
         onPress={() => navigation.navigate('AddPage')}>
@@ -116,6 +125,25 @@ export default function HomeMain({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  mainTitleBox: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: diviceWidth,
+    height: 100,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    marginTop: 20,
+    backgroundColor: '#F7F6FF',
+  },
+  mainTitleText: {
+    fontSize: 24,
+    fontFamily: 'SCDream5',
+  },
+  ourTown: {
+    height: 200,
+    marginBottom: 20,
+    backgroundColor: '#F7F6FF',
+  },
   subTitleBox: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -124,12 +152,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginTop: 20,
   },
-  subTitleBtn: {
-    width: 30,
-    height: 30,
+  newBooksScroll: {
+    height: 180,
+    marginBottom: 20,
   },
-  ourTown: {
-    height: 170,
+  subTitleBtn: {
+    width: 50,
+    height: 30,
   },
   addBtn: {
     backgroundColor: '#6864FF',

@@ -24,6 +24,11 @@ export default function OurTownComponent({ navigation, post }) {
             resizeMode='cover'
             source={{ uri: post.image }}
           />
+          <View style={styles.cardTitleBox}>
+            <Text numberOfLines={1} style={{ fontSize: 12 }}>
+              {post.title}
+            </Text>
+          </View>
         </View>
       </View>
     </Pressable>
@@ -43,14 +48,14 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
   },
   cardImage: {
-    width: 110,
-    height: 160,
+    width: 100,
+    height: 150,
     borderRadius: 5,
     alignSelf: 'center',
   },
   cardTitleBox: {
-    width: 130,
+    width: 90,
     alignSelf: 'center',
-    marginTop: 7,
+    marginTop: 15,
   },
 });

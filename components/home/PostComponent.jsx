@@ -26,7 +26,7 @@ export default function PostComponent({ navigation, post }) {
           />
         </View>
         <View style={styles.cardTitleBox}>
-          <Text numberOfLines={2} style={{ textAlign: 'center', fontSize: 12 }}>
+          <Text numberOfLines={1} style={{ textAlign: 'center', fontSize: 12 }}>
             {post.title}
           </Text>
         </View>
@@ -37,7 +37,7 @@ export default function PostComponent({ navigation, post }) {
 
 const styles = StyleSheet.create({
   card: {
-    marginVertical: 25,
+    marginVertical: 40,
     width: diviceWidth / 2,
     height: diviceWidth / 2,
     shadowColor: '#000',
@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   cardTitleBox: {
-    width: 130,
+    width: 100,
     alignSelf: 'center',
-    marginTop: 7,
+    marginTop: 15,
   },
 });
