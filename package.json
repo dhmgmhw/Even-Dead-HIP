@@ -8,6 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@expo/vector-icons": "^12.0.4",
     "@react-native-async-storage/async-storage": "^1.15.4",
     "@react-native-community/masked-view": "0.1.10",
     "@react-native-picker/picker": "^1.15.0",
@@ -15,8 +16,11 @@
     "@react-navigation/native": "^5.9.4",
     "@react-navigation/stack": "^5.14.4",
     "axios": "^0.21.1",
-    "expo": "~41.0.1",
+    "babel-preset-expo": "^8.1.0",
+    "expo": "^41.0.1",
+    "expo-facebook": "^11.0.5",
     "expo-font": "~9.1.0",
+    "expo-google-app-auth": "^8.1.7",
     "expo-image-picker": "~10.1.4",
     "expo-linear-gradient": "~9.1.0",
     "expo-status-bar": "~1.0.4",
@@ -27,13 +31,17 @@
     "react-native-dropdown-picker": "^4.0.9",
     "react-native-elements": "^3.4.1",
     "react-native-gesture-handler": "~1.10.2",
+    "react-native-json-tree": "^1.2.1",
+    "react-native-keyboard-aware-scroll-view": "^0.9.4",
     "react-native-reanimated": "~2.1.0",
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.0.0",
     "react-native-web": "~0.13.12"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0"
+    "@babel/core": "^7.9.0",
+    "babel-preset-react-native": "^4.0.1",
+    "react-native-dotenv": "^2.5.5"
   },
   "private": true,
   "rnpm": {

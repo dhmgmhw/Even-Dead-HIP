@@ -1,9 +1,9 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import  {createStackNavigator}  from '@react-navigation/stack';
 
 import TabNavigator from './TabNavigator';
-// import SignInPage from '../pages/login/SignInPage';
-// import SignUpPage from '../pages/login/SignUnPage';
+import SignInPage from '../pages/login/SignInPage';
+// import SignUpPage from '../pages/login/SignUpPage';
 import PostDetailPage from '../pages/home/PostDetailPage';
 import ChatPage from '../pages/chat/ChatPage';
 import AddPage from '../pages/home/AddPage';
@@ -17,9 +17,9 @@ const StackNavigator = () => {
       screenOptions={{
         headerShown: false,
       }}>
+      <Stack.Screen name='SignInPage' component={SignInPage} />
       <Stack.Screen name='TabNavigator' component={TabNavigator} />
-      {/* <Stack.Screen name='SignInPage' component={SignInPage} />
-      <Stack.Screen name='SignUpPage' component={SignUpPage} /> */}
+      {/* <Stack.Screen name='SignUpPage' component={SignUpPage} /> */} 
       <Stack.Screen name='OurTownPage' component={OurTownPage} />
       <Stack.Screen name='PostDetailPage' component={PostDetailPage} />
       <Stack.Screen name='ChatPage' component={ChatPage} />
