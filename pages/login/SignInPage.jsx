@@ -48,7 +48,7 @@ export default function SignInPage({navigation}) {
       alert(`Cancel`);
     }
     await login(email, id, navigation);
-    // navigation.push('TabNavigator');
+    navigation.push('TabNavigator');
 
   }
 

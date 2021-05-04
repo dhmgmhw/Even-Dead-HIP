@@ -17,9 +17,9 @@ export default function MyPageMain() {
           backgroundColor: '#6864FF',
         }}>
         <Tab
-          textStyle={{ fontFamily: 'SCDream5' }}
+          textStyle={{ fontFamily: 'SCDream5', color:'black' }}
           activeTextStyle={{
-            fontFamily: 'SCDream5',
+            fontFamily: 'SCDream5', color:'black'
           }}
           heading='서재'
           tabStyle={{ backgroundColor: 'white' }}
@@ -27,12 +27,12 @@ export default function MyPageMain() {
           <MyLibraryTab />
         </Tab>
         <Tab
-          textStyle={{ fontFamily: 'SCDream5' }}
-          activeTextStyle={{ fontFamily: 'SCDream5' }}
+          textStyle={{ fontFamily: 'SCDream5',color:'black' }}
+          activeTextStyle={{ fontFamily: 'SCDream5',color:'black' }}
           heading='나의 정보'
           tabStyle={{ backgroundColor: 'white' }}
           activeTabStyle={{ backgroundColor: 'white' }}>
-          <MyInfoTab />
+          <MyInfoTab />          
         </Tab>
       </Tabs>
     </View>
