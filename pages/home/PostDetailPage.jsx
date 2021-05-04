@@ -30,9 +30,9 @@ export default function PostDetailPage({ navigation, route }) {
 
   const image = { uri: detailData.image };
 
-  useLayoutEffect(() => {
-    // console.log(detailData);
-  }, []);
+  // useLayoutEffect(() => {
+  //   console.log(getStatusBarHeight());
+  // }, []);
 
   return (
     <ImageBackground

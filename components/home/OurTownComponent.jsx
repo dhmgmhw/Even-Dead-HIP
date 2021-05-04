@@ -25,7 +25,9 @@ export default function OurTownComponent({ navigation, post }) {
             source={{ uri: post.image }}
           />
           <View style={styles.cardTitleBox}>
-            <Text numberOfLines={1} style={{ fontSize: 12 }}>
+            <Text
+              numberOfLines={1}
+              style={{ fontFamily: 'SCDream3', fontSize: 12 }}>
               {post.title}
             </Text>
           </View>

@@ -26,7 +26,13 @@ export default function PostComponent({ navigation, post }) {
           />
         </View>
         <View style={styles.cardTitleBox}>
-          <Text numberOfLines={1} style={{ textAlign: 'center', fontSize: 12 }}>
+          <Text
+            numberOfLines={1}
+            style={{
+              textAlign: 'center',
+              fontSize: 12,
+              fontFamily: 'SCDream6',
+            }}>
             {post.title}
           </Text>
         </View>
