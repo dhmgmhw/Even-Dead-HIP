@@ -33,7 +33,7 @@ export default function OurTownPage({ navigation }) {
         }
         centerComponent={{
           text: '우리 동네 책장',
-          style: { fontSize: 20, fontWeight: '800' },
+          style: { fontSize: 20, fontFamily: 'SCDream6' },
         }}
         rightComponent={''}
       />

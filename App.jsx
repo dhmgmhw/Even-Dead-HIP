@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -24,6 +25,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
+      <StatusBar style='black' />
       <StackNavigator />
     </NavigationContainer>
   );

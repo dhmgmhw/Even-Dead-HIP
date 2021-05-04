@@ -25,6 +25,10 @@ export default function HomeMain({ navigation }) {
   //  console.log(posts);
   // }, []);
 
+  const BTN = async () => {
+    await btnPressed('123', '1241', '142dadq');
+  };
+
   return (
     <>
       <Header
@@ -40,7 +44,7 @@ export default function HomeMain({ navigation }) {
         }
         centerComponent={{
           text: '송파구',
-          style: { fontSize: 20, fontFamily: 'SCDream5', top: 3 },
+          style: { fontSize: 18, fontFamily: 'SCDream5', top: 3 },
         }}
         rightComponent={
           <Ionicons
@@ -63,8 +67,8 @@ export default function HomeMain({ navigation }) {
             style={styles.subTitleBtn}>
             <Text
               style={{
-                fontSize: 13,
-                fontWeight: '700',
+                fontSize: 12,
+                fontFamily: 'SCDream6',
                 top: 5,
                 color: 'grey',
               }}>
@@ -84,7 +88,7 @@ export default function HomeMain({ navigation }) {
             })}
           </ScrollView>
           <View style={styles.subTitleBox}>
-            <Text style={{ fontSize: 20, fontWeight: '600' }}>
+            <Text style={{ fontSize: 20, fontFamily: 'SCDream5' }}>
               새로 등록된 도서
             </Text>
             <Pressable
@@ -94,8 +98,8 @@ export default function HomeMain({ navigation }) {
               style={styles.subTitleBtn}>
               <Text
                 style={{
-                  fontSize: 13,
-                  fontWeight: '700',
+                  fontSize: 12,
+                  fontFamily: 'SCDream6',
                   top: 5,
                   color: 'grey',
                 }}>
@@ -137,7 +141,8 @@ const styles = StyleSheet.create({
   },
   mainTitleText: {
     fontSize: 24,
-    fontFamily: 'SCDream5',
+    fontFamily: 'SCDream6',
+    marginBottom: 5,
   },
   ourTown: {
     height: 200,
