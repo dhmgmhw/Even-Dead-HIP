@@ -15,22 +15,16 @@ export async function login(username, email, image, navigation) {
         image: image,
       },
     })
-    console.log(email)
-    console.log(username)
-    console.log(image)
+    // console.log(result.data)
 
     if (result.data.ok == true) {
-      Alert.alert(result.data.msg)
-      // console.log(user.email)
-
-      await AsyncStorage.setItem("session", result.data.token)
-      // Alert.alert(result.data)
+      await AsyncStorage.setItem("session", result.data.results)
       navigation.push("TabNavigator")
-      // issue
     } else if (result.data.ok == false) {
       Alert.alert(result.data.msg)
     }
   } catch (err) {
-    Alert.alert("무슨 문제가 있는 것 같아요! => ", err.message)
+    console.log(err)
+    Alert.alert('로그인 할 수 없습니다.')
   }
 }
