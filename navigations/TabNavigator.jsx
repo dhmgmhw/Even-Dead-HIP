@@ -49,12 +49,12 @@ const TabNavigator = () => {
       <Tabs.Screen name='SearchMain' component={SearchMain} />
       <Tabs.Screen
         name='ChatMain'
-        options={{
-          tabBarBadge: '0',
-          tabBarBadgeStyle: {
-            backgroundColor: 'blue',
-          },
-        }}
+        // options={{
+        //   tabBarBadge: '0',
+        //   tabBarBadgeStyle: {
+        //     backgroundColor: 'blue',
+        //   },
+        // }}
         component={ChatMain}
       />
       <Tabs.Screen name='MyPageMain' component={MyPageMain} />
