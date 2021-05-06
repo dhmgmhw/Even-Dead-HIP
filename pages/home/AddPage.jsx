@@ -15,7 +15,9 @@ import {
 import { Header, Overlay } from 'react-native-elements';
 import { Item } from 'native-base';
 
+import MultiAddPage from './MultiAddPage';
 import * as ImagePicker from 'expo-image-picker';
+// import { AssetsSelector } from 'expo-images-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 import { Ionicons } from '@expo/vector-icons';

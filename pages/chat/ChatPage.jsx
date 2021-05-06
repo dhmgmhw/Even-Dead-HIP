@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react"
 import {
   StyleSheet,
   Text,
@@ -7,43 +7,44 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
-} from 'react-native';
-import { Header } from 'react-native-elements';
+} from "react-native"
+import { Header } from "react-native-elements"
 
-import { Ionicons } from '@expo/vector-icons';
-import ChatInputComponent from '../../components/chat/ChatInputComponent';
+import { Ionicons } from "@expo/vector-icons"
+import ChatInputComponent from "../../components/chat/ChatInputComponent"
 
-const diviceWidth = Dimensions.get('window').width;
-const diviceHeight = Dimensions.get('window').height;
+const diviceWidth = Dimensions.get("window").width
+const diviceHeight = Dimensions.get("window").height
 
 export default function ChatPage({ navigation }) {
+  // console.log(setimage)
   return (
     <TouchableWithoutFeedback
       onPress={() => {
-        Keyboard.dismiss();
+        Keyboard.dismiss()
       }}>
       <>
         <Header
-          placement='left'
+          placement="left"
           containerStyle={{
-            backgroundColor: 'white',
-            alignSelf: 'center',
+            backgroundColor: "white",
+            alignSelf: "center",
             borderBottomWidth: 1,
           }}
           leftComponent={
             <Ionicons
               onPress={() => {
-                navigation.goBack();
+                navigation.goBack()
               }}
-              name={'chevron-back'}
+              name={"chevron-back"}
               size={27}
-              color={'black'}
+              color={"black"}
             />
           }
-          centerComponent={''}
+          centerComponent={""}
           rightComponent={
             <Ionicons
-              name={'search'}
+              name={"search"}
               size={27}
               style={{ marginHorizontal: 10 }}
             />
@@ -66,61 +67,61 @@ export default function ChatPage({ navigation }) {
         <ChatInputComponent />
       </>
     </TouchableWithoutFeedback>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
-  container: { backgroundColor: 'white' },
+  container: { backgroundColor: "white" },
   chatInfoBox: {
     width: diviceWidth,
     height: 80,
     borderWidth: 2,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   userBox: {
     width: 60,
     height: 60,
     borderRadius: 100,
-    backgroundColor: 'grey',
+    backgroundColor: "grey",
   },
   descBox: {
-    width: '60%',
+    width: "60%",
     height: 70,
-    backgroundColor: 'lightgrey',
+    backgroundColor: "lightgrey",
   },
   bookBox: {
     width: 60,
     height: 70,
-    backgroundColor: 'grey',
+    backgroundColor: "grey",
   },
   oppositeChatBox: {
     width: diviceWidth,
     height: 80,
     borderWidth: 2,
     marginTop: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   myChatBox: {
     width: diviceWidth,
     height: 80,
     borderWidth: 2,
     marginTop: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
   },
   oppositeUserBox: {
     width: 60,
     height: 60,
     borderRadius: 100,
-    backgroundColor: 'grey',
+    backgroundColor: "grey",
   },
   oppositeTextBox: {
-    width: '60%',
+    width: "60%",
     height: 70,
-    backgroundColor: 'lightgrey',
+    backgroundColor: "lightgrey",
   },
-  myTextBox: { width: '60%', height: 70, backgroundColor: 'lightgrey' },
-});
+  myTextBox: { width: "60%", height: 70, backgroundColor: "lightgrey" },
+})
