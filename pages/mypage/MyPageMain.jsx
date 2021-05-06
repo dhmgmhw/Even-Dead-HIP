@@ -11,28 +11,26 @@ export default function MyPageMain() {
     <View style={styles.container}>
       <StatusBar style='auto' />
       <Tabs
-        tabContainerStyle={{ color: 'white', marginTop: getStatusBarHeight() }}
+        tabContainerStyle={styles.tabBarContainer}
         locked={true}
         tabBarUnderlineStyle={{
           backgroundColor: '#6864FF',
         }}>
         <Tab
-          textStyle={{ fontFamily: 'SCDream5', color:'black' }}
-          activeTextStyle={{
-            fontFamily: 'SCDream5', color:'black'
-          }}
+          textStyle={styles.tabBarFont}
+          activeTextStyle={styles.tabBarFont}
           heading='서재'
-          tabStyle={{ backgroundColor: 'white' }}
-          activeTabStyle={{ backgroundColor: 'white' }}>
+          tabStyle={styles.whiteBack}
+          activeTabStyle={styles.whiteBack}>
           <MyLibraryTab />
         </Tab>
         <Tab
-          textStyle={{ fontFamily: 'SCDream5',color:'black' }}
-          activeTextStyle={{ fontFamily: 'SCDream5',color:'black' }}
+          textStyle={styles.tabBarFont}
+          activeTextStyle={styles.tabBarFont}
           heading='나의 정보'
-          tabStyle={{ backgroundColor: 'white' }}
-          activeTabStyle={{ backgroundColor: 'white' }}>
-          <MyInfoTab />          
+          tabStyle={styles.whiteBack}
+          activeTabStyle={styles.whiteBack}>
+          <MyInfoTab />
         </Tab>
       </Tabs>
     </View>
@@ -46,4 +44,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  tabBarContainer: { color: 'white', marginTop: getStatusBarHeight() },
+  tabBarFont: { fontFamily: 'SCDream5', color: 'black' },
+  whiteBack: { backgroundColor: 'white' },
 });
