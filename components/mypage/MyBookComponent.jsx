@@ -28,7 +28,7 @@ export default function MyBookComponent({ navigation }) {
             resizeMode='cover'
             source={{
               uri:
-                'https://lh3.googleusercontent.com/proxy/E9c2IMWfYxWvfXkqwun2m5rpySo0QHXnep0-30EhQmdTrcFu8m61QjpX8dhUhGA4F1xruuhNMbhsJV2FIfccN9KEEb8O96PA82_IN_SoDIs5hg',
+                'http://image.yes24.com/momo/TopCate2841/MidCate009/179530372(2).jpg',
             }}
           />
         </View>
@@ -55,13 +55,12 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 15,
+    marginVertical: 10,
   },
   bookCoverImg: {
-    width: 100,
-    height: 150,
-    marginLeft: 20,
-    marginRight: 10,
+    width: 90,
+    height: 130,
+    marginHorizontal: 20,
     borderRadius: 5,
   },
   state: {
@@ -76,7 +75,7 @@ const styles = StyleSheet.create({
   },
   region: {
     fontFamily: 'SCDream5',
-    fontSize: 17,
+    fontSize: 16,
     marginVertical: 10,
   },
   time: { fontFamily: 'SCDream5', color: '#9A9A9A' },
