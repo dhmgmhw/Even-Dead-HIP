@@ -1,4 +1,4 @@
-import React from "react"
+import React from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,35 +10,34 @@ import {
   Dimensions,
   TouchableHighlight,
   SafeAreaView,
-} from "react-native"
-import { Feather } from "@expo/vector-icons"
+} from 'react-native';
+import { Feather } from '@expo/vector-icons';
 
-// import poo from '../../assets/poo'
 export default function MyLibraryTab({ navigation }) {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.myprofile}>
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
           }}>
           <Image
             style={styles.profileimg}
-            source={require("../../assets/poo.png")}></Image>
+            source={require('../../assets/poo.png')}></Image>
           <View
             style={{
-              flexDirection: "column",
+              flexDirection: 'column',
               marginLeft: 20,
             }}>
             <Text
               numberOfLines={1}
-              ellipsizeMode={"tail"}
+              ellipsizeMode={'tail'}
               style={styles.nickname}>
               나는 곰돌이푸
             </Text>
             <View
               style={{
-                flexDirection: "row",
+                flexDirection: 'row',
                 marginBottom: 10,
               }}>
               <Text style={styles.likenum}>좋아요</Text>
@@ -46,29 +45,26 @@ export default function MyLibraryTab({ navigation }) {
               <Text style={styles.follownum}>팔로잉</Text>
               <Text style={styles.num}>9</Text>
             </View>
-            {/* <SafeAreaView> */}
             <Button
               style={styles.profileedit}
-              title="프로필 수정"
-              color="#6864FF"></Button>
-            {/* <TouchableHighlight></TouchableHighlight> */}
-            {/* </SafeAreaView> */}
+              title='프로필 수정'
+              color='#6864FF'></Button>
           </View>
         </View>
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
           }}>
           <View style={styles.textBox}>
             <TouchableHighlight
               style={styles.circle}
-              underlayColor="#C6C5FF"
-              onPress={() => alert("Yaay!")}>
+              underlayColor='#C6C5FF'
+              onPress={() => alert('Yaay!')}>
               <>
-                <Feather name="align-left" size={28} color="white" />
+                <Feather name='align-left' size={28} color='white' />
               </>
             </TouchableHighlight>
-            <Text style={styles.lists1} color="white">
+            <Text style={styles.lists1} color='white'>
               댓글
             </Text>
           </View>
@@ -76,10 +72,10 @@ export default function MyLibraryTab({ navigation }) {
           <View style={styles.recommendlist}>
             <TouchableHighlight
               style={styles.circle}
-              underlayColor="#C6C5FF"
-              onPress={() => alert("Yaay!")}>
+              underlayColor='#C6C5FF'
+              onPress={() => alert('Yaay!')}>
               <>
-                <Feather name="thumbs-up" size={28} color="white" />
+                <Feather name='thumbs-up' size={28} color='white' />
               </>
             </TouchableHighlight>
             <Text style={styles.lists}>추천목록</Text>
@@ -87,10 +83,10 @@ export default function MyLibraryTab({ navigation }) {
           <View style={styles.likelist}>
             <TouchableHighlight
               style={styles.circle}
-              underlayColor="#C6C5FF"
-              onPress={() => alert("Yaay!")}>
+              underlayColor='#C6C5FF'
+              onPress={() => alert('Yaay!')}>
               <>
-                <Feather name="heart" size={28} color="white" />
+                <Feather name='heart' size={28} color='white' />
               </>
             </TouchableHighlight>
             <Text style={styles.lists}>관심목록</Text>
@@ -98,24 +94,25 @@ export default function MyLibraryTab({ navigation }) {
         </View>
       </View>
       <View style={styles.bigborder}></View>
+
       <TouchableOpacity style={styles.deal}>
         <Text style={styles.downcompo}>거래내역</Text>
         <Feather
           style={styles.rarrow}
-          name="chevron-right"
+          name='chevron-right'
           size={28}
-          color="black"
+          color='black'
         />
       </TouchableOpacity>
       <View style={styles.border}></View>
-      <TouchableOpacity style={styles.myliketext}>
+      {/* <TouchableOpacity style={styles.myliketext}>
         <Text style={styles.downcompo}>내가 좋아한 글</Text>
 
         <Feather
           style={styles.rarrow1}
-          name="chevron-right"
+          name='chevron-right'
           size={28}
-          color="black"
+          color='black'
         />
       </TouchableOpacity>
 
@@ -124,9 +121,9 @@ export default function MyLibraryTab({ navigation }) {
         <Text style={styles.downcompo}>내가 쓴 댓글</Text>
         <Feather
           style={styles.rarrow2}
-          name="chevron-right"
+          name='chevron-right'
           size={28}
-          color="black"
+          color='black'
         />
       </TouchableOpacity>
 
@@ -135,44 +132,47 @@ export default function MyLibraryTab({ navigation }) {
         <Text style={styles.downcompo}>친구초대</Text>
         <Feather
           style={styles.rarrow3}
-          name="chevron-right"
+          name='chevron-right'
           size={28}
-          color="black"
+          color='black'
         />
       </TouchableOpacity>
-      <View style={styles.border}></View>
+      <View style={styles.border}></View> */}
     </ScrollView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
   bigborder: {
     height: 10,
-    backgroundColor: "#f2f2f2",
+    backgroundColor: '#f2f2f2',
   },
   border: {
     height: 5,
-    backgroundColor: "#f2f2f2",
+    backgroundColor: '#f2f2f2',
     borderRadius: 100,
   },
   deal: {
     height: 60,
-    flexDirection: "row",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
   },
   mycomment: {
     height: 60,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   invitefriend: {
     height: 60,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   myliketext: {
     height: 60,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   myprofile: {
     height: 250,
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
   },
   nickname: {
     marginTop: 50,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   likenum: {
     marginTop: 5,
@@ -193,25 +193,25 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   profileedit: {
-    height: "50%",
-    width: "100%",
+    height: '50%',
+    width: '100%',
     borderRadius: 100,
     marginTop: 50,
   },
   textBox: {
     marginLeft: 40,
     marginTop: 20,
-    flexDirection: "column",
+    flexDirection: 'column',
   },
   recommendlist: {
     marginLeft: 70,
     marginTop: 20,
-    flexDirection: "column",
+    flexDirection: 'column',
   },
   likelist: {
     marginLeft: 70,
     marginTop: 20,
-    flexDirection: "column",
+    flexDirection: 'column',
   },
   lists: {
     marginTop: 10,
@@ -221,14 +221,9 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   downcompo: {
-    marginTop: 15,
-    fontWeight: "bold",
-    marginLeft: 25,
+    fontWeight: 'bold',
   },
-  rarrow: {
-    marginLeft: 270,
-    marginTop: 10,
-  },
+  rarrow: {},
   rarrow1: {
     marginLeft: 240,
     marginTop: 10,
@@ -242,19 +237,19 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   num: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginTop: 5,
     marginLeft: 5,
   },
   circle: {
     borderRadius:
       Math.round(
-        Dimensions.get("window").width + Dimensions.get("window").height
+        Dimensions.get('window').width + Dimensions.get('window').height
       ) / 2,
-    width: Dimensions.get("window").width * 0.15,
-    height: Dimensions.get("window").width * 0.15,
-    backgroundColor: "#C6C5FF",
-    justifyContent: "center",
-    alignItems: "center",
+    width: Dimensions.get('window').width * 0.15,
+    height: Dimensions.get('window').width * 0.15,
+    backgroundColor: '#C6C5FF',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-})
+});
