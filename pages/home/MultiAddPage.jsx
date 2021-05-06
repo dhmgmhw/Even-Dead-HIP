@@ -1,4 +1,6 @@
-import * as React from "react"
+// import * as React from "react"
+import React, { useEffect, useState } from "react"
+
 import { Text, View, StyleSheet, SafeAreaView, Alert } from "react-native"
 import { AssetsSelector } from "expo-images-picker"
 import { Ionicons } from "@expo/vector-icons"
@@ -11,14 +13,20 @@ const ForceInset = {
   bottom: "never",
 }
 
-export default function MultiAddPage() {
+export default function MultiAddPage(navigation) {
   const onDone = data => {
+    navigation.navigate("AddPage", setimage)
     Alert.alert("Selected items are", JSON.stringify(data))
+    console.log(JSON.stringify(data))
+    console.log(data)
+    console.log(doneFunction)
+    console.log(onDone)
   }
 
   const goBack = () => {
     console.log("Going back use Navigator goBack() hook")
   }
+  const [image, setimage] = useState(JSON.stringify(data))
 
   return (
     <SafeAreaProvider>
@@ -28,7 +36,7 @@ export default function MultiAddPage() {
           <AssetsSelector
             options={{
               assetsType: ["photo", "video"],
-              maxSelections: 3,
+              maxSelections: 10,
               margin: 2,
               portraitCols: 4,
               landscapeCols: 5,
@@ -58,11 +66,13 @@ export default function MultiAddPage() {
                 buttonStyle: _buttonStyle,
                 buttonTextStyle: _textStyle,
                 backFunction: goBack,
+
                 doneFunction: data => onDone(data),
               },
             }}
           />
         </View>
+        <Text>{image}</Text>
       </SafeAreaView>
     </SafeAreaProvider>
   )

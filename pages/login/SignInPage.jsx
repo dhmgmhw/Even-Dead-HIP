@@ -36,7 +36,8 @@ export default function SignInPage({ navigation }) {
       expoClientId:
         "747037265612-5o4lk93m2n098dhirk4gshnqlugi86nv.apps.googleusercontent.com",
       //    GOOGLE_ANDROID_ID,
-      // iosClientId: GOOGLE_IOS_ID,
+      iosClientId:
+        "161728779966-berb0fukqq2aidubgq4v5o04h56b9hvr.apps.googleusercontent.com",
       scopes: ["profile", "email"],
     })
 

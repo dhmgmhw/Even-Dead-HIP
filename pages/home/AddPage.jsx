@@ -15,6 +15,7 @@ import {
 import { Header, Overlay } from "react-native-elements"
 import { Item } from "native-base"
 
+import MultiAddPage from "./MultiAddPage"
 import * as ImagePicker from "expo-image-picker"
 // import { AssetsSelector } from 'expo-images-picker';
 import DropDownPicker from "react-native-dropdown-picker"
@@ -319,11 +320,15 @@ export default function AddPage({ navigation }) {
 
         <View style={styles.addPicsBox}>
           {imageUri == "" ? (
-            <Pressable style={styles.bookPicBox} onPress={pickImage}>
+            <Pressable
+              style={styles.bookPicBox}
+              onPress={() => navigation.navigate("MultiAddPage")}>
+              {/* // onPress={pickImage}> */}
               <Text style={{ fontFamily: "SCDream4" }}>카메라</Text>
             </Pressable>
           ) : (
-            <Pressable onPress={pickImage}>
+            // <Pressable onPress={pickImage}>
+            <Pressable onPress={() => navigation.navigate("MultiAddPage")}>
               {/* <AssetsSelector> */}
               <Image source={{ uri: imageUri.uri }} style={styles.bookPicBox} />
             </Pressable>
