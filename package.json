@@ -17,6 +17,7 @@
     "@react-navigation/stack": "^5.14.4",
     "axios": "^0.21.1",
     "babel-preset-expo": "^8.1.0",
+    "Base64": "^1.1.0",
     "expo": "^41.0.1",
     "expo-facebook": "^11.0.5",
     "expo-font": "~9.1.0",
