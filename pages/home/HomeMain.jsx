@@ -6,6 +6,8 @@ import {
   Dimensions,
   ScrollView,
   Pressable,
+  FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import { Header } from 'react-native-elements';
 import { Button } from 'native-base';
@@ -19,14 +21,29 @@ const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
 export default function HomeMain({ navigation }) {
-  const [posts, setPosts] = useState(mocklist);
+  const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [pageCurrent, setPageCurrent] = useState(1);
 
-  // useEffect(() => {
-  //  console.log(posts);
-  // }, []);
+  useEffect(() => {
+    setPosts(mocklist);
+  }, []);
 
-  const BTN = async () => {
-    await btnPressed('123', '1241', '142dadq');
+  const renderItem = ({ item }) => {
+    return <Text style={{ height: 50 }}>{item.title}</Text>;
+  };
+
+  const renderFooter = () => {
+    return isLoading ? (
+      <View style={styles.loader}>
+        <ActivityIndicator size='small' />
+      </View>
+    ) : null;
+  };
+
+  const handleLoadMore = () => {
+    setPageCurrent(pageCurrent + 1);
+    setIsLoading(true);
   };
 
   return (
@@ -119,6 +136,18 @@ export default function HomeMain({ navigation }) {
           </ScrollView>
         </View>
       </ScrollView>
+      <FlatList
+        style={{ borderWidth: 2 }}
+        data={posts}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()}
+        ListFooterComponent={renderFooter}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0}
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+      />
+
       <Button
         style={styles.addBtn}
         onPress={() => navigation.navigate('AddPage')}>
@@ -182,5 +211,9 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.5,
     shadowRadius: 5,
+  },
+  loader: {
+    marginTop: 10,
+    alignSelf: 'center',
   },
 });
