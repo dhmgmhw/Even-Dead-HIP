@@ -21,7 +21,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { Ionicons } from '@expo/vector-icons';
 import { getSearchBook } from '../../config/KakaoApi';
 import KakaoResultCardComponent from '../../components/home/KakaoResultCardComponent';
-import { imageUpload, postBook, testUpload } from '../../config/PostingApi';
+import { getPostedBook, imageUpload, postBook } from '../../config/PostingApi';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
@@ -44,8 +44,9 @@ export default function AddPage({ navigation }) {
 
   const [switcher, setSwitcher] = useState(false);
   const [finderOpen, setFinderOpen] = useState(false);
+  const [finderHeight, setFinderHeight] = useState(false);
 
-  const [books, setBooks] = useState([]);
+  const [books, setBooks] = useState(['blank']);
 
   const toggleFinder = () => {
     setFinderOpen(!finderOpen);
@@ -60,8 +61,8 @@ export default function AddPage({ navigation }) {
   const bookTitleSearch = async () => {
     const result = await getSearchBook(text);
     setBooks(result.documents);
+    setFinderHeight(true);
     Keyboard.dismiss();
-    console.log(books);
   };
 
   const getPermission = async () => {
@@ -80,14 +81,12 @@ export default function AddPage({ navigation }) {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 4],
-      quality: 0.5,
+      quality: 0,
     });
     if (imageData.cancelled) {
       console.log('cancelled!');
       return;
     }
-    console.log(imageData);
-    await testUpload(imageData);
     setImageUri(imageData);
   };
 
@@ -112,24 +111,21 @@ export default function AddPage({ navigation }) {
       let data = {
         title: title,
         author: author,
-        image: bookImg,
         description: story,
         category: genreInfo,
-        state: stateInfo,
-        content: contentInfo,
+        status: stateInfo,
         price: priceInfo,
       };
-      const form = new FormData();
-      form.append('image', {
+
+      const formData = new FormData();
+      formData.append('file', {
         uri: imageUri.uri,
         type: imageUri.type,
-        name: imageUri.uri.substr(imageUri.uri.lastIndexOf('/') + 1),
+        name: 'image.jpg',
       });
+      formData.append('townBookDto', data);
 
-      console.log(form);
-      const response = await imageUpload(form);
-      data.capture_images = response;
-      await postBook(data, navigation);
+      const gotUri = await postBook(formData);
     }
   };
 
@@ -168,29 +164,10 @@ export default function AddPage({ navigation }) {
           }
         />
         {switcher ? (
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginVertical: 10,
-            }}>
-            <View
-              style={{
-                shadowColor: '#000',
-                shadowOffset: {
-                  width: 1,
-                  height: 3,
-                },
-                shadowOpacity: 0.25,
-                shadowRadius: 5,
-              }}>
+          <View style={styles.bookResBox}>
+            <View style={styles.bookResImgBox}>
               <Image
-                style={{
-                  width: 80,
-                  height: 110,
-                  margin: 20,
-                  borderRadius: 5,
-                }}
+                style={styles.bookResImg}
                 resizeMode='cover'
                 source={
                   bookImg
@@ -200,25 +177,11 @@ export default function AddPage({ navigation }) {
               />
             </View>
             <View style={{ width: diviceWidth * 0.65 }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  backgroundColor: '#F2F2F2',
-                  borderRadius: 5,
-                  paddingLeft: 10,
-                  paddingVertical: 2,
-                }}>
+              <View style={styles.bookResTitleBox}>
                 <Text
                   numberOfLines={1}
                   ellipsizeMode={'tail'}
-                  style={{
-                    width: diviceWidth * 0.55,
-                    fontSize: 13,
-                    fontFamily: 'SCDream5',
-                    color: 'grey',
-                  }}>
+                  style={styles.bookResText}>
                   {title}
                 </Text>
                 <Ionicons
@@ -229,28 +192,12 @@ export default function AddPage({ navigation }) {
                   style={{ paddingRight: 5, color: 'grey' }}
                 />
               </View>
-              <View
-                style={{
-                  backgroundColor: '#F2F2F2',
-                  height: 2,
-                  marginVertical: 5,
-                }}></View>
-              <View
-                style={{
-                  backgroundColor: '#F2F2F2',
-                  borderRadius: 5,
-                  paddingLeft: 10,
-                  paddingVertical: 3,
-                }}>
+              <View style={styles.bookResBorder}></View>
+              <View style={styles.bookResDescBox}>
                 <Text
                   numberOfLines={1}
                   ellipsizeMode={'tail'}
-                  style={{
-                    width: diviceWidth * 0.55,
-                    fontSize: 13,
-                    fontFamily: 'SCDream5',
-                    color: 'grey',
-                  }}>
+                  style={styles.bookResText}>
                   {author} 저 | {publisher} | {dateChagner(publishedInfo)}
                 </Text>
               </View>
@@ -258,16 +205,7 @@ export default function AddPage({ navigation }) {
           </View>
         ) : (
           <>
-            <Text
-              style={{
-                fontSize: 20,
-                fontFamily: 'SCDream6',
-                padding: 15,
-                paddingVertical: 10,
-                marginTop: 30,
-              }}>
-              도서 제목
-            </Text>
+            <Text style={styles.bookSearchTitle}>도서 제목</Text>
             <Pressable style={styles.bookSearchOpener} onPress={toggleFinder}>
               <Text style={{ fontFamily: 'SCDream5', color: 'grey' }}>
                 도서명 검색하기
@@ -297,7 +235,7 @@ export default function AddPage({ navigation }) {
           ]}
           labelStyle={{ fontFamily: 'SCDream5' }}
           placeholder='해쉬태그'
-          containerStyle={{ height: 50, width: diviceWidth }}
+          containerStyle={styles.dropBox}
           onChangeItem={(item) => {
             setGenreInfo(item.value);
           }}
@@ -312,7 +250,7 @@ export default function AddPage({ navigation }) {
           zIndex={4000}
           labelStyle={{ fontFamily: 'SCDream5' }}
           placeholder='상품상태'
-          containerStyle={{ height: 50, width: diviceWidth }}
+          containerStyle={styles.dropBox}
           onChangeItem={(item) => {
             setStateInfo(item.value);
           }}
@@ -320,33 +258,46 @@ export default function AddPage({ navigation }) {
 
         <View style={styles.addPicsBox}>
           {imageUri == '' ? (
-            <Pressable style={styles.bookPicBox} onPress={pickImage}>
-              <Text style={{ fontFamily: 'SCDream4' }}>카메라</Text>
-            </Pressable>
+            <>
+              <Pressable
+                style={[styles.userPicBox, { marginHorizontal: 20 }]}
+                onPress={pickImage}>
+                <Text style={{ fontFamily: 'SCDream4' }}>카메라</Text>
+              </Pressable>
+              <View style={{ justifyContent: 'center' }}>
+                <View>
+                  <Text style={styles.photoGuidanceText}>
+                    상품의 상태가 잘 보이게 찍어주세요
+                  </Text>
+                </View>
+              </View>
+            </>
           ) : (
-            <Pressable onPress={pickImage}>
-              <Image source={{ uri: imageUri.uri }} style={styles.bookPicBox} />
-            </Pressable>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ paddingHorizontal: 10 }}>
+              <Pressable onPress={pickImage}>
+                <Image
+                  source={{ uri: imageUri.uri }}
+                  style={styles.userPicBox}
+                />
+              </Pressable>
+            </ScrollView>
           )}
-          <View style={{ justifyContent: 'center' }}>
-            <View style={styles.descBox}>
-              <Text
-                style={{ fontFamily: 'SCDream5', fontSize: 13, color: 'grey' }}>
-                상품의 상태가 잘 보이게 찍어주세요
-              </Text>
-            </View>
-          </View>
         </View>
         <TextInput
           multiline
           style={styles.bookDescBox}
           onChangeText={setContentInfo}
           value={contentInfo}
-          placeholder='책 간단 소개'
+          placeholder='도서추천'
         />
 
         <Overlay
-          overlayStyle={styles.overlayBox}
+          overlayStyle={
+            finderHeight ? styles.overlayBoxWith : styles.overlayBoxWithout
+          }
           isVisible={finderOpen}
           onBackdropPress={toggleFinder}>
           <View
@@ -377,7 +328,7 @@ export default function AddPage({ navigation }) {
             {books == '' ? (
               <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                 <Image
-                  style={{ width: 200, height: 200, top: 120, opacity: 0.2 }}
+                  style={styles.foundImg}
                   resizeMode='contain'
                   source={require('../../assets/nodata.png')}
                 />
@@ -390,7 +341,7 @@ export default function AddPage({ navigation }) {
                       key={i}
                       onPress={() => {
                         setTitle(book.title);
-                        setAuthor(book.authors);
+                        setAuthor(book.authors.join(' '));
                         setBookImg(book.thumbnail);
                         setStory(book.contents);
                         setPublisher(book.publisher);
@@ -398,7 +349,7 @@ export default function AddPage({ navigation }) {
                         setPriceInfo(book.price);
                         setFinderOpen(false);
                         setSwitcher(true);
-                        console.log(book);
+                        // console.log(book);
                       }}>
                       <KakaoResultCardComponent book={book} />
                     </Pressable>
@@ -427,17 +378,73 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     flexDirection: 'row',
   },
-  bookPicBox: {
+  bookResBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  bookResImgBox: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 1,
+      height: 3,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 5,
+  },
+  bookResImg: {
+    width: 80,
+    height: 110,
+    margin: 20,
+    borderRadius: 5,
+  },
+  bookResTitleBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#F2F2F2',
+    borderRadius: 5,
+    paddingLeft: 10,
+    paddingVertical: 2,
+  },
+  bookResDescBox: {
+    backgroundColor: '#F2F2F2',
+    borderRadius: 5,
+    paddingLeft: 10,
+    paddingVertical: 3,
+  },
+  bookResText: {
+    width: diviceWidth * 0.55,
+    fontSize: 13,
+    fontFamily: 'SCDream5',
+    color: 'grey',
+  },
+  bookResBorder: {
+    backgroundColor: '#F2F2F2',
+    height: 2,
+    marginVertical: 5,
+  },
+  userPicBox: {
     width: 80,
     height: 80,
-    margin: 20,
+    marginVertical: 20,
+    marginHorizontal: 5,
     borderRadius: 5,
     backgroundColor: '#efefef',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  descBox: {
-    backgroundColor: 'white',
+  photoGuidanceText: {
+    fontFamily: 'SCDream5',
+    fontSize: 13,
+    color: 'grey',
+  },
+  bookSearchTitle: {
+    fontSize: 20,
+    fontFamily: 'SCDream6',
+    padding: 15,
+    paddingVertical: 10,
+    marginTop: 30,
   },
   bookSearchOpener: {
     backgroundColor: '#efefef',
@@ -449,23 +456,32 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  overlayBox: {
+  overlayBoxWith: {
     width: diviceWidth * 0.9,
     height: diviceHeight * 0.7,
     padding: 30,
   },
+  overlayBoxWithout: {
+    width: diviceWidth * 0.9,
+    height: diviceHeight * 0.4,
+    padding: 30,
+  },
+  dropBox: { height: 50, width: diviceWidth },
   bookTitleBox: {
     paddingLeft: 20,
     height: 50,
     width: '85%',
   },
   bookDescBox: {
-    width: diviceWidth,
-    height: 150,
-    paddingHorizontal: 20,
+    padding: 10,
+    height: 100,
+    borderRadius: 5,
+    backgroundColor: '#efefef',
+    marginHorizontal: 20,
     marginTop: 20,
   },
   bookSearchBtn: {
     width: '15%',
   },
+  foundImg: { width: 200, height: 200, top: 120, opacity: 0.2 },
 });

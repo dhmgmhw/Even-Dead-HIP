@@ -3,68 +3,38 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const host = 'http://3.35.216.159'
-const mockhost = 'https://607434bc066e7e0017e794f9.mockapi.io'
+const mockhost = 'https://607434bc066e7e0017e794f9.mockapi.io/filetest'
 
-export async function postBook(data, navigation) {
+export async function postBook(data) {
     try {
-        await axios({
-            method: 'post',
-            url: mockhost + '/api',
-            data: data
-        });
-        navigation.pop()
-        Alert.alert('정상적으로 글을 올렸습니다!');
-    } catch (err) {
-        console.log(err)
-    }
-}
-
-export async function imageUpload(data) {
-    try {
+        console.log(data)
         const response = await axios({
-            method: 'post',
-            url: mockhost + '/api/filetest',
-            data: data
+            method: "post",
+            url: host + '/api/townbooks',
+            headers: {
+                // 'Accept': 'application/json',
+                // "Content-Type": "multipart/form-data;"
+                "Content-Type": "application/json;"
+            },
+            data: data,
         });
-        console.log('이미지 업로드 성공');
         console.log(response.data)
         return response.data
     } catch (err) {
-        console.log(err)
+        const error = err.response.data.err || err.message;
+        Alert.alert(error);
     }
 }
 
-export async function testUpload(imageData) {
-    console.log(imageData)
-    const formData = new FormData();
-    formData.append('files', {
-        "uri": imageData.uri,
-        "type": imageData.type,
-    });
+export async function getPostedBook() {
     try {
-        await axios.post({
-            method: 'post',
-            url: mockhost + '/filetest',
-            data: formData,
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            },
+        const response = await axios({
+            method: "get",
+            url: host + '/api/test',
         });
+        console.log(response.data)
     } catch (err) {
-        Alert.alert('sers');
-        console.log(err)
+        const error = err.response.data.err || err.message;
+        Alert.alert(error);
     }
 }
-
-// export async function testGet() {
-//     try {
-//         const result = await axios({
-//             method: "get",
-//             url: mockhost + '/filetest',
-//         });
-//         console.log(result.data)
-//     } catch (err) {
-//         alert('sers')
-//         console.log(err)
-//     }
-// }
