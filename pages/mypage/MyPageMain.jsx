@@ -1,16 +1,22 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Tab, Tabs } from 'native-base';
+import { Tab, Tabs, DefaultTabBar } from 'native-base';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import MyLibraryTab from '../../components/mypage/MyLibraryTab';
 import MyInfoTab from '../../components/mypage/MyInfoTab';
+
+const renderTabBar = (props) => {
+  props.tabStyle = Object.create(props.tabStyle);
+  return <DefaultTabBar {...props} />;
+};
 
 export default function MyPageMain() {
   return (
     <View style={styles.container}>
       <StatusBar style='auto' />
       <Tabs
+        renderTabBar={renderTabBar}
         tabContainerStyle={styles.tabBarContainer}
         locked={true}
         tabBarUnderlineStyle={{

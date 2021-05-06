@@ -8,8 +8,8 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Dimensions,
+  TextInput,
 } from 'react-native';
-import { Searchbar } from 'react-native-paper';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -29,24 +29,42 @@ export default function SearchMain() {
       }}>
       <View style={styles.container}>
         {searchBar ? (
-          <Searchbar
-            style={styles.searchBar}
-            placeholder='책 검색'
-            onChangeText={onChangeSearch}
-            value={searchQuery}
-            onIconPress={() => {
-              console.log('pressed');
-            }}
-          />
+          <View style={styles.searchOpenedBar}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Ionicons
+                name='chevron-back'
+                size={24}
+                color='black'
+                onPress={() => {
+                  setSearchBar(false);
+                }}
+              />
+              <TextInput
+                style={styles.searchBar}
+                placeholder='책 검색'
+                onChangeText={onChangeSearch}
+                value={searchQuery}
+              />
+            </View>
+            <Ionicons
+              name='search-sharp'
+              size={24}
+              color='black'
+              onPress={() => {
+                setSearchBar(true);
+              }}
+            />
+          </View>
         ) : (
           <View style={styles.searchUnopenedBar}>
-            <Text style={{ fontFamily: 'SCDream5', fontSize: 18 }}>
+            <Text
+              style={{ fontFamily: 'SCDream5', fontSize: 17, marginLeft: 10 }}>
               책 검색
             </Text>
             <Ionicons
               name='search-sharp'
-              size={22}
-              color='grey'
+              size={24}
+              color='black'
               onPress={() => {
                 setSearchBar(true);
               }}
@@ -64,16 +82,26 @@ const styles = StyleSheet.create({
     height: diviceHeight,
   },
   searchBar: {
-    marginTop: getStatusBarHeight(),
     height: 50,
     shadowOpacity: 0,
+    borderColor: '#818181',
+    marginLeft: 20,
+    fontSize: 17,
+    fontFamily: 'SCDream5',
+  },
+  searchOpenedBar: {
+    marginTop: getStatusBarHeight(),
+    height: 50,
     borderBottomWidth: 1,
     borderColor: '#818181',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15,
   },
   searchUnopenedBar: {
     marginTop: getStatusBarHeight(),
     height: 50,
-    shadowOpacity: 0,
     borderBottomWidth: 1,
     borderColor: '#818181',
     flexDirection: 'row',
