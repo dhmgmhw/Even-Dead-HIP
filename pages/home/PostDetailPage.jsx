@@ -38,12 +38,7 @@ export default function PostDetailPage({ navigation, route }) {
     <ImageBackground
       source={image}
       blurRadius={3}
-      style={{
-        flex: 1,
-        resizeMode: 'cover',
-        justifyContent: 'center',
-        backgroundColor: 'black',
-      }}
+      style={styles.imageBackground}
       imageStyle={{ opacity: 0.3 }}>
       <ScrollView bounces={false}>
         <Header
@@ -89,13 +84,7 @@ export default function PostDetailPage({ navigation, route }) {
           <Text style={styles.bookCate}>카테고리 {'>'} 인문</Text>
           <Text style={styles.bookTitle}>{detailData.title}</Text>
           <Text style={styles.bookAuthor}>{detailData.author}</Text>
-          <View
-            style={{
-              width: diviceWidth * 0.95,
-              height: 10,
-              backgroundColor: '#f3f3f3',
-              alignSelf: 'center',
-            }}></View>
+          <View style={styles.descMiddleBorder}></View>
           <Text style={styles.subTitle}>작품소개</Text>
           <Text style={styles.bookDesc}>{detailData.description}</Text>
           <Text style={styles.subTitle}>도서추천</Text>
@@ -109,22 +98,19 @@ export default function PostDetailPage({ navigation, route }) {
         onPress={() => {
           navigation.navigate('ChatPage');
         }}>
-        <Text
-          style={{
-            fontSize: 23,
-            fontWeight: '600',
-            color: 'white',
-            textAlign: 'center',
-            padding: 20,
-          }}>
-          채팅연결하기
-        </Text>
+        <Text style={styles.chatBtnText}>채팅연결하기</Text>
       </Pressable>
     </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  imageBackground: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+    backgroundColor: 'black',
+  },
   bookImageBox: {
     height: 250,
     width: diviceWidth / 2.5,
@@ -157,6 +143,12 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: '700',
   },
+  descMiddleBorder: {
+    width: diviceWidth * 0.95,
+    height: 10,
+    backgroundColor: '#f3f3f3',
+    alignSelf: 'center',
+  },
   subTitle: { fontSize: 20, fontWeight: '700' },
   chatBox: {
     width: diviceWidth,
@@ -166,5 +158,12 @@ const styles = StyleSheet.create({
     bottom: 0,
     borderTopRightRadius: 5,
     borderTopLeftRadius: 5,
+  },
+  chatBtnText: {
+    fontSize: 23,
+    fontWeight: '600',
+    color: 'white',
+    textAlign: 'center',
+    padding: 20,
   },
 });
