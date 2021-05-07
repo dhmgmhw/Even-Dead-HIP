@@ -13,7 +13,6 @@ import {
 } from "react-native"
 import { Feather } from "@expo/vector-icons"
 
-// import poo from '../../assets/poo'
 export default function MyLibraryTab({ navigation }) {
   return (
     <ScrollView style={styles.container}>
@@ -46,13 +45,10 @@ export default function MyLibraryTab({ navigation }) {
               <Text style={styles.follownum}>팔로잉</Text>
               <Text style={styles.num}>9</Text>
             </View>
-            {/* <SafeAreaView> */}
             <Button
               style={styles.profileedit}
               title="프로필 수정"
               color="#6864FF"></Button>
-            {/* <TouchableHighlight></TouchableHighlight> */}
-            {/* </SafeAreaView> */}
           </View>
         </View>
         <View
@@ -98,6 +94,7 @@ export default function MyLibraryTab({ navigation }) {
         </View>
       </View>
       <View style={styles.bigborder}></View>
+
       <TouchableOpacity style={styles.deal}>
         <Text style={styles.downcompo}>거래내역</Text>
         <Feather
@@ -108,14 +105,14 @@ export default function MyLibraryTab({ navigation }) {
         />
       </TouchableOpacity>
       <View style={styles.border}></View>
-      <TouchableOpacity style={styles.myliketext}>
+      {/* <TouchableOpacity style={styles.myliketext}>
         <Text style={styles.downcompo}>내가 좋아한 글</Text>
 
         <Feather
           style={styles.rarrow1}
-          name="chevron-right"
+          name='chevron-right'
           size={28}
-          color="black"
+          color='black'
         />
       </TouchableOpacity>
 
@@ -124,9 +121,9 @@ export default function MyLibraryTab({ navigation }) {
         <Text style={styles.downcompo}>내가 쓴 댓글</Text>
         <Feather
           style={styles.rarrow2}
-          name="chevron-right"
+          name='chevron-right'
           size={28}
-          color="black"
+          color='black'
         />
       </TouchableOpacity>
 
@@ -135,12 +132,12 @@ export default function MyLibraryTab({ navigation }) {
         <Text style={styles.downcompo}>친구초대</Text>
         <Feather
           style={styles.rarrow3}
-          name="chevron-right"
+          name='chevron-right'
           size={28}
-          color="black"
+          color='black'
         />
       </TouchableOpacity>
-      <View style={styles.border}></View>
+      <View style={styles.border}></View> */}
     </ScrollView>
   )
 }
@@ -161,13 +158,14 @@ const styles = StyleSheet.create({
   deal: {
     height: 60,
     flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
   },
   mycomment: {
     flex: 1,
     height: 60,
     flexDirection: "row",
-    alignitems: "center",
-    justifyContent: "space-between",
   },
   invitefriend: {
     height: 60,
@@ -224,14 +222,9 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   downcompo: {
-    marginTop: 15,
     fontWeight: "bold",
-    marginLeft: 25,
   },
-  rarrow: {
-    marginLeft: 270,
-    marginTop: 10,
-  },
+  rarrow: {},
   rarrow1: {
     marginLeft: 240,
     marginTop: 10,

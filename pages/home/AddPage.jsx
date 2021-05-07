@@ -15,15 +15,13 @@ import {
 import { Header, Overlay } from 'react-native-elements';
 import { Item } from 'native-base';
 
-import MultiAddPage from './MultiAddPage';
 import * as ImagePicker from 'expo-image-picker';
-// import { AssetsSelector } from 'expo-images-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 import { Ionicons } from '@expo/vector-icons';
 import { getSearchBook } from '../../config/KakaoApi';
 import KakaoResultCardComponent from '../../components/home/KakaoResultCardComponent';
-import { getPostedBook, imageUpload, postBook } from '../../config/PostingApi';
+import { postBook } from '../../config/PostingApi';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
@@ -37,7 +35,7 @@ export default function AddPage({ navigation }) {
   const [bookImg, setBookImg] = useState();
   const [story, setStory] = useState();
   const [publisher, setPublisher] = useState();
-  const [imageUri, setImageUri] = useState('');
+  const [imageUri, setImageUri] = useState([]);
   const [genreInfo, setGenreInfo] = useState('');
   const [stateInfo, setStateInfo] = useState('');
   const [publishedInfo, setPublishedInfo] = useState();
@@ -67,30 +65,30 @@ export default function AddPage({ navigation }) {
     Keyboard.dismiss();
   };
 
-  const getPermission = async () => {
-    if (Platform.OS !== 'web') {
-      const {
-        status,
-      } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== 'granted') {
-        alert('사진을 업로드하려면 사진첩 권한이 필요합니다.');
-      }
-    }
-  };
+  // const getPermission = async () => {
+  //   if (Platform.OS !== 'web') {
+  //     const {
+  //       status,
+  //     } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  //     if (status !== 'granted') {
+  //       alert('사진을 업로드하려면 사진첩 권한이 필요합니다.');
+  //     }
+  //   }
+  // };
 
-  const pickImage = async () => {
-    let imageData = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 4],
-      quality: 0,
-    });
-    if (imageData.cancelled) {
-      console.log('cancelled!');
-      return;
-    }
-    setImageUri(imageData);
-  };
+  // const pickImage = async () => {
+  //   let imageData = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //     allowsEditing: true,
+  //     aspect: [4, 4],
+  //     quality: 0,
+  //   });
+  //   if (imageData.cancelled) {
+  //     console.log('cancelled!');
+  //     return;
+  //   }
+  //   setImageUri(imageData);
+  // };
 
   const upload = async () => {
     console.log('업로드 준비중!');
@@ -113,26 +111,44 @@ export default function AddPage({ navigation }) {
       let data = {
         title: title,
         author: author,
-        description: story,
+        // description: story,
         category: genreInfo,
         status: stateInfo,
         price: priceInfo,
       };
 
+      // let imageList = [];
+      // {
+      //   imageUri.map(async (image, i) => {
+      //     const formData = new FormData();
+      //     formData.append('file', {
+      //       uri: image.uri,
+      //       // type: imageUri.type,
+      //       name: 'image.jpg',
+      //     });
+      //     const gotUri = await postBook(formData);
+      //     console.log(gotUri);
+      //   });
+      // }
+
       const formData = new FormData();
       formData.append('file', {
-        uri: imageUri.uri,
-        type: imageUri.type,
+        uri: imageUri[0].uri,
+        // type: imageUri.type,
         name: 'image.jpg',
       });
-      formData.append('townBookDto', data);
+      formData.append('townBookDto', JSON.stringify(data), {
+        type: 'application/json; charset=UTF-8',
+      });
 
-      const gotUri = await postBook(formData);
+      const result = await postBook(formData);
+      // data.imageFiles = imageList;
+      // formData.append('townBookDto', data);
     }
   };
 
   useEffect(() => {
-    getPermission();
+    // getPermission();
   }, []);
 
   return (
@@ -156,7 +172,7 @@ export default function AddPage({ navigation }) {
               취소
             </Text>
           }
-          centerComponent={<Text style={styles.headerTitle}>도서등록</Text>}
+          centerComponent={<Text style={styles.headerTitle}>도서 등록</Text>}
           rightComponent={
             <Text
               onPress={upload}
@@ -235,6 +251,7 @@ export default function AddPage({ navigation }) {
             { label: '#만화', value: '만화' },
             { label: '#기타', value: '기타' },
           ]}
+          showArrow={false}
           labelStyle={{ fontFamily: 'SCDream5' }}
           placeholder='해쉬태그'
           containerStyle={styles.dropBox}
@@ -249,6 +266,7 @@ export default function AddPage({ navigation }) {
             { label: 'B', value: 'B' },
             { label: 'C', value: 'C' },
           ]}
+          showArrow={false}
           zIndex={4000}
           labelStyle={{ fontFamily: 'SCDream5' }}
           placeholder='상품상태'
@@ -263,7 +281,10 @@ export default function AddPage({ navigation }) {
             <>
               <Pressable
                 style={[styles.userPicBox, { marginHorizontal: 20 }]}
-                onPress={pickImage}>
+                // onPress={pickImage}
+                onPress={() => {
+                  navigation.navigate('MultiAddPage', setImageUri);
+                }}>
                 <Text style={{ fontFamily: 'SCDream4' }}>카메라</Text>
               </Pressable>
               <View style={{ justifyContent: 'center' }}>
@@ -279,12 +300,20 @@ export default function AddPage({ navigation }) {
               horizontal={true}
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{ paddingHorizontal: 10 }}>
-              <Pressable onPress={pickImage}>
-                <Image
-                  source={{ uri: imageUri.uri }}
-                  style={styles.userPicBox}
-                />
-              </Pressable>
+              {imageUri.map((image, i) => {
+                return (
+                  <Pressable
+                    key={i}
+                    onPress={() => {
+                      navigation.navigate('MultiAddPage', setImageUri);
+                    }}>
+                    <Image
+                      source={{ uri: image.uri }}
+                      style={styles.userPicBox}
+                    />
+                  </Pressable>
+                );
+              })}
             </ScrollView>
           )}
         </View>
