@@ -163,8 +163,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   mycomment: {
+    flex: 1,
     height: 60,
     flexDirection: "row",
+    alignitems: "center",
+    justifyContent: "space-between",
   },
   invitefriend: {
     height: 60,

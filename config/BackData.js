@@ -23,7 +23,7 @@ export async function login(username, email, image, navigation) {
       Alert.alert(result.data.msg)
       // console.log(user.email)
 
-      await AsyncStorage.setItem("session", result.data.token)
+      await AsyncStorage.setItem("session", result.data.results)
       // Alert.alert(result.data)
       navigation.push("TabNavigator")
       // issue

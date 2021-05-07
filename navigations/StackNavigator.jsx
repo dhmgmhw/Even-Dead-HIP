@@ -18,7 +18,7 @@ const StackNavigator = () => {
       screenOptions={{
         headerShown: false,
       }}>
-      {/* <Stack.Screen name='SignInPage' component={SignInPage} /> */}
+      {/* <Stack.Screen name="SignInPage" component={SignInPage} /> */}
       <Stack.Screen name="TabNavigator" component={TabNavigator} />
       {/* <Stack.Screen name='SignUpPage' component={SignUpPage} /> */}
       <Stack.Screen name="OurTownPage" component={OurTownPage} />
