@@ -21,6 +21,7 @@ export default function OurTownPage({ navigation }) {
         containerStyle={{
           backgroundColor: 'white',
           alignSelf: 'center',
+          borderBottomWidth: 0,
         }}
         leftComponent={
           <Ionicons
@@ -33,11 +34,14 @@ export default function OurTownPage({ navigation }) {
         }
         centerComponent={{
           text: '우리 동네 책장',
-          style: { fontSize: 20, fontFamily: 'SCDream6' },
+          style: { fontSize: 17, fontFamily: 'SCDream6', top: 5 },
         }}
         rightComponent={''}
       />
-      <ScrollView style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        // contentContainerStyle={{ paddingHorizontal: 10 }}
+      >
         <Grid style={{ flexWrap: 'wrap' }}>
           {posts.map((post, i) => {
             return (
