@@ -16,6 +16,7 @@ export async function getSearchBook(searchTitle) {
                 Authorization: `KakaoAK ${APIkey}`,
             },
         });
+        // console.log(response.data)
         return response.data;
     } catch (err) {
         const error = err.response.data.error || err.message;
