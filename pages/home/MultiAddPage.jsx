@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import StatusBarPlaceHolder from '../../components/AddPage/StatusBarPlaceHolder';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import CustomNavigator from '../../components/AddPage/CustomTopNavigator';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 const ForceInset = {
   top: 'never',
@@ -37,10 +38,10 @@ export default function MultiAddPage({ navigation, route }) {
               manipulate: {
                 // width: 200,
                 // height: 200,
-                compress: 0.5,
+                compress: 0,
               },
               assetsType: ['photo'],
-              maxSelections: 5,
+              maxSelections: 3,
               margin: 2,
               portraitCols: 4,
               landscapeCols: 5,
@@ -96,5 +97,6 @@ const _buttonStyle = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    bottom: getStatusBarHeight() / 2,
   },
 });
