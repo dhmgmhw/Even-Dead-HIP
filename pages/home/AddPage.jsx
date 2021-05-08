@@ -15,13 +15,12 @@ import {
 import { Header, Overlay } from 'react-native-elements';
 import { Item } from 'native-base';
 
-import * as ImagePicker from 'expo-image-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 import { Ionicons } from '@expo/vector-icons';
 import { getSearchBook } from '../../config/KakaoApi';
 import KakaoResultCardComponent from '../../components/home/KakaoResultCardComponent';
-import { postBook } from '../../config/PostingApi';
+import { uploadImg, postBook } from '../../config/PostingApi';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
@@ -41,12 +40,16 @@ export default function AddPage({ navigation }) {
   const [publishedInfo, setPublishedInfo] = useState();
   const [contentInfo, setContentInfo] = useState('');
   const [priceInfo, setPriceInfo] = useState();
+  const [webUrl, setWebUrl] = useState('');
 
   const [switcher, setSwitcher] = useState(false);
   const [finderOpen, setFinderOpen] = useState(false);
   const [finderHeight, setFinderHeight] = useState(false);
 
   const [books, setBooks] = useState(['blank']);
+
+  const makePerfectSentence = (str = '') =>
+    str.slice(0, str.lastIndexOf('.') + 1) || '작품 소개가 없습니다.';
 
   const toggleFinder = () => {
     setFinderOpen(!finderOpen);
@@ -65,31 +68,6 @@ export default function AddPage({ navigation }) {
     Keyboard.dismiss();
   };
 
-  // const getPermission = async () => {
-  //   if (Platform.OS !== 'web') {
-  //     const {
-  //       status,
-  //     } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-  //     if (status !== 'granted') {
-  //       alert('사진을 업로드하려면 사진첩 권한이 필요합니다.');
-  //     }
-  //   }
-  // };
-
-  // const pickImage = async () => {
-  //   let imageData = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
-  //     allowsEditing: true,
-  //     aspect: [4, 4],
-  //     quality: 0,
-  //   });
-  //   if (imageData.cancelled) {
-  //     console.log('cancelled!');
-  //     return;
-  //   }
-  //   setImageUri(imageData);
-  // };
-
   const upload = async () => {
     console.log('업로드 준비중!');
     if (title == '') {
@@ -101,55 +79,45 @@ export default function AddPage({ navigation }) {
     } else if (stateInfo == '') {
       Alert.alert('책의 상태를 선택해 주세요');
       return;
-    } else if (imageUri == '') {
-      Alert.alert('사진을 최소 한 장 선택해 주세요');
-      return;
+      // } else if (imageUri == '') {
+      //   Alert.alert('사진을 최소 한 장 선택해 주세요');
+      //   return;
     } else if (contentInfo == '') {
       Alert.alert('책을 간단히 소개해 주세요');
       return;
     } else {
       let data = {
         title: title,
+        image: bookImg,
+        publisher: publisher,
+        webUrl: webUrl,
         author: author,
-        // description: story,
+        description: story,
         category: genreInfo,
         status: stateInfo,
         price: priceInfo,
+        contentInfo: contentInfo,
       };
-
-      // let imageList = [];
-      // {
-      //   imageUri.map(async (image, i) => {
-      //     const formData = new FormData();
-      //     formData.append('file', {
-      //       uri: image.uri,
-      //       // type: imageUri.type,
-      //       name: 'image.jpg',
-      //     });
-      //     const gotUri = await postBook(formData);
-      //     console.log(gotUri);
+      // const formData = new FormData();
+      // for (let i = 0; i < imageUri.length; i++) {
+      //   formData.append('files', {
+      //     uri: imageUri[i].uri,
+      //     name: 'image' + i + '.jpg',
       //   });
       // }
-
-      const formData = new FormData();
-      formData.append('file', {
-        uri: imageUri[0].uri,
-        // type: imageUri.type,
-        name: 'image.jpg',
-      });
-      formData.append('townBookDto', JSON.stringify(data), {
-        type: 'application/json; charset=UTF-8',
-      });
-
-      const result = await postBook(formData);
-      // data.imageFiles = imageList;
-      // formData.append('townBookDto', data);
+      // const imgList = await uploadImg(formData);
+      // data.captureImages = imgList;
+      data.captureImages = [
+        'https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F19422E4C50D99D0E16',
+        'http://topclass.chosun.com/news_img/1807/1807_008.jpg',
+        'https://im-media.voltron.voanews.com/Drupal/01live-211/styles/sourced/s3/ap-images/2020/10/9ec91b2b903d81863454dfd1c183b7a3.jpg?itok=HmRagI3d',
+      ];
+      // console.log(data);
+      await postBook(data);
     }
   };
 
-  useEffect(() => {
-    // getPermission();
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <TouchableWithoutFeedback
@@ -166,7 +134,7 @@ export default function AddPage({ navigation }) {
           leftComponent={
             <Text
               onPress={() => {
-                navigation.goBack();
+                navigation.pop();
               }}
               style={styles.headerTitle}>
               취소
@@ -225,8 +193,13 @@ export default function AddPage({ navigation }) {
           <>
             <Text style={styles.bookSearchTitle}>도서 제목</Text>
             <Pressable style={styles.bookSearchOpener} onPress={toggleFinder}>
-              <Text style={{ fontFamily: 'SCDream5', color: 'grey' }}>
-                도서명 검색하기
+              <Text
+                style={{
+                  fontFamily: 'SCDream5',
+                  color: '#757575',
+                  fontSize: 13,
+                }}>
+                | 도서명 검색하기
               </Text>
               <Ionicons
                 active
@@ -238,17 +211,23 @@ export default function AddPage({ navigation }) {
             </Pressable>
           </>
         )}
-
         <DropDownPicker
           items={[
-            { label: '#수필', value: '수필' },
+            { label: '#소설', value: '소설' },
             { label: '#문학', value: '문학' },
-            { label: '#언어', value: '언어' },
-            { label: '#철학', value: '철학' },
+            { label: '#인문', value: '인문' },
+            { label: '#경제/경영', value: '경제/경영' },
+            { label: '#정치/사회', value: '정치/사회' },
+            { label: '#과학', value: '과학' },
             { label: '#예술', value: '예술' },
-            { label: '#종교', value: '종교' },
             { label: '#역사', value: '역사' },
-            { label: '#만화', value: '만화' },
+            { label: '#철학', value: '철학' },
+            { label: '#종교', value: '종교' },
+            { label: '#어린이', value: '어린이' },
+            { label: '#청소년', value: '청소년' },
+            { label: '#취업/수험서', value: '취업/수험서' },
+            { label: '#언어', value: '언어' },
+            { label: '#해외도서', value: '해외도서' },
             { label: '#기타', value: '기타' },
           ]}
           showArrow={false}
@@ -275,13 +254,11 @@ export default function AddPage({ navigation }) {
             setStateInfo(item.value);
           }}
         />
-
         <View style={styles.addPicsBox}>
           {imageUri == '' ? (
             <>
               <Pressable
                 style={[styles.userPicBox, { marginHorizontal: 20 }]}
-                // onPress={pickImage}
                 onPress={() => {
                   navigation.navigate('MultiAddPage', setImageUri);
                 }}>
@@ -322,9 +299,9 @@ export default function AddPage({ navigation }) {
           style={styles.bookDescBox}
           onChangeText={setContentInfo}
           value={contentInfo}
-          placeholder='도서추천'
+          placeholder='| 도서내용과 상태를 작성해주세요'
+          placeholderTextColor={'#757575'}
         />
-
         <Overlay
           overlayStyle={
             finderHeight ? styles.overlayBoxWith : styles.overlayBoxWithout
@@ -374,13 +351,13 @@ export default function AddPage({ navigation }) {
                         setTitle(book.title);
                         setAuthor(book.authors.join(' '));
                         setBookImg(book.thumbnail);
-                        setStory(book.contents);
+                        setStory(makePerfectSentence(book.contents));
                         setPublisher(book.publisher);
                         setPublishedInfo(book.datetime);
                         setPriceInfo(book.price);
                         setFinderOpen(false);
                         setSwitcher(true);
-                        // console.log(book);
+                        setWebUrl(book.url);
                       }}>
                       <KakaoResultCardComponent book={book} />
                     </Pressable>
@@ -397,9 +374,8 @@ export default function AddPage({ navigation }) {
 
 const styles = StyleSheet.create({
   headerTitle: {
-    fontSize: 16,
+    fontSize: 14,
     paddingHorizontal: 10,
-    fontSize: 16,
     fontFamily: 'SCDream5',
   },
   container: { backgroundColor: 'white' },
@@ -471,11 +447,11 @@ const styles = StyleSheet.create({
     color: 'grey',
   },
   bookSearchTitle: {
-    fontSize: 20,
+    fontSize: 14,
     fontFamily: 'SCDream6',
     padding: 15,
     paddingVertical: 10,
-    marginTop: 30,
+    marginTop: 20,
   },
   bookSearchOpener: {
     backgroundColor: '#efefef',
@@ -506,10 +482,9 @@ const styles = StyleSheet.create({
   bookDescBox: {
     padding: 10,
     height: 100,
-    borderRadius: 5,
-    backgroundColor: '#efefef',
     marginHorizontal: 20,
     marginTop: 20,
+    fontSize: 14,
   },
   bookSearchBtn: {
     width: '15%',
