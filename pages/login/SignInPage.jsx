@@ -53,6 +53,15 @@ export default function SignInPage({ navigation }) {
     navigation.push("TabNavigator")
   }
 
+  const signoutWithGoogleAsync = async () => {
+    try {
+      console.log("token in delete", accessToken)
+      await Google.logOutAsync({ accessToken, iosClientId: IOS_CLIENT_ID })
+    } catch (err) {
+      throw new Error(err)
+    }
+  }
+
   _onAuthFacebook = async () => {
     try {
       await Facebook.initializeAsync("3939632819489550")
@@ -90,6 +99,11 @@ export default function SignInPage({ navigation }) {
         style={[styles.button, { backgroundColor: "#4285F4" }]}>
         <FontAwesome name="google" size={17} color="#ffffff" />
         <Text style={styles.text}>구글로 시작하기</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.logoutbtn}
+        onPress={signoutWithGoogleAsync}>
+        <Text>Logout</Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={_onAuthFacebook}
@@ -173,5 +187,15 @@ const styles = StyleSheet.create({
     fontFamily: "SCDream5",
     color: "white",
     marginHorizontal: 15,
+  },
+  logoutbtn: {
+    width: 300,
+    height: 50,
+    backgroundColor: "#4285F4",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 5,
+    marginBottom: 20,
+    flexDirection: "row",
   },
 })

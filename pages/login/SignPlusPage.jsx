@@ -12,6 +12,8 @@ import {
 
 import CheckBox from "../../components/Login/CheckBox"
 
+import { signdetail } from "../../config/BackData"
+
 import { Searchbar } from "react-native-paper"
 import DropDownPicker from "react-native-dropdown-picker"
 
@@ -24,12 +26,13 @@ const data = require("../../interestcategory.json")
 
 const numcolumns = "3"
 
-let checkList = []
+// let checkList = []
 
 export default function SignPlusPage({ navigation }) {
   const [searchQuery, setSearchQuery] = useState("")
   const [input, setInput] = useState("")
   const [regionInfo, setRegionInfo] = useState("")
+  const [checkList, setcheckList] = useState("")
 
   const onChangeSearch = query => setSearchQuery(query)
   return (
@@ -66,7 +69,11 @@ export default function SignPlusPage({ navigation }) {
       <Pressable
         style={{ width: 100, height: 100, backgroundColor: "red" }}
         onPress={() => {
-          console.log(checkList)
+          console.log(checkList, setcheckList)
+          // console.log(setRegionInfo(item.value))
+
+          // signdetail(setRegionInfo(item.value), setcheckList(content.title))
+          signdetail("상구", ["#문학", "#철학"])
         }}></Pressable>
       {/* <View style={styles.searchbox}>
         <Searchbar
@@ -90,9 +97,14 @@ export default function SignPlusPage({ navigation }) {
               <Pressable
                 style={styles.ListBox}
                 key={i}
-                onPress={() => {
-                  checkList.push(content.title)
-                }}>
+                onpressIn={() => {
+                  checkList.content.title
+                  setcheckList(content.title)
+                }}
+                // onPress={() => {
+                //   checkList.push(content.title)
+                // }}
+              >
                 <CheckBox
                   style={styles.bookCard}
                   book={content.title}
