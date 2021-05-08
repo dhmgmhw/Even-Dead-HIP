@@ -15,11 +15,9 @@ export async function login(username, email, image, navigation) {
         image: image,
       },
     })
-    console.log(result.data)
     const token = result.data.results
     await AsyncStorage.setItem("session", token)
     await AsyncStorage.setItem("Email", email)
-    console.log(result.data.results)
     if (result.data.ok == true) {
       await AsyncStorage.setItem("session", result.data.results)
       navigation.push("TabNavigator")
@@ -54,5 +52,39 @@ export async function signdetail(town, interested) {
   } catch (err) {
     console.log(err)
     Alert.alert("정확히 입력해 주세요.")
+  }
+}
+
+export async function getuserprofile(
+  nickname,
+  img,
+  comment,
+  star,
+  interested,
+  town
+) {
+  try {
+    const token = await AsyncStorage.getItem("session")
+    const result = await axios({
+      method: "Get",
+      url: host + "/api/usercheck",
+      headers: {
+        token: token,
+      },
+
+      data: {
+        nickname: nickname,
+        img: img,
+        comment: comment,
+        star: star,
+        town: town,
+        interested: interested,
+      },
+    })
+    Alert.alert("조회 완료")
+    return result.data
+  } catch (err) {
+    console.log(err)
+    Alert.alert("다시 시도해 보세요.")
   }
 }

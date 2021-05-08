@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import {
   StyleSheet,
   ImageBackground,
@@ -23,6 +23,23 @@ const logo = require("../../assets/logo.png")
 export default function SignInPage({ navigation }) {
   const [jsonObject, setJsonObject] = useState({})
 
+  useEffect(() => {
+    navigation.addListener("beforeRemove", e => {
+      e.preventDefault()
+    })
+
+    setTimeout(() => {
+      AsyncStorage.getItem("session", (err, result) => {
+        if (result) {
+          navigation.push("TabNavigator")
+        } else {
+          setReady(true)
+        }
+      })
+      setReady(true)
+    })
+  }, [])
+
   _onAuthGoogle = async () => {
     const { type, accessToken, user, idToken } = await Google.logInAsync({
       androidClientId:
@@ -43,20 +60,26 @@ export default function SignInPage({ navigation }) {
         }
       )
       const json_rep = await response.json()
-      navigation.push("TabNavigator")
+      navigation.push("SignPlusPage")
 
       setJsonObject(json_rep)
     } else {
       alert(`Cancel`)
     }
     await login(user.name, user.email, user.photoUrl, navigation)
-    navigation.push("TabNavigator")
+    navigation.push("SignPluspage")
   }
 
   const signoutWithGoogleAsync = async () => {
     try {
       console.log("token in delete", accessToken)
-      await Google.logOutAsync({ accessToken, iosClientId: IOS_CLIENT_ID })
+      await Google.logOutAsync({
+        accessToken,
+        iosClientId:
+          "161728779966-berb0fukqq2aidubgq4v5o04h56b9hvr.apps.googleusercontent.com",
+        androidClientId:
+          "161728779966-m3u3d79dtk3f1eac5922csif029sokdd.apps.googleusercontent.com",
+      })
     } catch (err) {
       throw new Error(err)
     }

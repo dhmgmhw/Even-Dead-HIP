@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import {
   StyleSheet,
   Text,
@@ -13,7 +13,25 @@ import {
 } from "react-native"
 import { Feather } from "@expo/vector-icons"
 
+import Load from "../../components/Load/Load"
+
+import { getuserprofile } from "../../config/BackData"
+
 export default function MyLibraryTab({ navigation }) {
+  const [profile, setprofile] = useState("")
+  const [username, setusername] = useState([])
+  const [ready, setReady] = useState(false)
+
+  useEffect(() => {
+    download()
+  }, [])
+
+  const download = async () => {
+    const result = await getuserprofile()
+    setprofile(result.results)
+    console.log(profile)
+    setReady(true)
+  }
   return (
     <ScrollView style={styles.container}>
       <View style={styles.myprofile}>
@@ -21,9 +39,7 @@ export default function MyLibraryTab({ navigation }) {
           style={{
             flexDirection: "row",
           }}>
-          <Image
-            style={styles.profileimg}
-            source={require("../../assets/poo.png")}></Image>
+          <Image style={styles.profileimg} source={profile.img}></Image>
           <View
             style={{
               flexDirection: "column",
@@ -33,7 +49,7 @@ export default function MyLibraryTab({ navigation }) {
               numberOfLines={1}
               ellipsizeMode={"tail"}
               style={styles.nickname}>
-              나는 곰돌이푸
+              {profile.nickname}
             </Text>
             <View
               style={{
@@ -73,7 +89,7 @@ export default function MyLibraryTab({ navigation }) {
             <TouchableHighlight
               style={styles.circle}
               underlayColor="#C6C5FF"
-              onPress={() => alert("Yaay!")}>
+              onPress={(() => console.log(profile), alert("Yaay!"))}>
               <>
                 <Feather name="thumbs-up" size={28} color="white" />
               </>
@@ -84,7 +100,9 @@ export default function MyLibraryTab({ navigation }) {
             <TouchableHighlight
               style={styles.circle}
               underlayColor="#C6C5FF"
-              onPress={() => alert("Yaay!")}>
+              onPress={
+                (() => alert("Yaay!"), console.log(profile), alert("Yaay!"))
+              }>
               <>
                 <Feather name="heart" size={28} color="white" />
               </>
@@ -95,7 +113,9 @@ export default function MyLibraryTab({ navigation }) {
       </View>
       <View style={styles.bigborder}></View>
 
-      <TouchableOpacity style={styles.deal}>
+      <TouchableOpacity
+        style={styles.deal}
+        onpress={() => console.log(profile)}>
         <Text style={styles.downcompo}>거래내역</Text>
         <Feather
           style={styles.rarrow}
@@ -140,6 +160,9 @@ export default function MyLibraryTab({ navigation }) {
       <View style={styles.border}></View> */}
     </ScrollView>
   )
+  // : (
+  //   <Load />
+  // )
 }
 
 const styles = StyleSheet.create({

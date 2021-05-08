@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffet } from "react"
 import {
   StyleSheet,
   Text,
@@ -13,6 +13,8 @@ import {
 import CheckBox from "../../components/Login/CheckBox"
 
 import { signdetail } from "../../config/BackData"
+
+import { getuserprofile } from "../../config/BackData"
 
 import { Searchbar } from "react-native-paper"
 import DropDownPicker from "react-native-dropdown-picker"
@@ -33,6 +35,18 @@ export default function SignPlusPage({ navigation }) {
   const [input, setInput] = useState("")
   const [regionInfo, setRegionInfo] = useState("")
   const [checkList, setcheckList] = useState("")
+  const [profile, setprofile] = useState("")
+
+  // useEffect(() => {
+  //   download()
+  // }, [])
+
+  // const download = async () => {
+  //   const result = await getuserprofile()
+  //   setprofile(result.results)
+  //   console.log(profile)
+  //   setReady(true)
+  // }
 
   const onChangeSearch = query => setSearchQuery(query)
   return (
