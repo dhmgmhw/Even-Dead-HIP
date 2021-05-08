@@ -5,6 +5,7 @@ import TabNavigator from './TabNavigator';
 import SignInPage from '../pages/login/SignInPage';
 // import SignUpPage from '../pages/login/SignUpPage';
 import PostDetailPage from '../pages/home/PostDetailPage';
+import PostFixPage from '../pages/home/PostFixPage';
 import ChatPage from '../pages/chat/ChatPage';
 import AddPage from '../pages/home/AddPage';
 import OurTownPage from '../pages/home/OurTownPage';
@@ -26,6 +27,7 @@ const StackNavigator = () => {
       <Stack.Screen name='PostDetailPage' component={PostDetailPage} />
       <Stack.Screen name='ChatPage' component={ChatPage} />
       <Stack.Screen name='AddPage' component={AddPage} />
+      <Stack.Screen name='PostFixPage' component={PostFixPage} />
     </Stack.Navigator>
   );
 };

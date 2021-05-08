@@ -25,12 +25,12 @@ const TabNavigator = () => {
           } else if (route.name === 'ChatMain') {
             iconName += 'chatbox';
           } else if (route.name === 'MyPageMain') {
-            iconName += 'library';
+            iconName += 'person-sharp';
           }
           return (
             <Ionicons
               name={iconName}
-              color={focused ? '#6864FF' : 'lightgrey'}
+              color={focused ? '#438732' : 'lightgrey'}
               size={26}
             />
           );
