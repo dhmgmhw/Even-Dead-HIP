@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,33 +6,33 @@ import {
   Dimensions,
   ScrollView,
   Pressable,
-} from "react-native"
-import { Header } from "react-native-elements"
+} from 'react-native';
+import { Header } from 'react-native-elements';
 
-import { Ionicons } from "@expo/vector-icons"
+import { Ionicons } from '@expo/vector-icons';
 
-const diviceWidth = Dimensions.get("window").width
-const diviceHeight = Dimensions.get("window").height
+const diviceWidth = Dimensions.get('window').width;
+const diviceHeight = Dimensions.get('window').height;
 
 export default function ChatMain({ navigation }) {
-  const [image, setimage] = useState("kimchi")
+  const [image, setimage] = useState('kimchi');
   return (
     <>
       <Header
-        placement="left"
+        placement='left'
         containerStyle={{
-          backgroundColor: "white",
-          alignSelf: "center",
+          backgroundColor: 'white',
+          alignSelf: 'center',
           borderBottomWidth: 1,
         }}
-        leftComponent={""}
+        leftComponent={''}
         centerComponent={{
           text: { image },
-          style: { fontSize: 20, fontWeight: "800" },
+          style: { fontSize: 20, fontWeight: '800' },
         }}
         rightComponent={
           <Ionicons
-            name={"search"}
+            name={'search'}
             size={27}
             style={{ marginHorizontal: 10 }}
           />
@@ -42,7 +42,8 @@ export default function ChatMain({ navigation }) {
         <Pressable
           style={styles.chatBox}
           onPress={() => {
-            navigation.navigate("ChatPage", setimage)
+            // navigation.navigate("ChatPage", setimage)
+            navigation.navigate('SignUpPage');
           }}>
           {/* 변화 */}
           <View style={styles.userBox}></View>
@@ -53,33 +54,33 @@ export default function ChatMain({ navigation }) {
         </Pressable>
       </ScrollView>
     </>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
-  container: { backgroundColor: "white" },
+  container: { backgroundColor: 'white' },
   chatBox: {
     width: diviceWidth,
     height: 80,
     borderWidth: 2,
     marginTop: 10,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   userBox: {
     width: 60,
     height: 60,
     borderRadius: 100,
-    backgroundColor: "grey",
+    backgroundColor: 'grey',
   },
   descBox: {
-    width: "60%",
+    width: '60%',
     height: 70,
-    backgroundColor: "lightgrey",
+    backgroundColor: 'lightgrey',
   },
   bookBox: {
     width: 60,
     height: 70,
-    backgroundColor: "grey",
+    backgroundColor: 'grey',
   },
-})
+});
