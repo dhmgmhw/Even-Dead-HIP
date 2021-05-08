@@ -6329,6 +6329,11 @@ react-native-status-bar-height@^2.6.0:
   resolved "https://registry.yarnpkg.com/react-native-status-bar-height/-/react-native-status-bar-height-2.6.0.tgz#b6afd25b6e3d533c43d0fcdcfd5cafd775592cea"
   integrity sha512-z3SGLF0mHT+OlJDq7B7h/jXPjWcdBT3V14Le5L2PjntjjWM3+EJzq2BcXDwV+v67KFNJic5pgA26cCmseYek6w==
 
+react-native-swiper-hooks@^1.3.8:
+  version "1.3.8"
+  resolved "https://registry.yarnpkg.com/react-native-swiper-hooks/-/react-native-swiper-hooks-1.3.8.tgz#c4a1353ac780eabb1e23775b87cf703307484b93"
+  integrity sha512-EKRLv5DQ40P3kgo3IbEt/IloTxQLfathn7rIOXUafdedaEVqzFzhJQDZuEL57oc+ZwoZ1vPtpXftB2GLGwQH6w==
+
 react-native-vector-icons@^7.0.0:
   version "7.1.0"
   resolved "https://registry.yarnpkg.com/react-native-vector-icons/-/react-native-vector-icons-7.1.0.tgz#145487d617b2a81d395d2cf64e6e065fcab3a454"
