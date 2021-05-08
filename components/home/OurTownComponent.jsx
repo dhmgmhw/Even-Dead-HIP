@@ -24,13 +24,6 @@ export default function OurTownComponent({ navigation, post }) {
             resizeMode='cover'
             source={{ uri: post.image }}
           />
-          <View style={styles.cardTitleBox}>
-            <Text
-              numberOfLines={1}
-              style={{ fontFamily: 'SCDream3', fontSize: 12 }}>
-              {post.title}
-            </Text>
-          </View>
         </View>
       </View>
     </Pressable>
@@ -39,8 +32,8 @@ export default function OurTownComponent({ navigation, post }) {
 
 const styles = StyleSheet.create({
   card: {
-    width: 130,
-    height: 170,
+    width: 110,
+    height: 120,
     shadowColor: '#000',
     shadowOffset: {
       width: 1,
@@ -50,8 +43,8 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
   },
   cardImage: {
-    width: 100,
-    height: 150,
+    width: 80,
+    height: 120,
     borderRadius: 5,
     alignSelf: 'center',
   },
