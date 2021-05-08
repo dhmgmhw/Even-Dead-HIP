@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   ImageBackground,
@@ -23,6 +23,23 @@ const logo = require('../../assets/logo.png');
 export default function SignInPage({ navigation }) {
   const [jsonObject, setJsonObject] = useState({});
 
+  useEffect(() => {
+    navigation.addListener('beforeRemove', (e) => {
+      e.preventDefault();
+    });
+
+    setTimeout(() => {
+      AsyncStorage.getItem('session', (err, result) => {
+        if (result) {
+          navigation.push('TabNavigator');
+        } else {
+          setReady(true);
+        }
+      });
+      setReady(true);
+    });
+  }, []);
+
   _onAuthGoogle = async () => {
     const { type, accessToken, user, idToken } = await Google.logInAsync({
       androidClientId:
@@ -43,11 +60,29 @@ export default function SignInPage({ navigation }) {
         }
       );
       const json_rep = await response.json();
+      navigation.push('SignPlusPage');
+
       setJsonObject(json_rep);
     } else {
       alert(`Cancel`);
     }
     await login(user.name, user.email, user.photoUrl, navigation);
+    navigation.push('SignPluspage');
+  };
+
+  const signoutWithGoogleAsync = async () => {
+    try {
+      console.log('token in delete', accessToken);
+      await Google.logOutAsync({
+        accessToken,
+        iosClientId:
+          '161728779966-berb0fukqq2aidubgq4v5o04h56b9hvr.apps.googleusercontent.com',
+        androidClientId:
+          '161728779966-m3u3d79dtk3f1eac5922csif029sokdd.apps.googleusercontent.com',
+      });
+    } catch (err) {
+      throw new Error(err);
+    }
   };
 
   _onAuthFacebook = async () => {
@@ -75,7 +110,7 @@ export default function SignInPage({ navigation }) {
     } catch ({ message }) {
       alert(`페이스북 로그인 에러: ${message}`);
     }
-    // await login(email, username, image, navigation);
+    await login(email, username, image, navigation);
   };
 
   return (
@@ -87,6 +122,11 @@ export default function SignInPage({ navigation }) {
         style={[styles.button, { backgroundColor: '#4285F4' }]}>
         <FontAwesome name='google' size={17} color='#ffffff' />
         <Text style={styles.text}>구글로 시작하기</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.logoutbtn}
+        onPress={signoutWithGoogleAsync}>
+        <Text>Logout</Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={_onAuthFacebook}
@@ -170,5 +210,15 @@ const styles = StyleSheet.create({
     fontFamily: 'SCDream5',
     color: 'white',
     marginHorizontal: 15,
+  },
+  logoutbtn: {
+    width: 300,
+    height: 50,
+    backgroundColor: '#4285F4',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 5,
+    marginBottom: 20,
+    flexDirection: 'row',
   },
 });
