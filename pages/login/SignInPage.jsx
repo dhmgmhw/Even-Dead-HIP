@@ -64,7 +64,7 @@ export default function SignInPage({ navigation }) {
       });
       if (type === 'success') {
         const response = await fetch(
-          `https://graph.facebook.com/me?access_token=${token}`
+          `https://graph.facebook.com/me?fields=id,name,email&access_token=${token}`
         );
         const json_rep = await response.json();
         setJsonObject(json_rep);
@@ -75,7 +75,7 @@ export default function SignInPage({ navigation }) {
     } catch ({ message }) {
       alert(`페이스북 로그인 에러: ${message}`);
     }
-    await login(email, username, image, navigation);
+    // await login(email, username, image, navigation);
   };
 
   return (
