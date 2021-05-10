@@ -122,30 +122,30 @@ export default function HomeMain({ navigation }) {
               새로 등록된 도서
             </Text>
           </View>
-          <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            style={styles.newBooksScroll}>
-            {posts.map((post, i) => {
-              return (
-                <GenreComponent key={i} navigation={navigation} post={post} />
-              );
-            })}
-          </ScrollView>
-          <View style={styles.borderBox}></View>
-          <View style={styles.subTitleBox}>
-            <Text style={{ fontSize: 16, fontFamily: 'SCDream6' }}>#과학</Text>
-          </View>
-          <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            style={styles.newBooksScroll}>
-            {posts.map((post, i) => {
-              return (
-                <GenreComponent key={i} navigation={navigation} post={post} />
-              );
-            })}
-          </ScrollView>
+          {posts.map((post, i) => {
+            return (
+              <GenreComponent key={i} navigation={navigation} post={post} />
+            );
+          })}
+          {/* {data.length == 0 ? (
+        <ActivityIndicator size="large" />
+      ) : (
+        <FlatList
+          data={posts}
+          onEndReachedThreshold={0}
+          onEndReached={async () => {
+            console.log('바닥 가까이 감: 리프레시');
+          }}
+          renderItem={(data) => {
+            // console.log(data);
+            return (
+              <GenreComponent navigation={navigation} post={post} />
+            );
+          }}
+          numColumns={1}
+          keyExtractor={(item) => item.date.toString()}
+        />
+      )} */}
         </View>
       </ScrollView>
       <Button
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
   subTitleBox: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    height: 40,
+    height: 20,
     paddingHorizontal: 20,
     marginTop: 20,
   },
