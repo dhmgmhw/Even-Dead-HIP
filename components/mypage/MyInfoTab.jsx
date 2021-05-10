@@ -12,6 +12,7 @@ import {
   SafeAreaView,
 } from "react-native"
 import { Feather } from "@expo/vector-icons"
+import * as Google from "expo-google-app-auth"
 
 import Load from "../../components/Load/Load"
 
@@ -32,6 +33,22 @@ export default function MyLibraryTab({ navigation }) {
     console.log(profile)
     setReady(true)
   }
+
+  const signoutWithGoogleAsync = async () => {
+    try {
+      console.log("token in delete", accessToken)
+      await Google.logOutAsync({
+        accessToken,
+        iosClientId:
+          "161728779966-berb0fukqq2aidubgq4v5o04h56b9hvr.apps.googleusercontent.com",
+        androidClientId:
+          "161728779966-m3u3d79dtk3f1eac5922csif029sokdd.apps.googleusercontent.com",
+      })
+      // 클리어
+    } catch (err) {
+      throw new Error(err)
+    }
+  }
   return (
     <ScrollView style={styles.container}>
       <View style={styles.myprofile}>
@@ -39,7 +56,13 @@ export default function MyLibraryTab({ navigation }) {
           style={{
             flexDirection: "row",
           }}>
-          <Image style={styles.profileimg} source={profile.img}></Image>
+          <Image
+            style={styles.profileimg}
+            resizeMode="contain"
+            source={{
+              uri: profile.image,
+            }}
+          />
           <View
             style={{
               flexDirection: "column",
@@ -49,7 +72,7 @@ export default function MyLibraryTab({ navigation }) {
               numberOfLines={1}
               ellipsizeMode={"tail"}
               style={styles.nickname}>
-              {profile.nickname}
+              {profile.username}
             </Text>
             <View
               style={{
@@ -125,6 +148,11 @@ export default function MyLibraryTab({ navigation }) {
         />
       </TouchableOpacity>
       <View style={styles.border}></View>
+      <TouchableOpacity
+        style={styles.logoutbtn}
+        onPress={signoutWithGoogleAsync}>
+        <Text>Logout</Text>
+      </TouchableOpacity>
       {/* <TouchableOpacity style={styles.myliketext}>
         <Text style={styles.downcompo}>내가 좋아한 글</Text>
 
@@ -204,6 +232,9 @@ const styles = StyleSheet.create({
   profileimg: {
     marginLeft: 20,
     marginTop: 40,
+    height: 50,
+    width: 50,
+    borderRadius: 100,
   },
   nickname: {
     marginTop: 50,

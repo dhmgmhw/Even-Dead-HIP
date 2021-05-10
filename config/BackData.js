@@ -17,11 +17,10 @@ export async function login(username, email, image, navigation) {
       },
     })
     const token = result.data.results
-    await AsyncStorage.setItem("session", token)
-    await AsyncStorage.setItem("Email", email)
     if (result.data.ok == true) {
       await AsyncStorage.setItem("session", result.data.results)
-      navigation.push("TabNavigator")
+      await AsyncStorage.setItem("email", email)
+      navigation.push("SignPlusPage")
     } else if (result.data.ok == false) {
       Alert.alert(result.data.msg)
     }
@@ -30,7 +29,7 @@ export async function login(username, email, image, navigation) {
     Alert.alert("로그인 할 수 없습니다.")
   }
 }
-export async function signdetail(town, interested) {
+export async function signdetail(town) {
   try {
     const token = await AsyncStorage.getItem("session")
     const result = await axios({
@@ -43,10 +42,8 @@ export async function signdetail(town, interested) {
         token: token,
         // "Content-Type": "application/json;"
       },
-
       data: {
         town: town,
-        interested: interested,
       },
     })
     Alert.alert("포스팅 완료")
