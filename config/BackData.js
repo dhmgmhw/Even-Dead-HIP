@@ -90,28 +90,29 @@ export async function getuserProfile(
   }
 }
 
-// export async function getuserProfile(
-//   nickname,
-//   img,
-//   comment,
-//   star,
-//   interested,
-//   town
-// ) {
-//   try {
-//     const token = await AsyncStorage.getItem("session")
+export async function changeUserProfile(nickname, img, town) {
+  try {
+    const token = await AsyncStorage.getItem("session")
+    const result = await axios({
+      method: "put",
+      url: host + "/api/profile",
+      headers: {
+        token: token,
+      },
 
-//     const result = await axios.get(
-//       host + "/api/usercheck/" + nickname,
-//       img,
-//       comment,
-//       star,
-//       interested,
-//       town,
-//       token
-//     )
-//     return result.data.results
-//   } catch (err) {
-//     Alert.alert("error :(")
-//   }
-// }
+      data: {
+        nickname: nickname,
+        img: img,
+        town: town,
+      },
+    })
+    await AsyncStorage.setItem("session", token)
+    console.log(result)
+
+    Alert.alert("조회 완료")
+    return result.data
+  } catch (err) {
+    console.log(err)
+    Alert.alert("다시 시도해 보세요.")
+  }
+}

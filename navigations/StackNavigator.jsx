@@ -3,7 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack"
 
 import TabNavigator from "./TabNavigator"
 import SignInPage from "../pages/login/SignInPage"
-// import SignUpPage from '../pages/login/SignUpPage';
+import SignPlusPage from "../pages/login/SignPlusPage"
 import PostDetailPage from "../pages/home/PostDetailPage"
 import PostFixPage from "../pages/home/PostFixPage"
 import ChatPage from "../pages/chat/ChatPage"
@@ -28,6 +28,7 @@ const StackNavigator = () => {
       <Stack.Screen name="ChatPage" component={ChatPage} />
       <Stack.Screen name="AddPage" component={AddPage} />
       <Stack.Screen name="PostFixPage" component={PostFixPage} />
+      <Stack.Screen name="SignPlusPage" component={SignPlusPage} />
     </Stack.Navigator>
   )
 }

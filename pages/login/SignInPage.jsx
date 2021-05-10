@@ -74,7 +74,7 @@ export default function SignInPage({ navigation }) {
     await AsyncStorage.setItem("accessToken", accessToken)
     console.log(accessToken)
 
-    navigation.push("SignPluspage")
+    navigation.push("SignPlusPage")
   }
 
   const signoutWithGoogleAsync = async () => {

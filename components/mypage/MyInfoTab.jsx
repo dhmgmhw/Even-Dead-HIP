@@ -13,42 +13,81 @@ import {
 } from "react-native"
 import { Feather } from "@expo/vector-icons"
 import * as Google from "expo-google-app-auth"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 import Load from "../../components/Load/Load"
 
-import { getuserprofile } from "../../config/BackData"
+import { Overlay } from "react-native-elements"
 
+import { getuserProfile } from "../../config/BackData"
+
+c
 export default function MyLibraryTab({ navigation }) {
   const [profile, setprofile] = useState("")
   const [username, setusername] = useState([])
   const [ready, setReady] = useState(false)
-
+  const [accessToken, setAccessToken] = useState("")
+  const [visible, setVisible] = useState(false)
+  // const toggleOverlay = () => {
+  //   setVisible(!visible)
+  // }
   useEffect(() => {
     download()
   }, [])
 
   const download = async () => {
-    const result = await getuserprofile()
+    const result = await getuserProfile()
     setprofile(result.results)
     console.log(profile)
+    console.log(accessToken)
     setReady(true)
   }
 
-  const signoutWithGoogleAsync = async () => {
-    try {
-      console.log("token in delete", accessToken)
-      await Google.logOutAsync({
-        accessToken,
-        iosClientId:
-          "161728779966-berb0fukqq2aidubgq4v5o04h56b9hvr.apps.googleusercontent.com",
-        androidClientId:
-          "161728779966-m3u3d79dtk3f1eac5922csif029sokdd.apps.googleusercontent.com",
-      })
-      // 클리어
-    } catch (err) {
-      throw new Error(err)
+  // const signoutWithGoogleAsync = async () => {
+  //   const { accessToken } = await getAuthenticationTokens()
+  //   await Google.logOutAsync({
+  //     accessToken,
+  //     ...config,
+  //   })
+  //   await storeAuthenticationTokens("", "")
+
+  // await Google.logInAsync(config)
+
+  // if (type === "success") {
+  /* Log-Out */
+  // await Google.logOutAsync({ accessToken, ...config })
+  /* `accessToken` is now invalid and cannot be used to get data from the Google API with HTTP requests */
+  // }
+  // try {
+  //   console.log("token in delete", accessToken)
+  //   await Google.logOutAsync({
+  //     accessToken,
+  //     iosClientId:
+  //       "161728779966-berb0fukqq2aidubgq4v5o04h56b9hvr.apps.googleusercontent.com",
+  //     androidClientId:
+  //       "161728779966-m3u3d79dtk3f1eac5922csif029sokdd.apps.googleusercontent.com",
+  //   })
+  //   // 클리어
+  // } catch (err) {
+  //   throw new Error(err)
+  // }
+  // }
+  const logOut = async () => {
+    const logOutConfig = {
+      iosClientId:
+        "161728779966-berb0fukqq2aidubgq4v5o04h56b9hvr.apps.googleusercontent.com",
+
+      androidClientId:
+        "161728779966-m3u3d79dtk3f1eac5922csif029sokdd.apps.googleusercontent.com",
     }
+
+    await Google.logOutAsync({ accessToken, ...logOutConfig })
+    setAccessToken("")
+    // setIsUserLoggedIn(false);
+    // setIsTruckOwnerLoggedIn(false);
+    console.log("you have been logged out")
   }
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.myprofile}>
@@ -84,10 +123,20 @@ export default function MyLibraryTab({ navigation }) {
               <Text style={styles.follownum}>팔로잉</Text>
               <Text style={styles.num}>9</Text>
             </View>
+            {/* <View>
+              <Button title="Open Overlay" onPress={toggleOverlay} />
+
+              <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
+                <Text>Hello from Overlay!</Text>
+              </Overlay>
+            </View> */}
             <Button
               style={styles.profileedit}
               title="프로필 수정"
               color="#6864FF"></Button>
+            <TouchableOpacity style={styles.logoutbtn} onPress={logOut}>
+              <Text>Logout</Text>
+            </TouchableOpacity>
           </View>
         </View>
         <View
@@ -150,7 +199,8 @@ export default function MyLibraryTab({ navigation }) {
       <View style={styles.border}></View>
       <TouchableOpacity
         style={styles.logoutbtn}
-        onPress={signoutWithGoogleAsync}>
+        // onPress={signoutWithGoogleAsync}
+      >
         <Text>Logout</Text>
       </TouchableOpacity>
       {/* <TouchableOpacity style={styles.myliketext}>
