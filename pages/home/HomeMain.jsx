@@ -26,7 +26,7 @@ const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
 export default function HomeMain({ navigation }) {
-  const [posts, setPosts] = useState(mocklist);
+  const [posts, setPosts] = useState([]);
 
   const download = async () => {
     const result = await getPostedBook();
@@ -122,11 +122,22 @@ export default function HomeMain({ navigation }) {
               새로 등록된 도서
             </Text>
           </View>
-          {posts.map((post, i) => {
-            return (
-              <GenreComponent key={i} navigation={navigation} post={post} />
-            );
-          })}
+          {posts ? (
+            <>
+              {posts.map((post, i) => {
+                return (
+                  <Pressable
+                    onPress={() => {
+                      console.log(post);
+                    }}
+                    key={i}>
+                    <GenreComponent navigation={navigation} post={post} />
+                  </Pressable>
+                );
+              })}
+            </>
+          ) : null}
+
           {/* {data.length == 0 ? (
         <ActivityIndicator size="large" />
       ) : (

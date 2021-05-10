@@ -161,7 +161,7 @@ export default function MyLibraryTab({ navigation }) {
             <TouchableHighlight
               style={styles.circle}
               underlayColor="#C6C5FF"
-              onPress={(() => console.log(profile), alert("Yaay!"))}>
+              onPress={() => console.log(profile)}>
               <>
                 <Feather name="thumbs-up" size={28} color="white" />
               </>
@@ -172,9 +172,9 @@ export default function MyLibraryTab({ navigation }) {
             <TouchableHighlight
               style={styles.circle}
               underlayColor="#C6C5FF"
-              onPress={
-                (() => alert("Yaay!"), console.log(profile), alert("Yaay!"))
-              }>
+              onPress={() => {
+                console.log("ya")
+              }}>
               <>
                 <Feather name="heart" size={28} color="white" />
               </>

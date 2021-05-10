@@ -10,71 +10,69 @@ import {
 } from 'react-native';
 
 import { Tooltip } from 'react-native-elements';
+import { deleteComment } from '../../config/PostingApi';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
-export default function CommentBubbleComponent() {
+export default function CommentBubbleComponent({ post, download }) {
+  const delComment = async () => {
+    await deleteComment(post.commentId);
+    download();
+  };
+
   return (
-    <View style={styles.bubbleBox}>
-      <View style={styles.userImgBox}>
-        <Image
-          style={styles.userImg}
-          resizeMode='cover'
-          source={{
-            uri:
-              'http://c.files.bbci.co.uk/E866/production/_104449495_c32b76d3-5990-4bea-9304-ba818d87be15.jpg',
-          }}
-        />
-      </View>
-      <View style={styles.commentBox}>
-        <Text style={styles.commentText}>
-          ..다..🐬..다..🐬..다..🐬..다...🐬...다다다..🐬...다다다...🌀🌀또🌀물보라를🌀일으켜🌀🌀
-          ..다..🐬..다..🐬..다..🐬..다...🐬...다다다..🐬...다다다...🌀🌀또🌀물보라를🌀일으켜🌀🌀
-          ..다..🐬..다..🐬..다..🐬..다...🐬...다다다..🐬...다다다...🌀🌀또🌀물보라를🌀일으켜🌀🌀
-          ..다..🐬..다..🐬..다..🐬..다...🐬...다다다..🐬...다다다...🌀🌀또🌀물보라를🌀일으켜🌀🌀
-          ..다..🐬..다..🐬..다..🐬..다...🐬...다다다..🐬...다다다...🌀🌀또🌀물보라를🌀일으켜🌀🌀
-          ..다..🐬..다..🐬..다..🐬..다...🐬...다다다..
-        </Text>
-        <View style={styles.optionBox}>
-          <Text style={styles.commentText}>by. 내이름은 푸</Text>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.dataText}>2021.04.29 </Text>
-            <Tooltip
-              withOverlay={false}
-              containerStyle={{
-                height: 60,
-                backgroundColor: '#438732',
-              }}
-              pointerColor={'#438732'}
-              popover={
-                <>
-                  <Pressable
-                    style={styles.tooltipBtn}
-                    onPress={() => {
-                      console.log('Fix');
-                    }}>
-                    <Text style={styles.tooltipText}>수정</Text>
-                  </Pressable>
-                  <View
-                    style={{
-                      height: 1,
-                      backgroundColor: 'white',
-                      width: 100,
-                    }}></View>
-                  <Pressable
-                    style={styles.tooltipBtn}
-                    onPress={() => {
-                      console.log('Delete');
-                    }}>
-                    <Text style={styles.tooltipText}>삭제</Text>
-                  </Pressable>
-                </>
-              }>
-              <Text style={styles.dataText}>| 수정 및 삭제</Text>
-            </Tooltip>
-          </View>
-          {/* <Pressable
+    <Pressable
+      onPress={() => {
+        console.log(post);
+      }}>
+      <View style={styles.bubbleBox}>
+        <View style={styles.userImgBox}>
+          <Image
+            style={styles.userImg}
+            resizeMode='cover'
+            source={{
+              uri: post.image,
+            }}
+          />
+        </View>
+        <View style={styles.commentBox}>
+          <Text style={styles.commentText}>{post.contents}</Text>
+          <View style={styles.optionBox}>
+            <Text style={styles.commentText}>by. {post.username} </Text>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={styles.dataText}>2021.04.29 </Text>
+              <Tooltip
+                withOverlay={false}
+                containerStyle={{
+                  height: 60,
+                  backgroundColor: '#438732',
+                }}
+                pointerColor={'#438732'}
+                popover={
+                  <>
+                    <Pressable
+                      style={styles.tooltipBtn}
+                      onPress={() => {
+                        console.log('Fix');
+                      }}>
+                      <Text style={styles.tooltipText}>수정</Text>
+                    </Pressable>
+                    <View
+                      style={{
+                        height: 1,
+                        backgroundColor: 'white',
+                        width: 100,
+                      }}></View>
+                    <Pressable style={styles.tooltipBtn} onPress={delComment}>
+                      <Text style={styles.tooltipText}>삭제</Text>
+                    </Pressable>
+                  </>
+                }>
+                <Text style={styles.dataText}>| 수정 및 삭제</Text>
+              </Tooltip>
+            </View>
+            {/* <Pressable
             style={{ flexDirection: 'row' }}
             onPress={() => {
               console.log('삭제');
@@ -82,9 +80,10 @@ export default function CommentBubbleComponent() {
             <Text style={styles.dataText}>2021.04.29 </Text>
             <Text style={styles.dataText}>| 삭제하기</Text>
           </Pressable> */}
+          </View>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 }
 

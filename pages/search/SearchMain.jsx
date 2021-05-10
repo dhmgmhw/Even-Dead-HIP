@@ -107,11 +107,11 @@ export default function SearchMain({ navigation }) {
           </View>
         )}
         <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
-          {posts.map((post, i) => {
+          {/* {posts.map((post, i) => {
             return (
               <GenreComponent key={i} navigation={navigation} post={post} />
             );
-          })}
+          })} */}
         </ScrollView>
       </View>
     </TouchableWithoutFeedback>

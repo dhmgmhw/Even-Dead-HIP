@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -10,6 +10,7 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
+  ActivityIndicator,
 } from 'react-native';
 import { Header, Image, Tooltip } from 'react-native-elements';
 
@@ -17,7 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import Swiper from 'react-native-swiper-hooks';
 import CommentBubbleComponent from '../../components/home/CommentBubbleComponent';
-import { deletePost, postComment } from '../../config/PostingApi';
+import { deletePost, postComment, postDetail } from '../../config/PostingApi';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
@@ -25,19 +26,43 @@ const diviceHeight = Dimensions.get('window').height;
 export default function PostDetailPage({ navigation, route }) {
   const detailData = route.params;
 
+  const [data, setData] = useState([]);
+  const [ready, setReady] = useState(true);
+
   const image = { uri: detailData.image };
+
   const [comment, setComment] = useState('');
 
+  const [bubbles, setBubbles] = useState();
+
   const leaveComment = async () => {
+    if (comment == '') {
+      alert('댓글 내용을 작성해 주세요!');
+      return;
+    }
     await postComment(comment, detailData.id);
     setComment('');
+    download();
   };
 
-  useLayoutEffect(() => {
-    console.log(detailData);
+  const download = async () => {
+    const res = await postDetail(detailData.id);
+    setBubbles(res.comments);
+    setData(res);
+    setReady(false);
+  };
+
+  useEffect(() => {
+    download();
   }, []);
 
-  return (
+  return ready ? (
+    <ActivityIndicator
+      style={{ position: 'absolute', alignSelf: 'center', top: '50%' }}
+      size='large'
+      color='grey'
+    />
+  ) : (
     <TouchableWithoutFeedback
       onPress={() => {
         Keyboard.dismiss();
@@ -140,7 +165,7 @@ export default function PostDetailPage({ navigation, route }) {
                       marginRight: 15,
                     }}
                     resizeMode='cover'
-                    source={{ uri: detailData.image }}
+                    source={{ uri: data.townBook.user.image }}
                   />
                   <View>
                     <Text
@@ -149,10 +174,10 @@ export default function PostDetailPage({ navigation, route }) {
                         fontFamily: 'SCDream7',
                         marginBottom: 5,
                       }}>
-                      나는 곰돌이푸
+                      {data.townBook.user.username}
                     </Text>
                     <Text style={{ fontSize: 13, fontFamily: 'SCDream5' }}>
-                      송파구
+                      {data.townBook.user.town}
                     </Text>
                   </View>
                 </View>
@@ -182,9 +207,8 @@ export default function PostDetailPage({ navigation, route }) {
                       <Pressable
                         style={styles.tooltipBtn}
                         onPress={() => {
-                          deletePost(detailData.id);
+                          deletePost(detailData.id, navigation);
                           alert('게시글을 삭제했습니다!');
-                          navigation.pop();
                         }}>
                         <Text style={styles.tooltipText}>삭제</Text>
                       </Pressable>
@@ -227,7 +251,20 @@ export default function PostDetailPage({ navigation, route }) {
               <Text style={styles.subTitle}>댓글</Text>
 
               <View style={styles.commentBox}>
-                <CommentBubbleComponent />
+                {bubbles ? (
+                  <>
+                    {bubbles.map((post, i) => {
+                      return (
+                        <CommentBubbleComponent
+                          key={i}
+                          post={post}
+                          download={download}
+                        />
+                      );
+                    })}
+                  </>
+                ) : null}
+
                 <View style={styles.commentInputBox}>
                   <TextInput
                     style={styles.commentInput}

@@ -113,8 +113,7 @@ export default function PostFixPage({ navigation, route }) {
         'http://topclass.chosun.com/news_img/1807/1807_008.jpg',
       ];
       // console.log(data);
-      await updatePost(data, bookHerit.id);
-      navigation.pop();
+      await updatePost(data, bookHerit.id, navigation);
     }
   };
 

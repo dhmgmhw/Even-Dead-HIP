@@ -46,21 +46,14 @@ export async function signdetail(town) {
         town: town,
       },
     })
-    Alert.alert("포스팅 완료")
+    console.log('로그인완료')
   } catch (err) {
     console.log(err)
     Alert.alert("정확히 입력해 주세요.")
   }
 }
 
-export async function getuserProfile(
-  nickname,
-  img,
-  comment,
-  star,
-  interested,
-  town
-) {
+export async function getUserProfile() {
   try {
     const token = await AsyncStorage.getItem("session")
     const result = await axios({
@@ -69,20 +62,8 @@ export async function getuserProfile(
       headers: {
         token: token,
       },
-
-      data: {
-        nickname: nickname,
-        img: img,
-        comment: comment,
-        star: star,
-        town: town,
-        interested: interested,
-      },
     })
-    await AsyncStorage.setItem("session", token)
-    console.log(result)
-
-    Alert.alert("조회 완료")
+    console.log("조회 완료")
     return result.data
   } catch (err) {
     console.log(err)

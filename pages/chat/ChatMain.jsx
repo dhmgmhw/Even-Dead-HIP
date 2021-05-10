@@ -8,6 +8,7 @@ import {
   Pressable,
 } from 'react-native';
 import { Header } from 'react-native-elements';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Ionicons } from '@expo/vector-icons';
 
@@ -41,9 +42,9 @@ export default function ChatMain({ navigation }) {
       <ScrollView style={styles.container}>
         <Pressable
           style={styles.chatBox}
-          onPress={() => {
-            // navigation.navigate("ChatPage", setimage)
-            navigation.navigate('SignUpPage');
+          onPress={async () => {
+            await AsyncStorage.clear();
+            console.log('스토리지 비움');
           }}>
           {/* 변화 */}
           <View style={styles.userBox}></View>

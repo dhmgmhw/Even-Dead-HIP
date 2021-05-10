@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from "react-native"
 import JSONTree from "react-native-json-tree"
 import * as Facebook from "expo-facebook"
@@ -23,7 +24,7 @@ const logo = require("../../assets/logo.png")
 
 export default function SignInPage({ navigation }) {
   const [jsonObject, setJsonObject] = useState({})
-  const [ready, setReady] = useState(false)
+  const [ready, setReady] = useState(true)
 
   useEffect(() => {
     navigation.addListener("beforeRemove", e => {
@@ -35,10 +36,9 @@ export default function SignInPage({ navigation }) {
         if (result) {
           navigation.push("TabNavigator")
         } else {
-          setReady(true)
+          setReady(false)
         }
       })
-      setReady(true)
     })
   }, [])
 
@@ -53,7 +53,7 @@ export default function SignInPage({ navigation }) {
         "161728779966-berb0fukqq2aidubgq4v5o04h56b9hvr.apps.googleusercontent.com",
       scopes: ["profile", "email"],
     })
-    console.log(accessToken)
+    console.log(user)
 
     if (type === "success") {
       const response = await fetch(
@@ -62,9 +62,9 @@ export default function SignInPage({ navigation }) {
           headers: { Authorization: `Bearer ${accessToken}` },
         }
       )
-      console.log("token in accessible", accessToken)
+      // console.log('token in accessible', accessToken);
       const json_rep = await response.json()
-      navigation.push("SignPlusPage")
+      // navigation.push('SignPlusPage');
 
       setJsonObject(json_rep)
     } else {
@@ -121,7 +121,13 @@ export default function SignInPage({ navigation }) {
     await login(email, username, image, navigation)
   }
 
-  return (
+  return ready ? (
+    <ActivityIndicator
+      style={{ position: "absolute", alignSelf: "center", top: "50%" }}
+      size="large"
+      color="grey"
+    />
+  ) : (
     <ScrollView scrollEnabled={false} contentContainerStyle={styles.container}>
       <StatusBar style="auto" />
       <Text style={styles.loginText}>간편한 SNS 회원가입</Text>
