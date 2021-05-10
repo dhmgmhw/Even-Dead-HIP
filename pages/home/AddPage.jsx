@@ -101,21 +101,15 @@ export default function AddPage({ navigation }) {
         price: priceInfo,
         contentInfo: contentInfo,
       };
-      // const formData = new FormData();
-      // for (let i = 0; i < imageUri.length; i++) {
-      //   formData.append('files', {
-      //     uri: imageUri[i].uri,
-      //     name: 'image' + i + '.jpg',
-      //   });
-      // }
-      // const imgList = await uploadImg(formData);
-      // data.captureImages = imgList;
-      data.captureImages = [
-        'https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F19422E4C50D99D0E16',
-        'http://topclass.chosun.com/news_img/1807/1807_008.jpg',
-        'https://im-media.voltron.voanews.com/Drupal/01live-211/styles/sourced/s3/ap-images/2020/10/9ec91b2b903d81863454dfd1c183b7a3.jpg?itok=HmRagI3d',
-      ];
-      // console.log(data);
+      const formData = new FormData();
+      for (let i = 0; i < imageUri.length; i++) {
+        formData.append('files', {
+          uri: imageUri[i].uri,
+          name: 'image' + i + '.jpg',
+        });
+      }
+      const imgList = await uploadImg(formData);
+      data.captureImages = imgList;
       await postBook(data);
       navigation.pop();
     }
