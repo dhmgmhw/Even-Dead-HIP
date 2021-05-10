@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react"
 import { Alert } from "react-native"
 import axios from "axios"
 import AsyncStorage from "@react-native-async-storage/async-storage"
@@ -55,7 +56,7 @@ export async function signdetail(town, interested) {
   }
 }
 
-export async function getuserprofile(
+export async function getuserProfile(
   nickname,
   img,
   comment,
@@ -81,6 +82,9 @@ export async function getuserprofile(
         interested: interested,
       },
     })
+    await AsyncStorage.setItem("session", token)
+    console.log(result)
+
     Alert.alert("조회 완료")
     return result.data
   } catch (err) {
@@ -88,3 +92,29 @@ export async function getuserprofile(
     Alert.alert("다시 시도해 보세요.")
   }
 }
+
+// export async function getuserProfile(
+//   nickname,
+//   img,
+//   comment,
+//   star,
+//   interested,
+//   town
+// ) {
+//   try {
+//     const token = await AsyncStorage.getItem("session")
+
+//     const result = await axios.get(
+//       host + "/api/usercheck/" + nickname,
+//       img,
+//       comment,
+//       star,
+//       interested,
+//       town,
+//       token
+//     )
+//     return result.data.results
+//   } catch (err) {
+//     Alert.alert("error :(")
+//   }
+// }
