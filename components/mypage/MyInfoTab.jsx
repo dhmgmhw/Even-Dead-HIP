@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,73 +10,69 @@ import {
   Dimensions,
   TouchableHighlight,
   SafeAreaView,
-} from "react-native"
-import { Feather } from "@expo/vector-icons"
-import * as Google from "expo-google-app-auth"
+} from 'react-native';
+import { Feather } from '@expo/vector-icons';
+import * as Google from 'expo-google-app-auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import Load from "../../components/Load/Load"
+import Load from '../../components/Load/Load';
 
-import { getuserprofile } from "../../config/BackData"
+import { getUserProfile } from '../../config/BackData';
 
 export default function MyLibraryTab({ navigation }) {
-  const [profile, setprofile] = useState("")
-  const [username, setusername] = useState([])
-  const [ready, setReady] = useState(false)
+  const [profile, setprofile] = useState('');
+  const [username, setusername] = useState([]);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    download()
-  }, [])
+    download();
+  }, []);
 
   const download = async () => {
-    const result = await getuserprofile()
-    setprofile(result.results)
-    console.log(profile)
-    setReady(true)
-  }
+    const result = await getUserProfile();
+    setprofile(result.results);
+    console.log(profile);
+    setReady(true);
+  };
 
   const signoutWithGoogleAsync = async () => {
     try {
-      console.log("token in delete", accessToken)
-      await Google.logOutAsync({
-        accessToken,
-        iosClientId:
-          "161728779966-berb0fukqq2aidubgq4v5o04h56b9hvr.apps.googleusercontent.com",
-        androidClientId:
-          "161728779966-m3u3d79dtk3f1eac5922csif029sokdd.apps.googleusercontent.com",
-      })
-      // 클리어
+      await AsyncStorage.clear();
+      console.log('로그아웃!');
+      navigation.push('SignInPage');
     } catch (err) {
-      throw new Error(err)
+      console.log(err);
     }
-  }
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.myprofile}>
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
           }}>
           <Image
             style={styles.profileimg}
-            resizeMode="contain"
+            resizeMode='contain'
             source={{
               uri: profile.image,
             }}
           />
           <View
             style={{
-              flexDirection: "column",
+              flexDirection: 'column',
               marginLeft: 20,
             }}>
             <Text
               numberOfLines={1}
-              ellipsizeMode={"tail"}
+              ellipsizeMode={'tail'}
               style={styles.nickname}>
               {profile.username}
             </Text>
             <View
               style={{
-                flexDirection: "row",
+                flexDirection: 'row',
                 marginBottom: 10,
               }}>
               <Text style={styles.likenum}>좋아요</Text>
@@ -86,24 +82,24 @@ export default function MyLibraryTab({ navigation }) {
             </View>
             <Button
               style={styles.profileedit}
-              title="프로필 수정"
-              color="#6864FF"></Button>
+              title='프로필 수정'
+              color='#6864FF'></Button>
           </View>
         </View>
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
           }}>
           <View style={styles.textBox}>
             <TouchableHighlight
               style={styles.circle}
-              underlayColor="#C6C5FF"
-              onPress={() => alert("Yaay!")}>
+              underlayColor='#C6C5FF'
+              onPress={() => alert('Yaay!')}>
               <>
-                <Feather name="align-left" size={28} color="white" />
+                <Feather name='align-left' size={28} color='white' />
               </>
             </TouchableHighlight>
-            <Text style={styles.lists1} color="white">
+            <Text style={styles.lists1} color='white'>
               댓글
             </Text>
           </View>
@@ -111,10 +107,10 @@ export default function MyLibraryTab({ navigation }) {
           <View style={styles.recommendlist}>
             <TouchableHighlight
               style={styles.circle}
-              underlayColor="#C6C5FF"
-              onPress={(() => console.log(profile), alert("Yaay!"))}>
+              underlayColor='#C6C5FF'
+              onPress={() => console.log(profile)}>
               <>
-                <Feather name="thumbs-up" size={28} color="white" />
+                <Feather name='thumbs-up' size={28} color='white' />
               </>
             </TouchableHighlight>
             <Text style={styles.lists}>추천목록</Text>
@@ -122,12 +118,12 @@ export default function MyLibraryTab({ navigation }) {
           <View style={styles.likelist}>
             <TouchableHighlight
               style={styles.circle}
-              underlayColor="#C6C5FF"
-              onPress={
-                (() => alert("Yaay!"), console.log(profile), alert("Yaay!"))
-              }>
+              underlayColor='#C6C5FF'
+              onPress={() => {
+                console.log('ya');
+              }}>
               <>
-                <Feather name="heart" size={28} color="white" />
+                <Feather name='heart' size={28} color='white' />
               </>
             </TouchableHighlight>
             <Text style={styles.lists}>관심목록</Text>
@@ -142,9 +138,9 @@ export default function MyLibraryTab({ navigation }) {
         <Text style={styles.downcompo}>거래내역</Text>
         <Feather
           style={styles.rarrow}
-          name="chevron-right"
+          name='chevron-right'
           size={28}
-          color="black"
+          color='black'
         />
       </TouchableOpacity>
       <View style={styles.border}></View>
@@ -187,7 +183,7 @@ export default function MyLibraryTab({ navigation }) {
       </TouchableOpacity>
       <View style={styles.border}></View> */}
     </ScrollView>
-  )
+  );
   // : (
   //   <Load />
   // )
@@ -195,36 +191,36 @@ export default function MyLibraryTab({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
   bigborder: {
     height: 10,
-    backgroundColor: "#f2f2f2",
+    backgroundColor: '#f2f2f2',
   },
   border: {
     height: 5,
-    backgroundColor: "#f2f2f2",
+    backgroundColor: '#f2f2f2',
     borderRadius: 100,
   },
   deal: {
     height: 60,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 20,
   },
   mycomment: {
     flex: 1,
     height: 60,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   invitefriend: {
     height: 60,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   myliketext: {
     height: 60,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   myprofile: {
     height: 250,
@@ -238,7 +234,7 @@ const styles = StyleSheet.create({
   },
   nickname: {
     marginTop: 50,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   likenum: {
     marginTop: 5,
@@ -248,25 +244,25 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   profileedit: {
-    height: "50%",
-    width: "100%",
+    height: '50%',
+    width: '100%',
     borderRadius: 100,
     marginTop: 50,
   },
   textBox: {
     marginLeft: 40,
     marginTop: 20,
-    flexDirection: "column",
+    flexDirection: 'column',
   },
   recommendlist: {
     marginLeft: 70,
     marginTop: 20,
-    flexDirection: "column",
+    flexDirection: 'column',
   },
   likelist: {
     marginLeft: 70,
     marginTop: 20,
-    flexDirection: "column",
+    flexDirection: 'column',
   },
   lists: {
     marginTop: 10,
@@ -276,7 +272,7 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   downcompo: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   rarrow: {},
   rarrow1: {
@@ -292,19 +288,19 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   num: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginTop: 5,
     marginLeft: 5,
   },
   circle: {
     borderRadius:
       Math.round(
-        Dimensions.get("window").width + Dimensions.get("window").height
+        Dimensions.get('window').width + Dimensions.get('window').height
       ) / 2,
-    width: Dimensions.get("window").width * 0.15,
-    height: Dimensions.get("window").width * 0.15,
-    backgroundColor: "#C6C5FF",
-    justifyContent: "center",
-    alignItems: "center",
+    width: Dimensions.get('window').width * 0.15,
+    height: Dimensions.get('window').width * 0.15,
+    backgroundColor: '#C6C5FF',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-})
+});
