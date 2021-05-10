@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   ImageBackground,
@@ -6,96 +6,93 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native"
-import JSONTree from "react-native-json-tree"
-import * as Facebook from "expo-facebook"
-import * as Google from "expo-google-app-auth"
-import { FontAwesome } from "@expo/vector-icons"
-import AsyncStorage from "@react-native-async-storage/async-storage"
+  ActivityIndicator,
+} from 'react-native';
+import JSONTree from 'react-native-json-tree';
+import * as Facebook from 'expo-facebook';
+import * as Google from 'expo-google-app-auth';
+import { FontAwesome } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { login } from "../../config/BackData"
+import { login } from '../../config/BackData';
 
-import { StatusBar } from "expo-status-bar"
-import { ScrollView } from "react-native-gesture-handler"
+import { StatusBar } from 'expo-status-bar';
+import { ScrollView } from 'react-native-gesture-handler';
 
-const bImage = require("../../assets/back.png")
-const logo = require("../../assets/logo.png")
+const bImage = require('../../assets/back.png');
+const logo = require('../../assets/logo.png');
 
 export default function SignInPage({ navigation }) {
-  const [jsonObject, setJsonObject] = useState({})
-  const [ready, setReady] = useState(false)
+  const [jsonObject, setJsonObject] = useState({});
+  const [ready, setReady] = useState(true);
 
   useEffect(() => {
-    navigation.addListener("beforeRemove", e => {
-      e.preventDefault()
-    })
+    navigation.addListener('beforeRemove', (e) => {
+      e.preventDefault();
+    });
 
     setTimeout(() => {
-      AsyncStorage.getItem("session", (err, result) => {
+      AsyncStorage.getItem('session', (err, result) => {
         if (result) {
-          navigation.push("TabNavigator")
+          navigation.push('TabNavigator');
         } else {
-          setReady(true)
+          setReady(false);
         }
-      })
-      setReady(true)
-    })
-  }, [])
+      });
+    });
+  }, []);
 
   _onAuthGoogle = async () => {
     const { type, accessToken, user, idToken } = await Google.logInAsync({
       androidClientId:
-        "161728779966-m3u3d79dtk3f1eac5922csif029sokdd.apps.googleusercontent.com",
+        '161728779966-m3u3d79dtk3f1eac5922csif029sokdd.apps.googleusercontent.com',
       expoClientId:
-        "747037265612-5o4lk93m2n098dhirk4gshnqlugi86nv.apps.googleusercontent.com",
+        '747037265612-5o4lk93m2n098dhirk4gshnqlugi86nv.apps.googleusercontent.com',
       //    GOOGLE_ANDROID_ID,
       iosClientId:
-        "161728779966-berb0fukqq2aidubgq4v5o04h56b9hvr.apps.googleusercontent.com",
-      scopes: ["profile", "email"],
-    })
-    console.log(accessToken)
+        '161728779966-berb0fukqq2aidubgq4v5o04h56b9hvr.apps.googleusercontent.com',
+      scopes: ['profile', 'email'],
+    });
+    console.log(user);
 
-    if (type === "success") {
+    if (type === 'success') {
       const response = await fetch(
-        "https://www.googleapis.com/userinfo/v2/me",
+        'https://www.googleapis.com/userinfo/v2/me',
         {
           headers: { Authorization: `Bearer ${accessToken}` },
         }
-      )
-      console.log("token in accessible", accessToken)
-      const json_rep = await response.json()
-      navigation.push("SignPlusPage")
+      );
+      // console.log('token in accessible', accessToken);
+      const json_rep = await response.json();
+      // navigation.push('SignPlusPage');
 
-      setJsonObject(json_rep)
+      setJsonObject(json_rep);
     } else {
-      alert(`Cancel`)
+      alert(`Cancel`);
     }
-    await login(user.name, user.email, user.photoUrl, navigation)
-    await AsyncStorage.setItem("accessToken", accessToken)
-    console.log(accessToken)
-
-    navigation.push("SignPluspage")
-  }
+    await AsyncStorage.setItem('accessToken', accessToken);
+    await login(user.name, user.email, user.photoUrl, navigation);
+  };
 
   const signoutWithGoogleAsync = async () => {
     try {
-      console.log("token in delete", accessToken)
+      console.log('token in delete', accessToken);
       await Google.logOutAsync({
         accessToken,
         iosClientId:
-          "161728779966-berb0fukqq2aidubgq4v5o04h56b9hvr.apps.googleusercontent.com",
+          '161728779966-berb0fukqq2aidubgq4v5o04h56b9hvr.apps.googleusercontent.com',
         androidClientId:
-          "161728779966-m3u3d79dtk3f1eac5922csif029sokdd.apps.googleusercontent.com",
-      })
-      await AsyncStorage.setItem("accessToken", accessToken)
+          '161728779966-m3u3d79dtk3f1eac5922csif029sokdd.apps.googleusercontent.com',
+      });
+      await AsyncStorage.setItem('accessToken', accessToken);
     } catch (err) {
-      throw new Error(err)
+      throw new Error(err);
     }
-  }
+  };
 
   _onAuthFacebook = async () => {
     try {
-      await Facebook.initializeAsync("3939632819489550")
+      await Facebook.initializeAsync('3939632819489550');
       const {
         type,
         token,
@@ -103,32 +100,38 @@ export default function SignInPage({ navigation }) {
         permissions,
         declinedPermissions,
       } = await Facebook.logInWithReadPermissionsAsync({
-        permissions: ["public_profile", "email"],
-      })
-      if (type === "success") {
+        permissions: ['public_profile', 'email'],
+      });
+      if (type === 'success') {
         const response = await fetch(
           `https://graph.facebook.com/me?fields=id,name,email&access_token=${token}`
-        )
-        const json_rep = await response.json()
-        setJsonObject(json_rep)
-        console.log(json_rep)
+        );
+        const json_rep = await response.json();
+        setJsonObject(json_rep);
+        console.log(json_rep);
       } else {
-        console.log("Facebook Login cancelled")
+        console.log('Facebook Login cancelled');
       }
     } catch ({ message }) {
-      alert(`페이스북 로그인 에러: ${message}`)
+      alert(`페이스북 로그인 에러: ${message}`);
     }
-    await login(email, username, image, navigation)
-  }
+    await login(email, username, image, navigation);
+  };
 
-  return (
+  return ready ? (
+    <ActivityIndicator
+      style={{ position: 'absolute', alignSelf: 'center', top: '50%' }}
+      size='large'
+      color='grey'
+    />
+  ) : (
     <ScrollView scrollEnabled={false} contentContainerStyle={styles.container}>
-      <StatusBar style="auto" />
+      <StatusBar style='auto' />
       <Text style={styles.loginText}>간편한 SNS 회원가입</Text>
       <TouchableOpacity
         onPress={_onAuthGoogle}
-        style={[styles.button, { backgroundColor: "#4285F4" }]}>
-        <FontAwesome name="google" size={17} color="#ffffff" />
+        style={[styles.button, { backgroundColor: '#4285F4' }]}>
+        <FontAwesome name='google' size={17} color='#ffffff' />
         <Text style={styles.text}>구글로 시작하기</Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -138,12 +141,12 @@ export default function SignInPage({ navigation }) {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={_onAuthFacebook}
-        style={[styles.button, { backgroundColor: "#3b5998" }]}>
+        style={[styles.button, { backgroundColor: '#3b5998' }]}>
         <FontAwesome
-          name="facebook"
+          name='facebook'
           size={17}
-          color="#ffffff"
-          style={{ alignSelf: "center" }}
+          color='#ffffff'
+          style={{ alignSelf: 'center' }}
         />
         <Text style={styles.text}>페이스북으로 시작하기</Text>
       </TouchableOpacity>
@@ -151,47 +154,47 @@ export default function SignInPage({ navigation }) {
         <JSONTree data={jsonObject} />
       </View> */}
     </ScrollView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   content: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  thumbnail: { alignSelf: "center" },
+  thumbnail: { alignSelf: 'center' },
   title: {
     fontSize: 25,
-    fontWeight: "700",
-    color: "#c5beb6",
-    textAlign: "center",
+    fontWeight: '700',
+    color: '#c5beb6',
+    textAlign: 'center',
   },
   highlite: {
     fontSize: 25,
-    fontWeight: "700",
-    color: "#df3f32",
-    textAlign: "center",
+    fontWeight: '700',
+    color: '#df3f32',
+    textAlign: 'center',
   },
-  loginText: { fontFamily: "SCDream5", marginBottom: 20 },
+  loginText: { fontFamily: 'SCDream5', marginBottom: 20 },
   label: {
-    color: "#fff",
+    color: '#fff',
   },
   input: {
-    color: "#fff",
+    color: '#fff',
   },
 
   container1: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   header: {
     fontSize: 25,
@@ -200,33 +203,33 @@ const styles = StyleSheet.create({
     marginTop: 15,
     width: 150,
     height: 150,
-    borderColor: "rgba(0,0,0,0.2)",
+    borderColor: 'rgba(0,0,0,0.2)',
     borderWidth: 3,
     borderRadius: 150,
   },
   button: {
     width: 300,
     height: 50,
-    backgroundColor: "#4285F4",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#4285F4',
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 5,
     marginBottom: 20,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   text: {
-    fontFamily: "SCDream5",
-    color: "white",
+    fontFamily: 'SCDream5',
+    color: 'white',
     marginHorizontal: 15,
   },
   logoutbtn: {
     width: 300,
     height: 50,
-    backgroundColor: "#4285F4",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#4285F4',
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 5,
     marginBottom: 20,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
-})
+});
