@@ -28,6 +28,11 @@ export default function PostDetailPage({ navigation, route }) {
   const image = { uri: detailData.image };
   const [comment, setComment] = useState('');
 
+  const leaveComment = async () => {
+    await postComment(comment, detailData.id);
+    setComment('');
+  };
+
   useLayoutEffect(() => {
     console.log(detailData);
   }, []);
@@ -179,6 +184,7 @@ export default function PostDetailPage({ navigation, route }) {
                         onPress={() => {
                           deletePost(detailData.id);
                           alert('게시글을 삭제했습니다!');
+                          navigation.pop();
                         }}>
                         <Text style={styles.tooltipText}>삭제</Text>
                       </Pressable>
@@ -230,11 +236,7 @@ export default function PostDetailPage({ navigation, route }) {
                     placeholder='| 이 책에 대한 가치를 같이 나눠봐요.'
                     placeholderTextColor={'white'}
                   />
-                  <Pressable
-                    onPress={async () => {
-                      await postComment(comment, detailData.id);
-                    }}
-                    style={styles.commentBtn}>
+                  <Pressable onPress={leaveComment} style={styles.commentBtn}>
                     <Text style={styles.commentBtnText}>입력</Text>
                   </Pressable>
                 </View>
