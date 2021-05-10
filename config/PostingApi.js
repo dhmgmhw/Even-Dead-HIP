@@ -21,7 +21,7 @@ export async function uploadImg(data) {
 }
 
 export async function postBook(data) {
-    console.log(data)
+    // console.log(data)
     try {
         const response = await axios({
             method: "post",
@@ -77,6 +77,7 @@ export async function postComment(data, id) {
             data: data,
         });
         // return response.data
+        console.log(response.data)
         console.log(response.data.msg)
     } catch (err) {
         console.log(err)
