@@ -11,6 +11,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import { Header, Overlay } from 'react-native-elements';
 import { Item } from 'native-base';
@@ -27,6 +28,7 @@ const diviceHeight = Dimensions.get('window').height;
 
 export default function AddPage({ navigation }) {
   const [text, setText] = useState();
+  const [uploader, setUploader] = useState(false);
 
   // upload datas
   const [title, setTitle] = useState('');
@@ -70,6 +72,7 @@ export default function AddPage({ navigation }) {
 
   const upload = async () => {
     console.log('업로드 준비중!');
+    setUploader(true);
     if (title == '') {
       Alert.alert('등록할 책을 선택해 주세요');
       return;
@@ -79,9 +82,9 @@ export default function AddPage({ navigation }) {
     } else if (stateInfo == '') {
       Alert.alert('책의 상태를 선택해 주세요');
       return;
-      // } else if (imageUri == '') {
-      //   Alert.alert('사진을 최소 한 장 선택해 주세요');
-      //   return;
+    } else if (imageUri == '') {
+      Alert.alert('사진을 최소 한 장 선택해 주세요');
+      return;
     } else if (contentInfo == '') {
       Alert.alert('책을 간단히 소개해 주세요');
       return;
@@ -114,6 +117,7 @@ export default function AddPage({ navigation }) {
       ];
       // console.log(data);
       await postBook(data);
+      navigation.pop();
     }
   };
 
@@ -367,6 +371,13 @@ export default function AddPage({ navigation }) {
             )}
           </View>
         </Overlay>
+        {uploader ? (
+          <ActivityIndicator
+            style={{ position: 'absolute', alignSelf: 'center', top: '50%' }}
+            size='large'
+            color='grey'
+          />
+        ) : null}
       </View>
     </TouchableWithoutFeedback>
   );
