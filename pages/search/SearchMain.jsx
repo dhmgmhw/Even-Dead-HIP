@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,17 +9,54 @@ import {
   Keyboard,
   Dimensions,
   TextInput,
+  Alert,
 } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { Ionicons } from '@expo/vector-icons';
+import { mocklist } from '../../mock.json';
+
+import GenreComponent from '../../components/home/GenreComponent';
+
+import { getPostedBook, testGetPost } from '../../config/MainPageApi';
+import { searchBook } from '../../config/SearchApi';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
-export default function SearchMain() {
+export default function SearchMain({ navigation }) {
   const [searchBar, setSearchBar] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+
+  const [posts, setPosts] = useState([]);
+
+  const download = async () => {
+    const result = await getPostedBook();
+    setPosts(result);
+  };
+
   const onChangeSearch = (query) => setSearchQuery(query);
+
+  const searchBooks = async () => {
+    if (searchQuery == '') {
+      Alert.alert('검색어를 입력해주세요!');
+      return;
+    }
+    const searchResult = await searchBook(searchQuery);
+    if (searchResult == '') {
+      Alert.alert('검색결과가 없습니다:(');
+      return;
+    }
+    setSearchQuery('');
+    setPosts(searchResult);
+    setSearchBar(true);
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      download();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <TouchableWithoutFeedback
@@ -50,9 +87,7 @@ export default function SearchMain() {
               name='search-sharp'
               size={24}
               color='black'
-              onPress={() => {
-                setSearchBar(true);
-              }}
+              onPress={searchBooks}
             />
           </View>
         ) : (
@@ -71,6 +106,13 @@ export default function SearchMain() {
             />
           </View>
         )}
+        <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
+          {posts.map((post, i) => {
+            return (
+              <GenreComponent key={i} navigation={navigation} post={post} />
+            );
+          })}
+        </ScrollView>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -97,7 +139,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 15,
+    paddingHorizontal: 5,
+    marginHorizontal: 10,
   },
   searchUnopenedBar: {
     marginTop: getStatusBarHeight(),
@@ -107,6 +150,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 15,
+    paddingHorizontal: 5,
+    marginHorizontal: 10,
   },
 });
