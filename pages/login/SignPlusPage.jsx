@@ -11,6 +11,7 @@ import {
 } from "react-native"
 
 import CheckBox from "../../components/Login/CheckBox"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 import { signdetail } from "../../config/BackData"
 
@@ -82,12 +83,12 @@ export default function SignPlusPage({ navigation }) {
       />
       <Pressable
         style={{ width: 100, height: 100, backgroundColor: "red" }}
-        onPress={() => {
+        onPress={async () => {
           console.log(checkList, setcheckList)
           // console.log(setRegionInfo(item.value))
 
           // signdetail(setRegionInfo(item.value), setcheckList(content.title))
-          signdetail("상구", ["#문학", "#철학"])
+          await signdetail(regionInfo)
         }}></Pressable>
       {/* <View style={styles.searchbox}>
         <Searchbar
