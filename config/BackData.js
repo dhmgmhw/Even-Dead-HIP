@@ -104,6 +104,7 @@ export async function getuserProfile() {
 
 export async function changeUserProfile(username, image) {
   try {
+    console.log(username, image)
     const token = await AsyncStorage.getItem("session")
     const result = await axios({
       method: "put",
@@ -111,15 +112,12 @@ export async function changeUserProfile(username, image) {
       headers: {
         token: token,
       },
-
       data: {
         image: image,
         username: username,
       },
     })
-    await AsyncStorage.setItem("session", token)
-    console.log(result)
-
+    console.log(result.data)
     Alert.alert("변경 완료")
     return result.data
   } catch (err) {

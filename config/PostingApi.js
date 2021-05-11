@@ -12,8 +12,8 @@ export async function uploadImg(data) {
             url: host + '/api/images',
             data: data,
         });
+        console.log(response.data)
         return response.data
-        // console.log(data)
     } catch (err) {
         console.log(err)
         alert('이미지 업로드 오류')

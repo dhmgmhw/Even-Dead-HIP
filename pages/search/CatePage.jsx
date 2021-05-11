@@ -13,9 +13,6 @@ import { Header } from 'react-native-elements';
 
 import { Ionicons } from '@expo/vector-icons';
 
-import { mocklist } from '../../mock.json';
-import { Grid } from 'native-base';
-import PostComponent from '../../components/home/PostComponent';
 import { searchByCate } from '../../config/SearchApi';
 import GenreComponent from '../../components/home/GenreComponent';
 
