@@ -142,7 +142,7 @@ export default function AddPage({ navigation }) {
           rightComponent={
             <Text
               onPress={upload}
-              style={[styles.headerTitle, { color: '#6864FF' }]}>
+              style={[styles.headerTitle, { color: '#757575' }]}>
               등록
             </Text>
           }
@@ -193,7 +193,7 @@ export default function AddPage({ navigation }) {
             <Pressable style={styles.bookSearchOpener} onPress={toggleFinder}>
               <Text
                 style={{
-                  fontFamily: 'SCDream5',
+                  fontFamily: 'SansMedium',
                   color: '#757575',
                   fontSize: 13,
                 }}>
@@ -229,7 +229,7 @@ export default function AddPage({ navigation }) {
             { label: '#기타', value: '기타' },
           ]}
           showArrow={false}
-          labelStyle={{ fontFamily: 'SCDream5' }}
+          labelStyle={{ fontFamily: 'SansMedium' }}
           placeholder='해쉬태그'
           containerStyle={styles.dropBox}
           onChangeItem={(item) => {
@@ -245,7 +245,7 @@ export default function AddPage({ navigation }) {
           ]}
           showArrow={false}
           zIndex={4000}
-          labelStyle={{ fontFamily: 'SCDream5' }}
+          labelStyle={{ fontFamily: 'SansMedium' }}
           placeholder='상품상태'
           containerStyle={styles.dropBox}
           onChangeItem={(item) => {
@@ -260,7 +260,12 @@ export default function AddPage({ navigation }) {
                 onPress={() => {
                   navigation.navigate('MultiAddPage', setImageUri);
                 }}>
-                <Text style={{ fontFamily: 'SCDream4' }}>카메라</Text>
+                <Ionicons
+                  onPress={bookTitleSearch}
+                  name='image-outline'
+                  size={30}
+                  style={{ alignSelf: 'center', color: '#4CB73B' }}
+                />
               </Pressable>
               <View style={{ justifyContent: 'center' }}>
                 <View>
@@ -309,7 +314,7 @@ export default function AddPage({ navigation }) {
           <View
             style={{
               borderWidth: 2,
-              borderColor: '#6864FF',
+              borderColor: '#4CB73B',
               marginBottom: 20,
             }}>
             <Item>
@@ -379,9 +384,9 @@ export default function AddPage({ navigation }) {
 
 const styles = StyleSheet.create({
   headerTitle: {
-    fontSize: 14,
+    fontSize: 18,
     paddingHorizontal: 10,
-    fontFamily: 'SCDream5',
+    fontFamily: 'SansMedium',
   },
   container: { backgroundColor: 'white' },
   addPicsBox: {
@@ -428,7 +433,7 @@ const styles = StyleSheet.create({
   bookResText: {
     width: diviceWidth * 0.55,
     fontSize: 13,
-    fontFamily: 'SCDream5',
+    fontFamily: 'SansMedium',
     color: 'grey',
   },
   bookResBorder: {
@@ -447,13 +452,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   photoGuidanceText: {
-    fontFamily: 'SCDream5',
+    fontFamily: 'SansMedium',
     fontSize: 13,
     color: 'grey',
   },
   bookSearchTitle: {
-    fontSize: 14,
-    fontFamily: 'SCDream6',
+    fontSize: 18,
+    fontFamily: 'SansMedium',
     padding: 15,
     paddingVertical: 10,
     marginTop: 20,

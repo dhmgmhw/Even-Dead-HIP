@@ -146,7 +146,7 @@ export default function PostFixPage({ navigation, route }) {
           rightComponent={
             <Text
               onPress={update}
-              style={[styles.headerTitle, { color: '#6864FF' }]}>
+              style={[styles.headerTitle, { color: '#757575' }]}>
               수정
             </Text>
           }
@@ -192,24 +192,24 @@ export default function PostFixPage({ navigation, route }) {
         <DropDownPicker
           items={[
             { label: '#소설', value: '소설' },
-            { label: '#문학', value: '문학' },
+            { label: '#시/에세이', value: '시/에세이' },
             { label: '#인문', value: '인문' },
             { label: '#경제/경영', value: '경제/경영' },
             { label: '#정치/사회', value: '정치/사회' },
+            { label: '#언어', value: '언어' },
             { label: '#과학', value: '과학' },
             { label: '#예술', value: '예술' },
             { label: '#역사', value: '역사' },
             { label: '#철학', value: '철학' },
             { label: '#종교', value: '종교' },
+            { label: '#해외도서', value: '해외도서' },
             { label: '#어린이', value: '어린이' },
             { label: '#청소년', value: '청소년' },
             { label: '#취업/수험서', value: '취업/수험서' },
-            { label: '#언어', value: '언어' },
-            { label: '#해외도서', value: '해외도서' },
             { label: '#기타', value: '기타' },
           ]}
           showArrow={false}
-          labelStyle={{ fontFamily: 'SCDream5' }}
+          labelStyle={{ fontFamily: 'SansMedium' }}
           placeholder='해쉬태그'
           containerStyle={styles.dropBox}
           onChangeItem={(item) => {
@@ -225,7 +225,7 @@ export default function PostFixPage({ navigation, route }) {
           ]}
           showArrow={false}
           zIndex={4000}
-          labelStyle={{ fontFamily: 'SCDream5' }}
+          labelStyle={{ fontFamily: 'SansMedium' }}
           placeholder='상품상태'
           containerStyle={styles.dropBox}
           onChangeItem={(item) => {
@@ -271,7 +271,7 @@ export default function PostFixPage({ navigation, route }) {
           <View
             style={{
               borderWidth: 2,
-              borderColor: '#6864FF',
+              borderColor: '#757575',
               marginBottom: 20,
             }}>
             <Item>
@@ -334,9 +334,9 @@ export default function PostFixPage({ navigation, route }) {
 
 const styles = StyleSheet.create({
   headerTitle: {
-    fontSize: 14,
+    fontSize: 18,
     paddingHorizontal: 10,
-    fontFamily: 'SCDream5',
+    fontFamily: 'SansMedium',
   },
   container: { backgroundColor: 'white' },
   addPicsBox: {
@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
   bookResText: {
     width: diviceWidth * 0.55,
     fontSize: 13,
-    fontFamily: 'SCDream5',
+    fontFamily: 'SansMedium',
     color: 'grey',
   },
   bookResBorder: {
@@ -402,12 +402,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   photoGuidanceText: {
-    fontFamily: 'SCDream5',
+    fontFamily: 'SansMedium',
     fontSize: 13,
     color: 'grey',
   },
   bookSearchTitle: {
-    fontSize: 14,
+    fontSize: 18,
     fontFamily: 'SCDream6',
     padding: 15,
     paddingVertical: 10,
