@@ -73,7 +73,7 @@ export default function SignPlusPage({ navigation }) {
       await signdetail(searchQuery);
       navigation.push('TabNavigator');
     } else {
-      Alert.alert('아직은 서울 안의 자치구만 가능해요 ;(');
+      Alert.alert('아직은 서울 안에서만 가능해요 ;( 예) 송파구');
       return;
     }
   };
