@@ -15,21 +15,21 @@ import { Button } from 'native-base';
 
 import { Ionicons } from '@expo/vector-icons';
 
-import { mocklist } from '../../mock.json';
 import OurTownComponent from '../../components/home/OurTownComponent';
 import GenreComponent from '../../components/home/GenreComponent';
 
 import { getStatusBarHeight } from 'react-native-status-bar-height';
-import { getPostedBook, testGetPost } from '../../config/MainPageApi';
+import { getPostedBook } from '../../config/MainPageApi';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
 export default function HomeMain({ navigation }) {
+  const [currentPage, setCurrentPage] = useState(1);
   const [posts, setPosts] = useState([]);
 
   const download = async () => {
-    const result = await getPostedBook();
+    const result = await getPostedBook(currentPage);
     setPosts(result);
   };
 
@@ -53,25 +53,30 @@ export default function HomeMain({ navigation }) {
           backgroundColor: 'white',
         }}
         leftComponent={
-          <View
-            style={{
-              flexDirection: 'row',
-            }}>
-            <Text
-              style={{
-                fontSize: 14,
-                fontFamily: 'SCDream5',
-                top: 3,
-                color: '#398E3D',
-              }}>
-              송파구
-            </Text>
-            <Ionicons
-              name={'chevron-down'}
-              size={25}
-              style={{ paddingHorizontal: 5, color: '#398E3D', bottom: 4 }}
-            />
-          </View>
+          <Image
+            style={{ height: 25, width: 40 }}
+            resizeMode='contain'
+            source={require('../../assets/mainlogo.png')}
+          />
+          // <View
+          //   style={{
+          //     flexDirection: 'row',
+          //   }}>
+          //   <Text
+          //     style={{
+          //       fontSize: 14,
+          //       fontFamily: 'SCDream5',
+          //       top: 3,
+          //       color: '#398E3D',
+          //     }}>
+          //     송파구
+          //   </Text>
+          //   <Ionicons
+          //     name={'chevron-down'}
+          //     size={25}
+          //     style={{ paddingHorizontal: 5, color: '#398E3D', bottom: 4 }}
+          //   />
+          // </View>
         }
         centerComponent={''}
         rightComponent={
@@ -89,7 +94,14 @@ export default function HomeMain({ navigation }) {
           <View>
             <Text style={styles.mainTitleDesc}>좋은 책을 좋은 이웃과 함께</Text>
             <Text style={styles.mainTitleText}>우리 동네 책장</Text>
-            <View style={{ height: 20, backgroundColor: '#31B11C' }}></View>
+            <View
+              style={{
+                height: 20,
+                backgroundColor: '#31B11C',
+                position: 'relative',
+                bottom: 20,
+                zIndex: 2,
+              }}></View>
             <View>
               <Text style={styles.mainTitleDesc2}>
                 지역에서 관심있는 책을 교환하며
@@ -135,40 +147,32 @@ export default function HomeMain({ navigation }) {
             />
           </View>
           {posts ? (
-            <>
-              {posts.map((post, i) => {
+            <FlatList
+              data={posts}
+              renderItem={(post) => {
                 return (
-                  <Pressable
-                    onPress={() => {
-                      console.log(post);
-                    }}
-                    key={i}>
-                    <GenreComponent navigation={navigation} post={post} />
-                  </Pressable>
+                  <GenreComponent
+                    key={post.id}
+                    navigation={navigation}
+                    post={post.item}
+                  />
                 );
-              })}
-            </>
+              }}
+              ListHeaderComponent={<></>}
+              keyExtractor={(item) => item.id}
+              onEndReachedThreshold={0.1}
+              onEndReached={async () => {
+                let nextPosts = await getPostedBook(currentPage + 1);
+                if (nextPosts.length != null) {
+                  setCurrentPage(currentPage + 1);
+                  let allPosts = [...posts, ...nextPosts];
+                  setPosts(allPosts);
+                } else {
+                  console.log('불러올 정보가 없어요');
+                }
+              }}
+            />
           ) : null}
-
-          {/* {data.length == 0 ? (
-        <ActivityIndicator size="large" />
-      ) : (
-        <FlatList
-          data={posts}
-          onEndReachedThreshold={0}
-          onEndReached={async () => {
-            console.log('바닥 가까이 감: 리프레시');
-          }}
-          renderItem={(data) => {
-            // console.log(data);
-            return (
-              <GenreComponent navigation={navigation} post={post} />
-            );
-          }}
-          numColumns={1}
-          keyExtractor={(item) => item.date.toString()}
-        />
-      )} */}
         </View>
       </ScrollView>
       <Button
@@ -223,6 +227,8 @@ const styles = StyleSheet.create({
     fontFamily: 'SCDream7',
     marginBottom: 5,
     color: '#FFF4BE',
+    zIndex: 3,
+    left: 5,
   },
   subTitleBox: {
     flexDirection: 'row',

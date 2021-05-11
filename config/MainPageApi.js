@@ -6,36 +6,23 @@ const host = 'http://3.35.216.159'
 const mockhost = 'https://607434bc066e7e0017e794f9.mockapi.io/'
 
 
-export async function getPostedBook() {
-    // const token = await AsyncStorage.getItem("session")
+export async function getPostedBook(page) {
     try {
+        const token = await AsyncStorage.getItem("session")
         const response = await axios({
             method: "get",
-            url: host + `/api/townbooks`,
-            // headers: {
-            //     token: token,
-            // },
+            url: host + "/api/townbooks?page=" + page,
+            headers: {
+                token: token,
+            },
         });
-        // console.log(response.data)
-        return response.data.results
+        // console.log(response.data.results.content)
+        if (response.data.results.content == null) {
+            console.log('데이터 없음')
+        } else {
+            return response.data.results.content
+        }
     } catch (err) {
         console.log(err)
-        alert('책장을 불러올 수 없어요:(')
     }
 }
-
-
-
-// export async function getPostedBook() {
-//     try {
-//         const response = await axios({
-//             method: "get",
-//             url: host + 'api/townbooks',
-//         });
-//         console.log(response)
-//         // return response.data
-//     } catch (err) {
-//         const error = err.response.data.err || err.message;
-//         Alert.alert(error);
-//     }
-// }
