@@ -45,10 +45,9 @@ export default function ChatMain({ navigation }) {
           onPress={async () => {
             await AsyncStorage.clear()
             console.log("스토리지 비움")
+            navigation.push("SignInPage")
           }}>
-          {/* 변화 */}
           <View style={styles.userBox}></View>
-
           <View style={styles.descBox}></View>
           <View style={styles.bookBox}></View>
           <Text>{image}</Text>

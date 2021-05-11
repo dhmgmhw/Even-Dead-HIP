@@ -48,7 +48,7 @@ export default function GenreComponent({ navigation, post }) {
             <Text
               numberOfLines={1}
               style={{ fontFamily: 'SCDream3', fontSize: 12 }}>
-              송파구
+              {post.town}
             </Text>
           </View>
         </View>

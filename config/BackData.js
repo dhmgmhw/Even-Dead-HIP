@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react"
 import { Alert } from "react-native"
 import axios from "axios"
 import AsyncStorage from "@react-native-async-storage/async-storage"
@@ -16,7 +15,6 @@ export async function login(username, email, image, navigation) {
         image: image,
       },
     })
-    const token = result.data.results
     if (result.data.ok == true) {
       await AsyncStorage.setItem("session", result.data.results)
       await AsyncStorage.setItem("email", email)
@@ -29,6 +27,7 @@ export async function login(username, email, image, navigation) {
     Alert.alert("로그인 할 수 없습니다.")
   }
 }
+
 export async function signdetail(town) {
   try {
     const token = await AsyncStorage.getItem("session")
@@ -36,11 +35,7 @@ export async function signdetail(town) {
       method: "Put",
       url: host + "/api/profile",
       headers: {
-        // 'Accept': 'application/json',
-        // "Content-Type": "multipart/form-data;"
-        // Authorization: "Bearer " + token,
         token: token,
-        // "Content-Type": "application/json;"
       },
       data: {
         town: town,

@@ -68,7 +68,7 @@ export default function MultiAddPage({ navigation, route }) {
                 goBackText: '뒤로',
                 selectedText: 'Selected',
                 midTextColor: 'blue',
-                buttonTextStyle: _textStyle,
+                buttonTextStyle: textStyle,
                 backFunction: goBack,
                 doneFunction: (data) => {
                   onDone(data);
@@ -84,16 +84,11 @@ export default function MultiAddPage({ navigation, route }) {
   );
 }
 
-const _textStyle = {
+const textStyle = {
   color: 'black',
   fontFamily: 'SCDream5',
 };
-const _buttonStyle = {
-  backgroundColor: 'black',
-  borderRadius: 18,
-};
 
-// if you want to use defaultTopNavigator you must send in basic style
 const styles = StyleSheet.create({
   container: {
     flex: 1,

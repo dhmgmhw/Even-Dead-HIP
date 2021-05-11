@@ -13,11 +13,11 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { Header, Image, Tooltip } from 'react-native-elements';
-
 import { Ionicons } from '@expo/vector-icons';
 
 import Swiper from 'react-native-swiper-hooks';
 import CommentBubbleComponent from '../../components/home/CommentBubbleComponent';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { deletePost, postComment, postDetail } from '../../config/PostingApi';
 
 const diviceWidth = Dimensions.get('window').width;
@@ -26,8 +26,11 @@ const diviceHeight = Dimensions.get('window').height;
 export default function PostDetailPage({ navigation, route }) {
   const detailData = route.params;
 
+  const [myEmail, setMyEmail] = useState();
+
   const [data, setData] = useState([]);
   const [ready, setReady] = useState(true);
+  const [onPageLoader, setOnPageLoader] = useState(false);
 
   const image = { uri: detailData.image };
 
@@ -36,6 +39,7 @@ export default function PostDetailPage({ navigation, route }) {
   const [bubbles, setBubbles] = useState();
 
   const leaveComment = async () => {
+    setOnPageLoader(true);
     if (comment == '') {
       alert('댓글 내용을 작성해 주세요!');
       return;
@@ -43,12 +47,15 @@ export default function PostDetailPage({ navigation, route }) {
     await postComment(comment, detailData.id);
     setComment('');
     download();
+    setOnPageLoader(false);
   };
 
   const download = async () => {
     const res = await postDetail(detailData.id);
     setBubbles(res.comments);
     setData(res);
+    const result = await AsyncStorage.getItem('email');
+    setMyEmail(result);
     setReady(false);
   };
 
@@ -93,12 +100,59 @@ export default function PostDetailPage({ navigation, route }) {
               }
               centerComponent={''}
               rightComponent={
-                <Ionicons
-                  name={'open-outline'}
-                  size={27}
-                  color={'white'}
-                  style={{ marginHorizontal: 10 }}
-                />
+                <View style={{ flexDirection: 'row' }}>
+                  <Ionicons
+                    name={'open-outline'}
+                    size={27}
+                    color={'white'}
+                    style={{ marginHorizontal: 10 }}
+                    onPress={() => {
+                      console.log(detailData.user.email);
+                      console.log(myEmail);
+                    }}
+                  />
+                  {detailData.user.email == myEmail ? (
+                    <Tooltip
+                      withOverlay={false}
+                      containerStyle={{
+                        height: 60,
+                        backgroundColor: '#438732',
+                      }}
+                      pointerColor={'#438732'}
+                      popover={
+                        <>
+                          <Pressable
+                            style={styles.tooltipBtn}
+                            onPress={() => {
+                              navigation.pop();
+                              navigation.navigate('PostFixPage', detailData);
+                            }}>
+                            <Text style={styles.tooltipText}>수정</Text>
+                          </Pressable>
+                          <View
+                            style={{
+                              height: 1,
+                              backgroundColor: 'white',
+                              width: 100,
+                            }}></View>
+                          <Pressable
+                            style={styles.tooltipBtn}
+                            onPress={() => {
+                              deletePost(detailData.id, navigation);
+                              alert('게시글을 삭제했습니다!');
+                            }}>
+                            <Text style={styles.tooltipText}>삭제</Text>
+                          </Pressable>
+                        </>
+                      }>
+                      <Ionicons
+                        name={'ellipsis-vertical'}
+                        color={'white'}
+                        size={27}
+                      />
+                    </Tooltip>
+                  ) : null}
+                </View>
               }
             />
             <Swiper
@@ -171,72 +225,40 @@ export default function PostDetailPage({ navigation, route }) {
                     <Text
                       style={{
                         fontSize: 17,
-                        fontFamily: 'SCDream7',
+                        fontFamily: 'SansExtra',
                         marginBottom: 5,
                       }}>
                       {data.townBook.user.username}
                     </Text>
-                    <Text style={{ fontSize: 13, fontFamily: 'SCDream5' }}>
+                    <Text
+                      style={{
+                        fontSize: 13,
+                        fontFamily: 'SansMedium',
+                        color: '#828282',
+                      }}>
                       {data.townBook.user.town}
                     </Text>
                   </View>
                 </View>
-                <Tooltip
-                  withOverlay={false}
-                  containerStyle={{
-                    height: 60,
-                    backgroundColor: '#438732',
-                  }}
-                  pointerColor={'#438732'}
-                  popover={
-                    <>
-                      <Pressable
-                        style={styles.tooltipBtn}
-                        onPress={() => {
-                          navigation.pop();
-                          navigation.navigate('PostFixPage', detailData);
-                        }}>
-                        <Text style={styles.tooltipText}>수정</Text>
-                      </Pressable>
-                      <View
-                        style={{
-                          height: 1,
-                          backgroundColor: 'white',
-                          width: 100,
-                        }}></View>
-                      <Pressable
-                        style={styles.tooltipBtn}
-                        onPress={() => {
-                          deletePost(detailData.id, navigation);
-                          alert('게시글을 삭제했습니다!');
-                        }}>
-                        <Text style={styles.tooltipText}>삭제</Text>
-                      </Pressable>
-                    </>
-                  }>
-                  <Ionicons
-                    name={'ellipsis-vertical'}
-                    color={'black'}
-                    size={27}
-                  />
-                </Tooltip>
               </View>
               <View style={styles.descMiddleBorder}></View>
               <Text style={styles.bookCate}>#{detailData.category}</Text>
               <Text style={styles.bookTitle} numberOfLines={2}>
                 {detailData.title}
               </Text>
-              <Text style={styles.bookAuthor}>{detailData.author}</Text>
+              <Text style={styles.bookAuthor}>
+                {detailData.publisher} | {detailData.author}
+              </Text>
               <View style={styles.descMiddleBorder}></View>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={styles.subTitle}>도서상태</Text>
+                <Text style={styles.subTitle}>상태 |</Text>
                 <View style={styles.bookStatusBadge}>
                   <Text
                     style={{
-                      fontFamily: 'SCDream5',
+                      fontFamily: 'SansBold',
                       fontSize: 18,
                       color: '#54b65e',
-                      top: 1,
+                      bottom: 1,
                     }}>
                     {detailData.status}
                   </Text>
@@ -248,7 +270,7 @@ export default function PostDetailPage({ navigation, route }) {
               <Text style={styles.bookDesc}>{detailData.description}</Text>
               {/* <Text style={{ textAlign: 'right' }}>하이퍼링크</Text> */}
               <View style={styles.descMiddleBorder}></View>
-              <Text style={styles.subTitle}>댓글</Text>
+              <Text style={styles.subTitle}>가치 나누기</Text>
 
               <View style={styles.commentBox}>
                 {bubbles ? (
@@ -264,7 +286,6 @@ export default function PostDetailPage({ navigation, route }) {
                     })}
                   </>
                 ) : null}
-
                 <View style={styles.commentInputBox}>
                   <TextInput
                     style={styles.commentInput}
@@ -287,6 +308,17 @@ export default function PostDetailPage({ navigation, route }) {
             }}>
             <Text style={styles.chatBtnText}>가치 교환하기</Text>
           </Pressable> */}
+          {onPageLoader ? (
+            <ActivityIndicator
+              style={{
+                position: 'absolute',
+                alignSelf: 'center',
+                top: '50%',
+              }}
+              size='large'
+              color='grey'
+            />
+          ) : null}
         </KeyboardAvoidingView>
       </ImageBackground>
     </TouchableWithoutFeedback>
@@ -326,7 +358,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginVertical: 15,
   },
-  subTitle: { fontSize: 20, fontWeight: '700' },
   chatBox: {
     width: diviceWidth,
     height: 70,
@@ -338,24 +369,34 @@ const styles = StyleSheet.create({
   },
   chatBtnText: {
     fontSize: 18,
-    fontFamily: 'SCDream5',
+    fontFamily: 'SansBold',
     color: 'white',
     textAlign: 'center',
     padding: 20,
   },
-  bookCate: { fontFamily: 'SCDream2', fontSize: 12, marginBottom: 5 },
-  bookTitle: { fontFamily: 'SCDream7', fontSize: 18, marginBottom: 5 },
-  bookAuthor: { fontFamily: 'SCDream4', fontSize: 12 },
-  subTitle: { fontFamily: 'SCDream7', fontSize: 14 },
-  bookDesc: { fontSize: 13, lineHeight: 20, marginVertical: 15 },
+  bookCate: {
+    fontFamily: 'SansMedium',
+    fontSize: 12,
+    marginBottom: 5,
+    color: '#4CB73B',
+  },
+  bookTitle: { fontFamily: 'SansExtra', fontSize: 20, marginBottom: 5 },
+  bookAuthor: { fontFamily: 'SansThin', fontSize: 12, color: '#828282' },
+  bookDesc: {
+    fontFamily: 'SansRegular',
+    fontSize: 13,
+    lineHeight: 20,
+    marginVertical: 15,
+  },
+  subTitle: { fontSize: 16, fontFamily: 'SansBold', color: '#4CB73B' },
   bookStatusBadge: {
     marginLeft: 10,
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
     borderRadius: 100,
     borderColor: '#54b65e',
     backgroundColor: 'white',
-    borderWidth: 5,
+    borderWidth: 3,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',

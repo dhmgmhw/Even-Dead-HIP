@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import {
   StyleSheet,
   ImageBackground,
-  Container,
+  Image,
   Text,
   TouchableOpacity,
   View,
@@ -16,11 +16,20 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 
 import { login } from "../../config/BackData"
 
+<<<<<<< HEAD
 import { StatusBar } from "expo-status-bar"
 import { ScrollView } from "react-native-gesture-handler"
 
 const bImage = require("../../assets/back.png")
 const logo = require("../../assets/logo.png")
+=======
+import { StatusBar } from 'expo-status-bar';
+import { ScrollView } from 'react-native-gesture-handler';
+import color from 'color';
+
+const bImage = require('../../assets/back.png');
+const logo = require('../../assets/mainlogo.png');
+>>>>>>> b291d5bd0128cb2f0c0475baf538ac3946f7ea96
 
 export default function SignInPage({ navigation }) {
   const [jsonObject, setJsonObject] = useState({})
@@ -68,7 +77,11 @@ export default function SignInPage({ navigation }) {
 
       setJsonObject(json_rep)
     } else {
+<<<<<<< HEAD
       alert(`Cancel`)
+=======
+      console.log('cancel');
+>>>>>>> b291d5bd0128cb2f0c0475baf538ac3946f7ea96
     }
     await login(user.name, user.email, user.photoUrl, navigation)
     await AsyncStorage.setItem("accessToken", accessToken)
@@ -129,19 +142,40 @@ export default function SignInPage({ navigation }) {
     />
   ) : (
     <ScrollView scrollEnabled={false} contentContainerStyle={styles.container}>
-      <StatusBar style="auto" />
-      <Text style={styles.loginText}>간편한 SNS 회원가입</Text>
+      <Image
+        style={{ height: 50, width: 80, margin: 30, marginTop: 100 }}
+        resizeMode='contain'
+        source={require('../../assets/mainlogo.png')}
+      />
+      <Text style={[styles.loginText, { marginBottom: 200 }]}>
+        같이하는 가치나눔
+      </Text>
+      <StatusBar style='auto' />
+      <View
+        style={{
+          width: 300,
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: 50,
+        }}>
+        <View
+          style={{ height: 2, width: 50, backgroundColor: '#4CB73B' }}></View>
+        <Text style={styles.loginText}>간편한 SNS 회원가입</Text>
+        <View
+          style={{ height: 2, width: 50, backgroundColor: '#4CB73B' }}></View>
+      </View>
       <TouchableOpacity
         onPress={_onAuthGoogle}
         style={[styles.button, { backgroundColor: "#4285F4" }]}>
         <FontAwesome name="google" size={17} color="#ffffff" />
         <Text style={styles.text}>구글로 시작하기</Text>
       </TouchableOpacity>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.logoutbtn}
         onPress={signoutWithGoogleAsync}>
         <Text>Logout</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <TouchableOpacity
         onPress={_onAuthFacebook}
         style={[styles.button, { backgroundColor: "#3b5998" }]}>
@@ -185,7 +219,7 @@ const styles = StyleSheet.create({
     color: "#df3f32",
     textAlign: "center",
   },
-  loginText: { fontFamily: "SCDream5", marginBottom: 20 },
+  loginText: { fontFamily: 'SCDream6', color: '#4CB73B' },
   label: {
     color: "#fff",
   },

@@ -17,6 +17,12 @@ export default function App() {
     SCDream7: require('./assets/fonts/SCDream7.otf'),
     SCDream8: require('./assets/fonts/SCDream8.otf'),
     SCDream9: require('./assets/fonts/SCDream9.otf'),
+    SansThin: require('./assets/fonts/NotoSansKR-Thin.otf'),
+    SansLight: require('./assets/fonts/NotoSansKR-Light.otf'),
+    SansRegular: require('./assets/fonts/NotoSansKR-Regular.otf'),
+    SansMedium: require('./assets/fonts/NotoSansKR-Medium.otf'),
+    SansBold: require('./assets/fonts/NotoSansKR-Bold.otf'),
+    SansExtra: require('./assets/fonts/NotoSansKR-Black.otf'),
   });
 
   if (!loaded) {

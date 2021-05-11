@@ -3,25 +3,24 @@ import {
   StyleSheet,
   Text,
   View,
-  FlatList,
-  StatusBar,
-  SafeAreaView,
   Dimensions,
   Pressable,
   Alert,
+  TextInput,
+  TouchableWithoutFeedback,
+  Keyboard,
+  ActivityIndicator,
 } from "react-native"
 
 // import CheckBox from "../../components/login/CheckBox"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
-import { signdetail } from "../../config/BackData"
-
-import { getuserprofile } from "../../config/BackData"
-
 import { Searchbar } from "react-native-paper"
 import DropDownPicker from "react-native-dropdown-picker"
 
 import { Container, ScrollView } from "native-base"
+
+import { getUserProfile, signdetail } from "../../config/BackData"
 
 const diviceWidth = Dimensions.get("window").width
 const diviceHeight = Dimensions.get("window").height
@@ -39,105 +38,122 @@ export default function SignPlusPage({ navigation }) {
   const [checkList, setcheckList] = useState("")
   const [profile, setprofile] = useState("")
 
-  // useEffect(() => {
-  //   download()
-  // }, [])
+  const [loading, setLoading] = useState(true)
 
-  // const download = async () => {
-  //   const result = await getuserprofile()
-  //   setprofile(result.results)
-  //   console.log(profile)
-  //   setReady(true)
-  // }
-
-  const submitRegion = async () => {
-    if (regionInfo == "") {
-      Alert.alert("우리동네를 지정해 주세요!")
-      return
+  const checkUser = async () => {
+    const userData = await getUserProfile()
+    if (userData.results.town == null) {
+      setLoading(false)
     } else {
-      await signdetail(regionInfo)
       navigation.push("TabNavigator")
     }
   }
 
-  const onChangeSearch = query => setSearchQuery(query)
-  return (
-    <Container style={styles.container}>
-      <Text style={styles.setarea}>지역을 설정해주세요</Text>
-      <DropDownPicker
-        items={[
-          { label: "종로구", value: "종로구" },
-          { label: "중구", value: "중구" },
-          { label: "용산구", value: "용산구" },
-          { label: "성동구", value: "성동구" },
-          { label: "서대문구", value: "서대문구" },
-          { label: "마포구", value: "마포구" },
-          { label: "양천구", value: "양천구" },
-          { label: "강서구", value: "강서구" },
-          { label: "구로구", value: "구로구" },
-          { label: "금천구", value: "금천구" },
-          { label: "영등포구", value: "영등포구" },
-          { label: "동작구", value: "동작구" },
-          { label: "관악구", value: "관악구" },
-          { label: "서초구", value: "서초구" },
-          { label: "강남구", value: "강남구" },
-          { label: "송파구", value: "송파구" },
-          { label: "강동구", value: "강동구" },
-        ]}
-        showArrow={false}
-        labelStyle={{ fontFamily: "SCDream5" }}
-        placeholder="사는 지역을 선택해 주세요"
-        containerStyle={styles.dropBox}
-        onChangeItem={item => {
-          setRegionInfo(item.value)
-        }}
-      />
-      <Pressable
-        style={{ width: 100, height: 100, backgroundColor: "red" }}
-        onPress={submitRegion}></Pressable>
-      {/* <View style={styles.searchbox}>
-        <Searchbar
-          style={styles.searchbar}
-          placeholder="지역명 검색 예) 강남구"
-          onChangeText={onChangeSearch}
-          value={searchQuery}.
-        />
-        <StatusBar style="auto" />
-      </View> */}
+  useEffect(() => {
+    navigation.addListener("beforeRemove", e => {
+      e.preventDefault()
+    })
+    checkUser()
+  }, [])
 
-      <View style={styles.interest}>
-        <Text style={styles.ment}>관심있는 분야에 체크해주세요</Text>
-      </View>
-      <SafeAreaView>
-        {/* <ScrollView> */}
-        {/* <FlatList> */}
-        <View style={styles.bookcate}>
-          {data.cateList.map((content, i) => {
-            return (
-              <Pressable
-                style={styles.ListBox}
-                key={i}
-                onpressIn={() => {
-                  checkList.content.title
-                  setcheckList(content.title)
-                }}
-                // onPress={() => {
-                //   checkList.push(content.title)
-                // }}
-              >
-                {/* <CheckBox
-                  style={styles.bookCard}
-                  book={content.title}
-                  numcolumns={3}
-                /> */}
-              </Pressable>
-            )
-          })}
+  const submitRegion = async () => {
+    if (searchQuery === "") {
+      Alert.alert("우리동네를 입력해 주세요!")
+      return
+    } else if (
+      searchQuery === "종로구" ||
+      "중구" ||
+      "용산구" ||
+      "성동구" ||
+      "광진구" ||
+      "동대문구" ||
+      "중랑구" ||
+      "성북구" ||
+      "북구" ||
+      "도봉구" ||
+      "노원구" ||
+      "은평구" ||
+      "서대문구" ||
+      "마포구" ||
+      "양천구" ||
+      "강서구" ||
+      "구로구" ||
+      "금천구" ||
+      "영등포구" ||
+      "동작구" ||
+      "관악구" ||
+      "서초구" ||
+      "강남구" ||
+      "송파구"
+    ) {
+      await signdetail(searchQuery)
+      navigation.push("TabNavigator")
+    } else {
+      Alert.alert("아직은 서울 안의 자치구만 가능해요 ;(")
+      return
+    }
+  }
+
+  const onChangeSearch = query => setSearchQuery(query)
+
+  return loading ? (
+    <ActivityIndicator
+      style={{ position: "absolute", alignSelf: "center", top: "50%" }}
+      size="large"
+      color="grey"
+    />
+  ) : (
+    <TouchableWithoutFeedback
+      onPress={() => {
+        Keyboard.dismiss()
+      }}>
+      <Container style={styles.container}>
+        <Text style={styles.setarea}>지역을 설정해주세요</Text>
+        <View
+          style={{
+            backgroundColor: "#F5F5F5",
+            height: 60,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: 15,
+            margin: 20,
+          }}>
+          <TextInput
+            style={{
+              borderWidth: 2,
+              width: "90%",
+              height: 40,
+              borderRadius: 15,
+              borderColor: "#4CB73B",
+              alignSelf: "center",
+              paddingHorizontal: 10,
+            }}
+            placeholder="지역명 입력 예) 강남구"
+            onChangeText={onChangeSearch}
+            value={searchQuery}
+          />
         </View>
-        {/* </FlatList> */}
-        {/* </ScrollView> */}
-      </SafeAreaView>
-    </Container>
+        <Pressable
+          style={{
+            width: 130,
+            height: 50,
+            backgroundColor: searchQuery == "" ? "#E0E0E0" : "#1EA608",
+            borderRadius: 15,
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            alignSelf: "center",
+            top: "30%",
+          }}
+          onPress={submitRegion}>
+          <Text
+            style={{ color: "white", fontFamily: "SansMedium", fontSize: 20 }}>
+            확인
+          </Text>
+        </Pressable>
+      </Container>
+    </TouchableWithoutFeedback>
   )
 }
 
@@ -149,6 +165,12 @@ const styles = StyleSheet.create({
   setarea: {
     marginTop: 100,
     marginLeft: 100,
+    marginTop: 150,
+    marginBottom: 50,
+    fontSize: 18,
+    fontFamily: "SCDream6",
+    color: "#23A40E",
+    alignSelf: "center",
   },
   ment: {
     marginTop: 100,
