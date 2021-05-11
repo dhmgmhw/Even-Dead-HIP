@@ -40,7 +40,7 @@ export default function CatePage({ navigation, route }) {
         navigation.pop();
       }, 1000);
     } else {
-      console.log(result.results);
+      //   console.log(result.results);
       setPosts(result.results);
       setLoader(false);
     }
