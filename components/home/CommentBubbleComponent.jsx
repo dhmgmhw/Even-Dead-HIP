@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -7,15 +7,37 @@ import {
   Dimensions,
   Pressable,
   Image,
+  TextInput,
+  Alert,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Tooltip } from 'react-native-elements';
-import { deleteComment } from '../../config/PostingApi';
+import { changeComment, deleteComment } from '../../config/PostingApi';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
 export default function CommentBubbleComponent({ post, download }) {
+  const [text, setText] = useState(post.contents);
+  const [commentChanger, setCommentChanger] = useState(false);
+  const [myEmail, setMyEmail] = useState();
+
+  const checkEmail = async () => {
+    const result = await AsyncStorage.getItem('email');
+    setMyEmail(result);
+  };
+
+  useEffect(() => {
+    checkEmail();
+  }, []);
+
+  const fixComment = async () => {
+    await changeComment(post.commentId, text);
+    setCommentChanger(false);
+    download();
+  };
+
   const delComment = async () => {
     await deleteComment(post.commentId);
     download();
@@ -24,7 +46,7 @@ export default function CommentBubbleComponent({ post, download }) {
   return (
     <Pressable
       onPress={() => {
-        console.log(post);
+        console.log(post.email);
       }}>
       <View style={styles.bubbleBox}>
         <View style={styles.userImgBox}>
@@ -37,49 +59,83 @@ export default function CommentBubbleComponent({ post, download }) {
           />
         </View>
         <View style={styles.commentBox}>
-          <Text style={styles.commentText}>{post.contents}</Text>
+          {commentChanger ? (
+            <TextInput
+              style={[
+                styles.commentText,
+                {
+                  borderBottomWidth: 2,
+                  paddingBottom: 3,
+                  borderColor: 'lightgrey',
+                },
+              ]}
+              onChangeText={setText}
+              value={text}
+              placeholder='수정할 내용을 작성해 주세요'
+              placeholderTextColor={'#757575'}
+            />
+          ) : (
+            <Text style={styles.commentText}>{post.contents}</Text>
+          )}
           <View style={styles.optionBox}>
             <Text style={styles.commentText}>by. {post.username} </Text>
             <View style={{ flexDirection: 'row' }}>
-              <Text style={styles.dataText}>2021.04.29 </Text>
-              <Tooltip
-                withOverlay={false}
-                containerStyle={{
-                  height: 60,
-                  backgroundColor: '#438732',
-                }}
-                pointerColor={'#438732'}
-                popover={
-                  <>
-                    <Pressable
-                      style={styles.tooltipBtn}
-                      onPress={() => {
-                        console.log('Fix');
-                      }}>
-                      <Text style={styles.tooltipText}>수정</Text>
-                    </Pressable>
-                    <View
-                      style={{
-                        height: 1,
-                        backgroundColor: 'white',
-                        width: 100,
-                      }}></View>
-                    <Pressable style={styles.tooltipBtn} onPress={delComment}>
-                      <Text style={styles.tooltipText}>삭제</Text>
-                    </Pressable>
-                  </>
-                }>
-                <Text style={styles.dataText}>| 수정 및 삭제</Text>
-              </Tooltip>
+              {/* <Text style={styles.dataText}>2021.04.29 </Text> */}
+              {post.email == myEmail ? (
+                <Tooltip
+                  withOverlay={false}
+                  containerStyle={{
+                    height: 60,
+                    backgroundColor: '#438732',
+                  }}
+                  pointerColor={'#438732'}
+                  popover={
+                    <>
+                      <Pressable
+                        style={styles.tooltipBtn}
+                        onPress={() => {
+                          setCommentChanger(true);
+                        }}>
+                        <Text style={styles.tooltipText}>수정</Text>
+                      </Pressable>
+                      <View
+                        style={{
+                          height: 1,
+                          backgroundColor: 'white',
+                          width: 100,
+                        }}></View>
+                      <Pressable style={styles.tooltipBtn} onPress={delComment}>
+                        <Text style={styles.tooltipText}>삭제</Text>
+                      </Pressable>
+                    </>
+                  }>
+                  {commentChanger ? (
+                    <View style={{ flexDirection: 'row' }}>
+                      <Text
+                        onPress={() => {
+                          setCommentChanger(false);
+                        }}
+                        style={[
+                          styles.dataText,
+                          { color: 'black', marginLeft: 10 },
+                        ]}>
+                        취소
+                      </Text>
+                      <Text
+                        onPress={fixComment}
+                        style={[
+                          styles.dataText,
+                          { color: 'black', marginLeft: 10 },
+                        ]}>
+                        수정하기
+                      </Text>
+                    </View>
+                  ) : (
+                    <Text style={styles.dataText}> 수정/삭제</Text>
+                  )}
+                </Tooltip>
+              ) : null}
             </View>
-            {/* <Pressable
-            style={{ flexDirection: 'row' }}
-            onPress={() => {
-              console.log('삭제');
-            }}>
-            <Text style={styles.dataText}>2021.04.29 </Text>
-            <Text style={styles.dataText}>| 삭제하기</Text>
-          </Pressable> */}
           </View>
         </View>
       </View>
@@ -117,7 +173,7 @@ const styles = StyleSheet.create({
   dataText: {
     fontSize: 12,
     fontFamily: 'SansThin',
-    color: '#898989',
+    color: 'black',
   },
   tooltipBtn: {
     width: 100,
