@@ -120,6 +120,27 @@ export async function postComment(data, id) {
     }
 }
 
+export async function changeComment(id, comment) {
+    const token = await AsyncStorage.getItem("session")
+    try {
+        const response = await axios({
+            method: "put",
+            url: host + '/api/comments/' + id,
+            data: {
+                contents: comment
+            },
+            headers: {
+                token: token,
+            },
+        });
+        alert('댓글 수정 완료')
+    } catch (err) {
+        console.log(err)
+        alert('댓글을 삭제할 수 없습니다.')
+    }
+}
+
+
 export async function deleteComment(id) {
     const token = await AsyncStorage.getItem("session")
     try {

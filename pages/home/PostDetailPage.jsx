@@ -13,11 +13,11 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { Header, Image, Tooltip } from 'react-native-elements';
-
 import { Ionicons } from '@expo/vector-icons';
 
 import Swiper from 'react-native-swiper-hooks';
 import CommentBubbleComponent from '../../components/home/CommentBubbleComponent';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { deletePost, postComment, postDetail } from '../../config/PostingApi';
 
 const diviceWidth = Dimensions.get('window').width;
@@ -25,6 +25,8 @@ const diviceHeight = Dimensions.get('window').height;
 
 export default function PostDetailPage({ navigation, route }) {
   const detailData = route.params;
+
+  const [myEmail, setMyEmail] = useState();
 
   const [data, setData] = useState([]);
   const [ready, setReady] = useState(true);
@@ -52,6 +54,8 @@ export default function PostDetailPage({ navigation, route }) {
     const res = await postDetail(detailData.id);
     setBubbles(res.comments);
     setData(res);
+    const result = await AsyncStorage.getItem('email');
+    setMyEmail(result);
     setReady(false);
   };
 
@@ -96,12 +100,59 @@ export default function PostDetailPage({ navigation, route }) {
               }
               centerComponent={''}
               rightComponent={
-                <Ionicons
-                  name={'open-outline'}
-                  size={27}
-                  color={'white'}
-                  style={{ marginHorizontal: 10 }}
-                />
+                <View style={{ flexDirection: 'row' }}>
+                  <Ionicons
+                    name={'open-outline'}
+                    size={27}
+                    color={'white'}
+                    style={{ marginHorizontal: 10 }}
+                    onPress={() => {
+                      console.log(detailData.user.email);
+                      console.log(myEmail);
+                    }}
+                  />
+                  {detailData.user.email == myEmail ? (
+                    <Tooltip
+                      withOverlay={false}
+                      containerStyle={{
+                        height: 60,
+                        backgroundColor: '#438732',
+                      }}
+                      pointerColor={'#438732'}
+                      popover={
+                        <>
+                          <Pressable
+                            style={styles.tooltipBtn}
+                            onPress={() => {
+                              navigation.pop();
+                              navigation.navigate('PostFixPage', detailData);
+                            }}>
+                            <Text style={styles.tooltipText}>수정</Text>
+                          </Pressable>
+                          <View
+                            style={{
+                              height: 1,
+                              backgroundColor: 'white',
+                              width: 100,
+                            }}></View>
+                          <Pressable
+                            style={styles.tooltipBtn}
+                            onPress={() => {
+                              deletePost(detailData.id, navigation);
+                              alert('게시글을 삭제했습니다!');
+                            }}>
+                            <Text style={styles.tooltipText}>삭제</Text>
+                          </Pressable>
+                        </>
+                      }>
+                      <Ionicons
+                        name={'ellipsis-vertical'}
+                        color={'white'}
+                        size={27}
+                      />
+                    </Tooltip>
+                  ) : null}
+                </View>
               }
             />
             <Swiper
@@ -189,45 +240,6 @@ export default function PostDetailPage({ navigation, route }) {
                     </Text>
                   </View>
                 </View>
-                <Tooltip
-                  withOverlay={false}
-                  containerStyle={{
-                    height: 60,
-                    backgroundColor: '#438732',
-                  }}
-                  pointerColor={'#438732'}
-                  popover={
-                    <>
-                      <Pressable
-                        style={styles.tooltipBtn}
-                        onPress={() => {
-                          navigation.pop();
-                          navigation.navigate('PostFixPage', detailData);
-                        }}>
-                        <Text style={styles.tooltipText}>수정</Text>
-                      </Pressable>
-                      <View
-                        style={{
-                          height: 1,
-                          backgroundColor: 'white',
-                          width: 100,
-                        }}></View>
-                      <Pressable
-                        style={styles.tooltipBtn}
-                        onPress={() => {
-                          deletePost(detailData.id, navigation);
-                          alert('게시글을 삭제했습니다!');
-                        }}>
-                        <Text style={styles.tooltipText}>삭제</Text>
-                      </Pressable>
-                    </>
-                  }>
-                  <Ionicons
-                    name={'ellipsis-vertical'}
-                    color={'black'}
-                    size={27}
-                  />
-                </Tooltip>
               </View>
               <View style={styles.descMiddleBorder}></View>
               <Text style={styles.bookCate}>#{detailData.category}</Text>
