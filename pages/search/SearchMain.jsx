@@ -1,8 +1,6 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
-  Text,
   ScrollView,
   View,
   TouchableWithoutFeedback,
@@ -10,7 +8,6 @@ import {
   Dimensions,
   TextInput,
   Alert,
-  Pressable,
 } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { Ionicons } from '@expo/vector-icons';
@@ -18,7 +15,6 @@ import { Ionicons } from '@expo/vector-icons';
 import GenreComponent from '../../components/home/GenreComponent';
 import CateSelectComponent from '../../components/search/CateSelectComponent';
 
-import { getPostedBook } from '../../config/MainPageApi';
 import { searchBook } from '../../config/SearchApi';
 
 const diviceWidth = Dimensions.get('window').width;
@@ -43,7 +39,6 @@ export default function SearchMain({ navigation }) {
       Alert.alert('검색결과가 없습니다:(');
       return;
     }
-    // setSearchQuery('');
     setPosts(searchResult);
   };
 

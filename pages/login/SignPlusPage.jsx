@@ -1,9 +1,8 @@
-import React, { useState, useEffet } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
   Pressable,
   Alert,
   TextInput,
@@ -12,31 +11,12 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-// import CheckBox from "../../components/login/CheckBox"
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import { Searchbar } from 'react-native-paper';
-import DropDownPicker from 'react-native-dropdown-picker';
-
 import { Container, ScrollView } from 'native-base';
 
 import { getUserProfile, signdetail } from '../../config/BackData';
 
-const diviceWidth = Dimensions.get('window').width;
-const diviceHeight = Dimensions.get('window').height;
-
-const data = require('../../interestcategory.json');
-
-const numcolumns = '3';
-
-// let checkList = []
-
 export default function SignPlusPage({ navigation }) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [input, setInput] = useState('');
-  const [regionInfo, setRegionInfo] = useState('');
-  const [checkList, setcheckList] = useState('');
-  const [profile, setprofile] = useState('');
 
   const [loading, setLoading] = useState(true);
 
@@ -172,31 +152,4 @@ const styles = StyleSheet.create({
     color: '#23A40E',
     alignSelf: 'center',
   },
-  ment: {
-    marginTop: 100,
-    marginLeft: 100,
-  },
-  bookcate: {
-    // flexDirection: "row",
-    marginTop: 30,
-  },
-  ListBox: {
-    padding: 5,
-    marginBottom: 10,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  bookCard: {
-    height: 40,
-    padding: 10,
-    margin: 10,
-    borderWidth: 0.1,
-    borderColor: 'black',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-  },
-  dropBox: { height: 50, width: diviceWidth },
 });
