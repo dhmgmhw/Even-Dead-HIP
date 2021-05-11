@@ -155,7 +155,7 @@ export default function MyInfoTab({ navigation }) {
                 style={styles.profileimg}
                 resizeMode="contain"
                 source={{
-                  uri: profile.image,
+                  uri: imageUri,
                 }}
               />
               <View
@@ -196,7 +196,7 @@ export default function MyInfoTab({ navigation }) {
                     style={styles.editprofileimg}
                     resizeMode="contain"
                     source={{
-                      uri: profile.image,
+                      uri: imageUri,
                     }}
                   />
                 </Pressable>

@@ -113,8 +113,8 @@ export async function changeUserProfile(username, image) {
       },
 
       data: {
-        username: username,
         image: image,
+        username: username,
       },
     })
     await AsyncStorage.setItem("session", token)
