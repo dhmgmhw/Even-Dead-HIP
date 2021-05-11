@@ -89,38 +89,50 @@ export default function HomeMain({ navigation }) {
           <View>
             <Text style={styles.mainTitleDesc}>좋은 책을 좋은 이웃과 함께</Text>
             <Text style={styles.mainTitleText}>우리 동네 책장</Text>
+            <View style={{ height: 20, backgroundColor: '#31B11C' }}></View>
+            <View>
+              <Text style={styles.mainTitleDesc2}>
+                지역에서 관심있는 책을 교환하며
+              </Text>
+              <Text style={styles.mainTitleDesc2}>
+                내 안의 가치를 같이 키워보세요
+              </Text>
+            </View>
           </View>
-          <Pressable
-            onPress={() => {
-              navigation.navigate('OurTownPage');
-            }}
-            style={styles.subTitleBtn}>
-            <Text
-              style={{
-                fontSize: 9,
-                fontFamily: 'SCDream6',
-                top: 5,
-                color: 'white',
-              }}>
-              더보기{'>'}
-            </Text>
-          </Pressable>
         </View>
         <View style={styles.mainTitleDescBox}>
-          <View>
-            <Text style={styles.mainTitleDesc}>
-              지역에서 관심있는 책을 교환하며
-            </Text>
-            <Text style={styles.mainTitleDesc}>
-              내 안의 가치를 같이 키워보세요
-            </Text>
-          </View>
+          <Text style={styles.mainTitleDesc3}>다양한 분야의 책도 만나고</Text>
+          <Text style={styles.mainTitleDesc3}>동네 이웃도 만나고</Text>
+          <Text style={styles.mainTitleDesc4}>같이하는 가치나눔</Text>
+          <Ionicons
+            name={'chevron-down'}
+            size={25}
+            style={{ color: 'white', top: 15 }}
+          />
+          <Ionicons
+            name={'chevron-down'}
+            size={25}
+            style={{ color: 'lightgrey' }}
+          />
+          <Ionicons
+            name={'chevron-down'}
+            size={25}
+            style={{ color: 'grey', bottom: 15 }}
+          />
         </View>
         <View>
           <View style={styles.subTitleBox}>
-            <Text style={{ fontSize: 16, fontFamily: 'SCDream6' }}>
+            <Text style={{ fontSize: 16, fontFamily: 'SansRegular' }}>
               새로 등록된 도서
             </Text>
+            <Ionicons
+              name={'add-outline'}
+              size={25}
+              onPress={() => {
+                navigation.navigate('OurTownPage');
+              }}
+              style={{ color: 'black', bottom: 2 }}
+            />
           </View>
           {posts ? (
             <>
@@ -172,22 +184,39 @@ const styles = StyleSheet.create({
   mainTitleBox: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    height: 100,
     paddingHorizontal: 20,
-    backgroundColor: '#4CB73B',
+    backgroundColor: '#64BB35',
     paddingTop: getStatusBarHeight(),
   },
   mainTitleDescBox: {
-    height: 70,
-    paddingHorizontal: 20,
-    backgroundColor: '#4CB73B',
+    backgroundColor: '#64BB35',
     paddingTop: 10,
+    alignItems: 'center',
   },
   mainTitleDesc: {
-    fontFamily: 'SCDream4',
-    fontSize: 14,
+    fontFamily: 'SCDream7',
+    fontSize: 12,
     color: 'white',
     lineHeight: 20,
+    marginBottom: 10,
+  },
+  mainTitleDesc2: {
+    fontFamily: 'SCDream5',
+    fontSize: 13,
+    color: 'white',
+    lineHeight: 20,
+  },
+  mainTitleDesc3: {
+    fontFamily: 'SCDream5',
+    fontSize: 13,
+    color: 'white',
+    lineHeight: 20,
+  },
+  mainTitleDesc4: {
+    fontFamily: 'SCDream7',
+    fontSize: 22,
+    color: 'white',
+    marginTop: 20,
   },
   mainTitleText: {
     fontSize: 28,
@@ -195,22 +224,10 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     color: '#FFF4BE',
   },
-  ourTown: {
-    height: 170,
-    marginBottom: 20,
-    backgroundColor: '#4CB73B',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 1,
-      height: 3,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
-    marginBottom: 20,
-  },
   subTitleBox: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     height: 20,
     paddingHorizontal: 20,
     marginTop: 20,

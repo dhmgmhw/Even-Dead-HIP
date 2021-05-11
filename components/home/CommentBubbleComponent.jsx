@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   },
   commentText: {
     fontSize: 13,
-    fontFamily: 'SCDream4',
+    fontFamily: 'SansThin',
   },
   optionBox: {
     marginTop: 7,
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
   },
   dataText: {
     fontSize: 12,
-    fontFamily: 'SCDream4',
+    fontFamily: 'SansThin',
     color: '#898989',
   },
   tooltipBtn: {
