@@ -16,20 +16,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 
 import { login } from "../../config/BackData"
 
-<<<<<<< HEAD
 import { StatusBar } from "expo-status-bar"
 import { ScrollView } from "react-native-gesture-handler"
+import color from "color"
 
 const bImage = require("../../assets/back.png")
-const logo = require("../../assets/logo.png")
-=======
-import { StatusBar } from 'expo-status-bar';
-import { ScrollView } from 'react-native-gesture-handler';
-import color from 'color';
-
-const bImage = require('../../assets/back.png');
-const logo = require('../../assets/mainlogo.png');
->>>>>>> b291d5bd0128cb2f0c0475baf538ac3946f7ea96
+const logo = require("../../assets/mainlogo.png")
 
 export default function SignInPage({ navigation }) {
   const [jsonObject, setJsonObject] = useState({})
@@ -77,11 +69,7 @@ export default function SignInPage({ navigation }) {
 
       setJsonObject(json_rep)
     } else {
-<<<<<<< HEAD
-      alert(`Cancel`)
-=======
-      console.log('cancel');
->>>>>>> b291d5bd0128cb2f0c0475baf538ac3946f7ea96
+      console.log("cancel")
     }
     await login(user.name, user.email, user.photoUrl, navigation)
     await AsyncStorage.setItem("accessToken", accessToken)
@@ -109,15 +97,10 @@ export default function SignInPage({ navigation }) {
   _onAuthFacebook = async () => {
     try {
       await Facebook.initializeAsync("3939632819489550")
-      const {
-        type,
-        token,
-        expires,
-        permissions,
-        declinedPermissions,
-      } = await Facebook.logInWithReadPermissionsAsync({
-        permissions: ["public_profile", "email"],
-      })
+      const { type, token, expires, permissions, declinedPermissions } =
+        await Facebook.logInWithReadPermissionsAsync({
+          permissions: ["public_profile", "email"],
+        })
       if (type === "success") {
         const response = await fetch(
           `https://graph.facebook.com/me?fields=id,name,email&access_token=${token}`
@@ -144,26 +127,26 @@ export default function SignInPage({ navigation }) {
     <ScrollView scrollEnabled={false} contentContainerStyle={styles.container}>
       <Image
         style={{ height: 50, width: 80, margin: 30, marginTop: 100 }}
-        resizeMode='contain'
-        source={require('../../assets/mainlogo.png')}
+        resizeMode="contain"
+        source={require("../../assets/mainlogo.png")}
       />
       <Text style={[styles.loginText, { marginBottom: 200 }]}>
         같이하는 가치나눔
       </Text>
-      <StatusBar style='auto' />
+      <StatusBar style="auto" />
       <View
         style={{
           width: 300,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
           marginBottom: 50,
         }}>
         <View
-          style={{ height: 2, width: 50, backgroundColor: '#4CB73B' }}></View>
+          style={{ height: 2, width: 50, backgroundColor: "#4CB73B" }}></View>
         <Text style={styles.loginText}>간편한 SNS 회원가입</Text>
         <View
-          style={{ height: 2, width: 50, backgroundColor: '#4CB73B' }}></View>
+          style={{ height: 2, width: 50, backgroundColor: "#4CB73B" }}></View>
       </View>
       <TouchableOpacity
         onPress={_onAuthGoogle}
@@ -219,7 +202,7 @@ const styles = StyleSheet.create({
     color: "#df3f32",
     textAlign: "center",
   },
-  loginText: { fontFamily: 'SCDream6', color: '#4CB73B' },
+  loginText: { fontFamily: "SCDream6", color: "#4CB73B" },
   label: {
     color: "#fff",
   },

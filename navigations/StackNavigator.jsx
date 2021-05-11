@@ -10,13 +10,6 @@ import ChatPage from "../pages/chat/ChatPage"
 import AddPage from "../pages/home/AddPage"
 import OurTownPage from "../pages/home/OurTownPage"
 import MultiAddPage from "../pages/home/MultiAddPage"
-
-import PostDetailPage from "../pages/home/PostDetailPage"
-import PostFixPage from "../pages/home/PostFixPage"
-import ChatPage from "../pages/chat/ChatPage"
-import AddPage from "../pages/home/AddPage"
-import OurTownPage from "../pages/home/OurTownPage"
-import MultiAddPage from "../pages/home/MultiAddPage"
 import CatePage from "../pages/search/CatePage"
 
 const Stack = createStackNavigator()
