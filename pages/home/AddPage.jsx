@@ -212,20 +212,20 @@ export default function AddPage({ navigation }) {
         <DropDownPicker
           items={[
             { label: '#소설', value: '소설' },
-            { label: '#문학', value: '문학' },
+            { label: '#시/에세이', value: '시/에세이' },
             { label: '#인문', value: '인문' },
             { label: '#경제/경영', value: '경제/경영' },
             { label: '#정치/사회', value: '정치/사회' },
+            { label: '#언어', value: '언어' },
             { label: '#과학', value: '과학' },
             { label: '#예술', value: '예술' },
             { label: '#역사', value: '역사' },
             { label: '#철학', value: '철학' },
             { label: '#종교', value: '종교' },
+            { label: '#해외도서', value: '해외도서' },
             { label: '#어린이', value: '어린이' },
             { label: '#청소년', value: '청소년' },
             { label: '#취업/수험서', value: '취업/수험서' },
-            { label: '#언어', value: '언어' },
-            { label: '#해외도서', value: '해외도서' },
             { label: '#기타', value: '기타' },
           ]}
           showArrow={false}
