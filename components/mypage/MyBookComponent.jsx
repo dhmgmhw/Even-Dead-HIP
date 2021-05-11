@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react"
 import {
   StyleSheet,
   Text,
@@ -6,17 +6,17 @@ import {
   Pressable,
   Dimensions,
   Image,
-} from 'react-native';
+} from "react-native"
 
-const diviceWidth = Dimensions.get('window').width;
-const diviceHeight = Dimensions.get('window').height;
+const diviceWidth = Dimensions.get("window").width
+const diviceHeight = Dimensions.get("window").height
 
 export default function MyBookComponent({ navigation }) {
   return (
     <>
       <Pressable
         onPress={() => {
-          console.log('나는 곰돌이푸');
+          console.log("나는 곰돌이푸")
         }}
         style={styles.container}>
         <View
@@ -25,20 +25,20 @@ export default function MyBookComponent({ navigation }) {
           }}>
           <Image
             style={styles.bookCoverImg}
-            resizeMode='cover'
+            resizeMode="cover"
             source={{
               uri:
-                'http://image.yes24.com/momo/TopCate2841/MidCate009/179530372(2).jpg',
+                "http://image.yes24.com/momo/TopCate2841/MidCate009/179530372(2).jpg",
             }}
           />
         </View>
         <View style={{ width: diviceWidth * 0.65 }}>
           <View
             style={{
-              flexDirection: 'column',
+              flexDirection: "column",
             }}>
             <Text style={styles.state}>S급</Text>
-            <Text numberOfLines={1} ellipsizeMode={'tail'} style={styles.title}>
+            <Text numberOfLines={1} ellipsizeMode={"tail"} style={styles.title}>
               나는 곰돌이푸
             </Text>
             <Text style={styles.region}>송파구 잠실동 2</Text>
@@ -48,13 +48,13 @@ export default function MyBookComponent({ navigation }) {
       </Pressable>
       <View style={styles.bottomBar}></View>
     </>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginVertical: 10,
   },
   bookCoverImg: {
@@ -64,24 +64,24 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   state: {
-    fontFamily: 'SCDream5',
+    fontFamily: "SCDream5",
     fontSize: 18,
-    color: '#6864FF',
+    color: "#4CB73B",
   },
   title: {
-    fontFamily: 'SCDream5',
+    fontFamily: "SCDream5",
     fontSize: 16,
     marginVertical: 10,
   },
   region: {
-    fontFamily: 'SCDream5',
+    fontFamily: "SCDream5",
     fontSize: 16,
     marginVertical: 10,
   },
-  time: { fontFamily: 'SCDream5', color: '#9A9A9A' },
+  time: { fontFamily: "SCDream5", color: "#9A9A9A" },
   bottomBar: {
     height: 5,
     width: diviceWidth,
-    backgroundColor: '#F7F6FF',
+    backgroundColor: "#F7F6FF",
   },
-});
+})
