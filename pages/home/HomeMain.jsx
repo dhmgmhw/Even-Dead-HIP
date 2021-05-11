@@ -137,14 +137,14 @@ export default function HomeMain({ navigation }) {
             <Text style={{ fontSize: 16, fontFamily: 'SansRegular' }}>
               새로 등록된 도서
             </Text>
-            <Ionicons
+            {/* <Ionicons
               name={'add-outline'}
               size={25}
               onPress={() => {
                 navigation.navigate('OurTownPage');
               }}
               style={{ color: 'black', bottom: 2 }}
-            />
+            /> */}
           </View>
           {posts ? (
             <FlatList
@@ -158,7 +158,6 @@ export default function HomeMain({ navigation }) {
                   />
                 );
               }}
-              ListHeaderComponent={<></>}
               keyExtractor={(item) => item.id}
               onEndReachedThreshold={0.1}
               onEndReached={async () => {

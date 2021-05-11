@@ -7,6 +7,7 @@ const mockhost = 'https://607434bc066e7e0017e794f9.mockapi.io/'
 
 
 export async function getPostedBook(page) {
+    console.log('Page is ' + page)
     try {
         const token = await AsyncStorage.getItem("session")
         const response = await axios({
@@ -16,8 +17,8 @@ export async function getPostedBook(page) {
                 token: token,
             },
         });
-        // console.log(response.data.results.content)
-        if (response.data.results.content == null) {
+        // console.log(response.data)
+        if (response.data.results == null) {
             console.log('데이터 없음')
         } else {
             return response.data.results.content
