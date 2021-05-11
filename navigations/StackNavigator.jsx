@@ -11,13 +11,6 @@ import AddPage from "../pages/home/AddPage"
 import OurTownPage from "../pages/home/OurTownPage"
 import MultiAddPage from "../pages/home/MultiAddPage"
 
-import PostDetailPage from "../pages/home/PostDetailPage"
-import PostFixPage from "../pages/home/PostFixPage"
-import ChatPage from "../pages/chat/ChatPage"
-import AddPage from "../pages/home/AddPage"
-import OurTownPage from "../pages/home/OurTownPage"
-import MultiAddPage from "../pages/home/MultiAddPage"
-
 const Stack = createStackNavigator()
 
 const StackNavigator = () => {
@@ -27,7 +20,6 @@ const StackNavigator = () => {
         headerShown: false,
       }}>
       <Stack.Screen name="SignInPage" component={SignInPage} />
-      <Stack.Screen name="SignPlusPage" component={SignPlusPage} />
       <Stack.Screen name="TabNavigator" component={TabNavigator} />
       {/* <Stack.Screen name='SignUpPage' component={SignUpPage} /> */}
       <Stack.Screen name="OurTownPage" component={OurTownPage} />

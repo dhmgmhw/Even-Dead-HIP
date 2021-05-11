@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   state: {
     fontFamily: "SCDream5",
     fontSize: 18,
-    color: "#6864FF",
+    color: "#4CB73B",
   },
   title: {
     fontFamily: "SCDream5",

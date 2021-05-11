@@ -46,14 +46,14 @@ export async function signdetail(town) {
         town: town,
       },
     })
-    console.log('로그인완료')
+    console.log("로그인완료")
   } catch (err) {
     console.log(err)
     Alert.alert("정확히 입력해 주세요.")
   }
 }
 
-export async function getUserProfile() {
+export async function getuserProfile() {
   try {
     const token = await AsyncStorage.getItem("session")
     const result = await axios({
@@ -64,6 +64,7 @@ export async function getUserProfile() {
       },
     })
     console.log("조회 완료")
+
     return result.data
   } catch (err) {
     console.log(err)
@@ -71,7 +72,42 @@ export async function getUserProfile() {
   }
 }
 
-export async function changeUserProfile(nickname, img, town) {
+// export async function getuserProfile(
+//   nickname,
+//   img,
+//   comment,
+//   star,
+//   interested,
+//   town
+// ) {
+//   try {
+//     const token = await AsyncStorage.getItem("session")
+//     const result = await axios({
+//       method: "Get",
+//       url: host + "/api/usercheck",
+//       headers: {
+//         token: token,
+//       },
+
+//       data: {
+//         nickname: nickname,
+//         img: img,
+//         comment: comment,
+//         star: star,
+//         town: town,
+//         interested: interested,
+//       },
+//     })
+//     Alert.alert("조회 완료")
+//     return result.data
+//   } catch (err) {
+//     console.log(err)
+//     Alert.alert("다시 시도해 보세요.")
+//   }
+//   console.log(result)
+// }
+
+export async function changeUserProfile(username, image) {
   try {
     const token = await AsyncStorage.getItem("session")
     const result = await axios({
@@ -82,15 +118,14 @@ export async function changeUserProfile(nickname, img, town) {
       },
 
       data: {
-        nickname: nickname,
-        img: img,
-        town: town,
+        username: username,
+        image: image,
       },
     })
     await AsyncStorage.setItem("session", token)
     console.log(result)
 
-    Alert.alert("조회 완료")
+    Alert.alert("변경 완료")
     return result.data
   } catch (err) {
     console.log(err)
