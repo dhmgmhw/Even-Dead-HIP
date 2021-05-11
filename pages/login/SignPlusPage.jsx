@@ -9,9 +9,10 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   Keyboard,
+  ActivityIndicator,
 } from 'react-native';
 
-import { signdetail } from '../../config/BackData';
+import { getUserProfile, signdetail } from '../../config/BackData';
 
 import { Container } from 'native-base';
 
@@ -21,10 +22,22 @@ const diviceHeight = Dimensions.get('window').height;
 export default function SignPlusPage({ navigation }) {
   const [searchQuery, setSearchQuery] = useState('');
 
+  const [loading, setLoading] = useState(true);
+
+  const checkUser = async () => {
+    const userData = await getUserProfile();
+    if (userData.results.town == null) {
+      setLoading(false);
+    } else {
+      navigation.push('TabNavigator');
+    }
+  };
+
   useEffect(() => {
     navigation.addListener('beforeRemove', (e) => {
       e.preventDefault();
     });
+    checkUser();
   }, []);
 
   const submitRegion = async () => {
@@ -67,7 +80,13 @@ export default function SignPlusPage({ navigation }) {
 
   const onChangeSearch = (query) => setSearchQuery(query);
 
-  return (
+  return loading ? (
+    <ActivityIndicator
+      style={{ position: 'absolute', alignSelf: 'center', top: '50%' }}
+      size='large'
+      color='grey'
+    />
+  ) : (
     <TouchableWithoutFeedback
       onPress={() => {
         Keyboard.dismiss();
