@@ -8,12 +8,11 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   Keyboard,
-  ActivityIndicator,
 } from 'react-native';
 
 import { Container } from 'native-base';
 
-import { getUserProfile, signdetail } from '../../config/BackData';
+import { signdetail } from '../../config/BackData';
 
 const seoul = [
   '종로구',
@@ -43,30 +42,10 @@ const seoul = [
   '강동구',
 ];
 
-export default function SignPlusPage({ navigation }) {
+export default function TownChangePage({ navigation }) {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const [loading, setLoading] = useState(true);
-
-  const checkUser = async () => {
-    try {
-      const userData = await getUserProfile();
-      if (userData.results.town == null) {
-        setLoading(false);
-      } else {
-        navigation.push('TabNavigator');
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    navigation.addListener('beforeRemove', (e) => {
-      e.preventDefault();
-    });
-    checkUser();
-  }, []);
+  useEffect(() => {}, []);
 
   const submitRegion = async () => {
     if (searchQuery === '') {
@@ -74,7 +53,7 @@ export default function SignPlusPage({ navigation }) {
       return;
     } else if (seoul.includes(searchQuery)) {
       await signdetail(searchQuery);
-      navigation.push('TabNavigator');
+      navigation.pop();
     } else {
       Alert.alert('아직은 서울에서만 가능해요 예) 송파구');
       return;
@@ -83,13 +62,7 @@ export default function SignPlusPage({ navigation }) {
 
   const onChangeSearch = (query) => setSearchQuery(query);
 
-  return loading ? (
-    <ActivityIndicator
-      style={{ position: 'absolute', alignSelf: 'center', top: '50%' }}
-      size='large'
-      color='grey'
-    />
-  ) : (
+  return (
     <TouchableWithoutFeedback
       onPress={() => {
         Keyboard.dismiss();

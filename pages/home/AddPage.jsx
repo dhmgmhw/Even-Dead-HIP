@@ -117,8 +117,6 @@ export default function AddPage({ navigation }) {
     }
   }
 
-  useEffect(() => {}, [])
-
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -264,7 +262,6 @@ export default function AddPage({ navigation }) {
                 }}>
                 <Text style={{ fontFamily: "SCDream4" }}>카메라</Text>
                 <Ionicons
-                  onPress={bookTitleSearch}
                   name="image-outline"
                   size={30}
                   style={{ alignSelf: "center", color: "#4CB73B" }}

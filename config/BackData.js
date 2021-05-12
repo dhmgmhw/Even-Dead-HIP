@@ -59,7 +59,6 @@ export async function getUserProfile() {
       },
     })
     console.log("조회 완료")
-
     return result.data
   } catch (err) {
     console.log(err)
@@ -126,44 +125,13 @@ export async function changeUserProfile(username, image) {
   }
 }
 
-export async function getUserComment() {
+export async function signOut(navigation) {
   try {
-    const token = await AsyncStorage.getItem("session")
-    const result = await axios({
-      method: "Get",
-      url: host + "/api/users/comments",
-      headers: {
-        token: token,
-      },
-    })
-    console.log("댓글 조회 완료")
-    console.log(result)
-
-    return result.results
+    await AsyncStorage.clear()
+    Alert.alert("로그아웃합니다")
+    navigation.push("SignInPage")
   } catch (err) {
+    Alert.alert("로그아웃 오류가 발생했습니다")
     console.log(err)
-    Alert.alert("다시 시도해 보세요.")
   }
-  console.log(result)
-}
-
-export async function getUserBooks() {
-  try {
-    const token = await AsyncStorage.getItem("session")
-    const result = await axios({
-      method: "Get",
-      url: host + "/api/users/townbooks",
-      headers: {
-        token: token,
-      },
-    })
-    console.log("내가쓴글 조회 완료")
-    console.log(result)
-
-    return result.results
-  } catch (err) {
-    console.log(err)
-    Alert.alert("다시 시도해 보세요.")
-  }
-  console.log(result)
 }

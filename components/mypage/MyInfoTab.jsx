@@ -21,7 +21,12 @@ import { Feather } from "@expo/vector-icons"
 import { ProgressBar, Colors } from "react-native-paper"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
+<<<<<<< HEAD
 import { uploadImg } from "../../config/PostingApi"
+=======
+import { getUserProfile, signOut } from '../../config/BackData';
+import { changeUserProfile } from '../../config/BackData';
+>>>>>>> 485bc1428c2a8ca7de292cb1d2422501624bb781
 
 import { getUserProfile } from "../../config/BackData"
 import { changeUserProfile } from "../../config/BackData"
@@ -50,15 +55,29 @@ export default function MyInfoTab({ navigation }) {
   }, [])
 
   const getPermission = async () => {
+<<<<<<< HEAD
     if (Platform.OS !== "web") {
       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
       if (status !== "granted") {
         alert("게시글을 업로드하려면 사진첩 권한이 필요합니다.")
+=======
+    if (Platform.OS !== 'web') {
+      const { status } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        alert('게시글을 업로드하려면 사진첩 권한이 필요합니다.');
+>>>>>>> 485bc1428c2a8ca7de292cb1d2422501624bb781
       }
     }
   }
 
+  const logout = () => {
+    console.log('스토리지 비움');
+    signOut(navigation);
+  };
+
   const download = async () => {
+<<<<<<< HEAD
     const result = await getUserProfile()
     setprofile(result.results)
     setNickName(result.results.username)
@@ -73,6 +92,13 @@ export default function MyInfoTab({ navigation }) {
     const result = await getUserBooks()
     setBookLists(result)
   }
+=======
+    const result = await getUserProfile();
+    setprofile(result.results);
+    setNickName(result.results.username);
+    setImageUri(result.results.image);
+  };
+>>>>>>> 485bc1428c2a8ca7de292cb1d2422501624bb781
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible)
@@ -201,7 +227,7 @@ export default function MyInfoTab({ navigation }) {
                   onChangeText={text => setName(text)}
                   value={name}
                   placeholder={nickName}
-                  placeholderTextColor={"grey"}
+                  placeholderTextColor={'black'}
                 />
               </View>
             </Overlay>
@@ -273,13 +299,9 @@ export default function MyInfoTab({ navigation }) {
 
       <View style={styles.border}></View>
       <TouchableOpacity
-        style={[styles.deal, { alignSelf: "center" }]}
-        onPress={async () => {
-          await AsyncStorage.clear()
-          console.log("스토리지 비움")
-          navigation.push("SignInPage")
-        }}>
-        <Text style={[styles.downcompo, { color: "red" }]}>로그아웃</Text>
+        style={[styles.deal, { alignSelf: 'center' }]}
+        onPress={logout}>
+        <Text style={[styles.downcompo, { color: 'red' }]}>로그아웃</Text>
       </TouchableOpacity>
       <View style={styles.border}></View>
     </ScrollView>
@@ -338,13 +360,17 @@ const styles = StyleSheet.create({
     height: 70,
     width: 70,
     borderRadius: 100,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
   },
   editprofileimg: {
     marginVertical: 10,
     height: 80,
     width: 80,
     borderRadius: 100,
-    alignSelf: "center",
+    alignSelf: 'center',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
   },
   nickname: {
     fontFamily: "SansBold",

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -6,20 +6,45 @@ import {
   Image,
   Pressable,
   Text,
+  LogBox,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { delScrapBook, postScrapBook } from '../../config/MyPageApi';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
-export default function GenreComponent({ navigation, post }) {
-  const [scrap, setScrap] = useState(false);
+export default function GenreComponent({
+  navigation,
+  post,
+  scrapList,
+  userCheck,
+  myEmail,
+}) {
+  LogBox.ignoreLogs(['Warning: ...']);
+
+  const bookMark = async () => {
+    await postScrapBook(post.id);
+    await userCheck();
+  };
+
+  const delBookMark = async () => {
+    await delScrapBook(post.id);
+    await userCheck();
+  };
+
+  useEffect(() => {
+    // console.log(scrapList);
+    // console.log(post);
+  }, []);
 
   return (
     <Pressable
       style={styles.cardBox}
       onPress={() => {
         navigation.navigate('PostDetailPage', post);
+        // console.log(myEmail);
+        // console.log(post.user.email);
       }}>
       <View style={styles.card}>
         <View style={styles.cardFlex}>
@@ -54,14 +79,25 @@ export default function GenreComponent({ navigation, post }) {
         </View>
       </View>
       <View style={styles.bottomBorder}></View>
-      <Ionicons
-        name={scrap ? 'bookmark' : 'bookmark-outline'}
-        onPress={() => {
-          scrap ? setScrap(false) : setScrap(true);
-        }}
-        size={25}
-        style={[styles.scrap, { color: scrap ? 'green' : 'grey' }]}
-      />
+      {post.user.email == myEmail ? null : (
+        <>
+          {scrapList.includes(post.id) ? (
+            <Ionicons
+              name={'bookmark'}
+              onPress={delBookMark}
+              size={25}
+              style={[styles.scrap, { color: 'green' }]}
+            />
+          ) : (
+            <Ionicons
+              name={'bookmark-outline'}
+              onPress={bookMark}
+              size={25}
+              style={[styles.scrap, { color: 'gray' }]}
+            />
+          )}
+        </>
+      )}
     </Pressable>
   );
 }

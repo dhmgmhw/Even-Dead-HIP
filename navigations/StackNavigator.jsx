@@ -11,7 +11,9 @@ import AddPage from "../pages/home/AddPage"
 import OurTownPage from "../pages/home/OurTownPage"
 import MultiAddPage from "../pages/home/MultiAddPage"
 import CatePage from "../pages/search/CatePage"
-import MyPage from "../pages/mypage/MyPage"
+import TownChangePage from "../pages/home/TownChangePage"
+import TradeSelectPage from "../pages/home/TradeSelectPage"
+import TradeConfirmPage from "../pages/home/TradeConfirmPage"
 
 const Stack = createStackNavigator()
 
@@ -27,13 +29,11 @@ const StackNavigator = () => {
         options={{ gestureEnabled: false }}
       />
       <Stack.Screen name="SignPlusPage" component={SignPlusPage} />
-
       <Stack.Screen
         name="TabNavigator"
         component={TabNavigator}
         options={{ gestureEnabled: false }}
       />
-      <Stack.Screen name="MyPage" component={MyPage} />
       <Stack.Screen name="OurTownPage" component={OurTownPage} />
       <Stack.Screen name="MultiAddPage" component={MultiAddPage} />
       <Stack.Screen name="PostDetailPage" component={PostDetailPage} />
@@ -41,6 +41,9 @@ const StackNavigator = () => {
       <Stack.Screen name="AddPage" component={AddPage} />
       <Stack.Screen name="PostFixPage" component={PostFixPage} />
       <Stack.Screen name="CatePage" component={CatePage} />
+      <Stack.Screen name="TownChangePage" component={TownChangePage} />
+      <Stack.Screen name="TradeSelectPage" component={TradeSelectPage} />
+      <Stack.Screen name="TradeConfirmPage" component={TradeConfirmPage} />
     </Stack.Navigator>
   )
 }

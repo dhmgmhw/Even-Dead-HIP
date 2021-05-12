@@ -74,6 +74,7 @@ export default function CatePage({ navigation, route }) {
       />
       <ScrollView
         style={styles.container}
+        showsVerticalScrollIndicator={false}
         // contentContainerStyle={{ paddingHorizontal: 10 }}
       >
         {posts ? (

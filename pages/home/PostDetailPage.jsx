@@ -12,13 +12,16 @@ import {
   KeyboardAvoidingView,
   ActivityIndicator,
 } from 'react-native';
-import { Header, Image, Tooltip } from 'react-native-elements';
+import { Header, Image, Tooltip, Overlay } from 'react-native-elements';
+
 import { Ionicons } from '@expo/vector-icons';
 
 import Swiper from 'react-native-swiper-hooks';
 import CommentBubbleComponent from '../../components/home/CommentBubbleComponent';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { deletePost, postComment, postDetail } from '../../config/PostingApi';
+import { Grid } from 'native-base';
+import { Alert } from 'react-native';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
@@ -33,10 +36,18 @@ export default function PostDetailPage({ navigation, route }) {
   const [onPageLoader, setOnPageLoader] = useState(false);
 
   const image = { uri: detailData.image };
-
   const [comment, setComment] = useState('');
 
   const [bubbles, setBubbles] = useState();
+
+  const [visible, setVisible] = useState(false);
+  const [innerImg, setInnerImg] = useState();
+
+  const [scrap, setScrap] = useState(false);
+
+  const toggleOverlay = () => {
+    setVisible(!visible);
+  };
 
   const leaveComment = async () => {
     setOnPageLoader(true);
@@ -62,6 +73,13 @@ export default function PostDetailPage({ navigation, route }) {
   useEffect(() => {
     download();
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      download();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   return ready ? (
     <ActivityIndicator
@@ -101,7 +119,7 @@ export default function PostDetailPage({ navigation, route }) {
               centerComponent={''}
               rightComponent={
                 <View style={{ flexDirection: 'row' }}>
-                  <Ionicons
+                  {/* <Ionicons
                     name={'open-outline'}
                     size={27}
                     color={'white'}
@@ -109,13 +127,14 @@ export default function PostDetailPage({ navigation, route }) {
                     onPress={() => {
                       console.log(detailData.user.email);
                       console.log(myEmail);
+                      navigation.navigate('TradeConfirmPage');
                     }}
-                  />
+                  /> */}
                   {detailData.user.email == myEmail ? (
                     <Tooltip
                       withOverlay={false}
                       containerStyle={{
-                        height: 60,
+                        height: 130,
                         backgroundColor: '#438732',
                       }}
                       pointerColor={'#438732'}
@@ -124,17 +143,10 @@ export default function PostDetailPage({ navigation, route }) {
                           <Pressable
                             style={styles.tooltipBtn}
                             onPress={() => {
-                              navigation.pop();
                               navigation.navigate('PostFixPage', detailData);
                             }}>
                             <Text style={styles.tooltipText}>수정</Text>
                           </Pressable>
-                          <View
-                            style={{
-                              height: 1,
-                              backgroundColor: 'white',
-                              width: 100,
-                            }}></View>
                           <Pressable
                             style={styles.tooltipBtn}
                             onPress={() => {
@@ -143,6 +155,23 @@ export default function PostDetailPage({ navigation, route }) {
                             }}>
                             <Text style={styles.tooltipText}>삭제</Text>
                           </Pressable>
+                          {data.townBook.finish === 1 ? null : (
+                            <Pressable
+                              style={styles.tooltipBtn}
+                              onPress={() => {
+                                if (bubbles == '') {
+                                  Alert.alert('교환할 상대가 없습니다');
+                                  return;
+                                } else {
+                                  navigation.navigate('TradeSelectPage', [
+                                    detailData,
+                                    bubbles,
+                                  ]);
+                                }
+                              }}>
+                              <Text style={styles.tooltipText}>거래완료</Text>
+                            </Pressable>
+                          )}
                         </>
                       }>
                       <Ionicons
@@ -174,34 +203,39 @@ export default function PostDetailPage({ navigation, route }) {
                 <Image
                   style={styles.bookImage}
                   resizeMode='cover'
+                  PlaceholderContent={<ActivityIndicator />}
                   source={{ uri: detailData.image }}
                 />
               </View>
-              <View style={styles.bookImageBox}>
-                <Image
-                  style={styles.bookImage}
-                  resizeMode='contain'
-                  source={{ uri: detailData.captureImages[0] }}
-                />
-              </View>
-              {detailData.captureImages[1] ? (
-                <View style={styles.bookImageBox}>
-                  <Image
-                    style={styles.bookImage}
-                    resizeMode='contain'
-                    source={{ uri: detailData.captureImages[1] }}
-                  />
-                </View>
-              ) : null}
-              {detailData.captureImages[2] ? (
-                <View style={styles.bookImageBox}>
-                  <Image
-                    style={styles.bookImage}
-                    resizeMode='contain'
-                    source={{ uri: detailData.captureImages[2] }}
-                  />
-                </View>
-              ) : null}
+              <Grid style={styles.bookImageBox}>
+                {detailData.captureImages.map((photo, i) => {
+                  return (
+                    <Pressable
+                      key={i}
+                      onPress={() => {
+                        toggleOverlay();
+                        setInnerImg(photo);
+                      }}>
+                      <Image
+                        style={styles.InnerBookImage}
+                        resizeMode='cover'
+                        source={{ uri: photo }}
+                        PlaceholderContent={<ActivityIndicator />}
+                      />
+                      <Overlay
+                        isVisible={visible}
+                        onBackdropPress={toggleOverlay}>
+                        <Image
+                          style={styles.overlayImage}
+                          resizeMode='contain'
+                          source={{ uri: innerImg }}
+                          PlaceholderContent={<ActivityIndicator />}
+                        />
+                      </Overlay>
+                    </Pressable>
+                  );
+                })}
+              </Grid>
             </Swiper>
             <View style={styles.container}>
               <View
@@ -240,6 +274,16 @@ export default function PostDetailPage({ navigation, route }) {
                     </Text>
                   </View>
                 </View>
+                {/* {detailData.user.email == myEmail ? null : (
+                  <Ionicons
+                    name={scrap ? 'bookmark' : 'bookmark-outline'}
+                    onPress={() => {
+                      scrap ? setScrap(false) : setScrap(true);
+                    }}
+                    size={24}
+                    style={[styles.scrap, { color: scrap ? 'green' : 'black' }]}
+                  />
+                )} */}
               </View>
               <View style={styles.descMiddleBorder}></View>
               <Text style={styles.bookCate}>#{detailData.category}</Text>
@@ -258,7 +302,7 @@ export default function PostDetailPage({ navigation, route }) {
                       fontFamily: 'SansBold',
                       fontSize: 18,
                       color: '#54b65e',
-                      bottom: 1,
+                      bottom: 2,
                     }}>
                     {detailData.status}
                   </Text>
@@ -271,7 +315,6 @@ export default function PostDetailPage({ navigation, route }) {
               {/* <Text style={{ textAlign: 'right' }}>하이퍼링크</Text> */}
               <View style={styles.descMiddleBorder}></View>
               <Text style={styles.subTitle}>가치 나누기</Text>
-
               <View style={styles.commentBox}>
                 {bubbles ? (
                   <>
@@ -301,13 +344,16 @@ export default function PostDetailPage({ navigation, route }) {
               </View>
             </View>
           </ScrollView>
-          {/* <Pressable
-            style={styles.chatBox}
-            onPress={() => {
-              navigation.navigate('ChatPage');
-            }}>
-            <Text style={styles.chatBtnText}>가치 교환하기</Text>
-          </Pressable> */}
+          {data.townBook.finish === 1 ? (
+            <Pressable
+              style={styles.chatBox}
+              // onPress={() => {
+              //   navigation.navigate('ChatPage');
+              // }}
+            >
+              <Text style={styles.chatBtnText}>가치교환완료</Text>
+            </Pressable>
+          ) : null}
           {onPageLoader ? (
             <ActivityIndicator
               style={{
@@ -337,12 +383,22 @@ const styles = StyleSheet.create({
     width: 210,
     borderRadius: 5,
     marginBottom: 50,
+    flexWrap: 'wrap',
   },
   bookImage: {
-    height: '100%',
+    height: 300,
     width: 210,
     borderRadius: 5,
     alignSelf: 'center',
+  },
+  InnerBookImage: {
+    height: 105,
+    width: 105,
+    borderWidth: 1,
+  },
+  overlayImage: {
+    height: diviceWidth,
+    width: diviceWidth,
   },
   container: {
     width: diviceWidth,
@@ -361,7 +417,7 @@ const styles = StyleSheet.create({
   chatBox: {
     width: diviceWidth,
     height: 70,
-    backgroundColor: '#438732',
+    backgroundColor: '#ADADAD',
     position: 'absolute',
     bottom: 0,
     borderTopRightRadius: 5,
@@ -438,7 +494,7 @@ const styles = StyleSheet.create({
   commentBtnText: { fontFamily: 'SCDream4', fontSize: 13, color: 'white' },
   tooltipBtn: {
     width: 100,
-    height: 30,
+    height: 40,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
@@ -448,5 +504,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'white',
     textAlign: 'center',
+  },
+  doneBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 25,
+    width: 80,
+    borderRadius: 15,
+    backgroundColor: '#54B65E',
+    top: 5,
+    alignSelf: 'flex-end',
+  },
+  done: {
+    fontFamily: 'SansMedium',
+    fontSize: 12,
+    color: 'white',
   },
 });

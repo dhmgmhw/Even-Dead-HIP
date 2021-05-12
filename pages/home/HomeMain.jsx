@@ -5,28 +5,40 @@ import {
   View,
   Dimensions,
   ScrollView,
-  Pressable,
   FlatList,
-  ActivityIndicator,
   Image,
+  LogBox,
 } from 'react-native';
 import { Header } from 'react-native-elements';
 import { Button } from 'native-base';
 
 import { Ionicons } from '@expo/vector-icons';
 
-import OurTownComponent from '../../components/home/OurTownComponent';
 import GenreComponent from '../../components/home/GenreComponent';
 
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { getPostedBook } from '../../config/MainPageApi';
+import { getUserProfile } from '../../config/BackData';
+import { Pressable } from 'react-native';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
 export default function HomeMain({ navigation }) {
+  LogBox.ignoreLogs(['Warning: ...']);
   const [currentPage, setCurrentPage] = useState(1);
   const [posts, setPosts] = useState([]);
+  const [scrapList, setScrapList] = useState([]);
+
+  const [myTown, setMyTown] = useState();
+  const [myEmail, setMyEmail] = useState();
+
+  const userCheck = async () => {
+    const myInfo = await getUserProfile();
+    setMyTown(myInfo.results.town);
+    setScrapList(myInfo.results.scrapList);
+    setMyEmail(myInfo.results.email);
+  };
 
   const download = async () => {
     const result = await getPostedBook(currentPage);
@@ -36,6 +48,7 @@ export default function HomeMain({ navigation }) {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       download();
+      userCheck();
     });
     return unsubscribe;
   }, [navigation]);
@@ -58,33 +71,15 @@ export default function HomeMain({ navigation }) {
             resizeMode='contain'
             source={require('../../assets/mainlogo.png')}
           />
-          // <View
-          //   style={{
-          //     flexDirection: 'row',
-          //   }}>
-          //   <Text
-          //     style={{
-          //       fontSize: 14,
-          //       fontFamily: 'SCDream5',
-          //       top: 3,
-          //       color: '#398E3D',
-          //     }}>
-          //     송파구
-          //   </Text>
-          //   <Ionicons
-          //     name={'chevron-down'}
-          //     size={25}
-          //     style={{ paddingHorizontal: 5, color: '#398E3D', bottom: 4 }}
-          //   />
-          // </View>
         }
         centerComponent={''}
         rightComponent={
-          <Ionicons
-            name={'notifications-outline'}
-            size={25}
-            style={{ color: '#398E3D' }}
-          />
+          ''
+          // <Ionicons
+          //   name={'notifications-outline'}
+          //   size={25}
+          //   style={{ color: '#398E3D' }}
+          // />
         }
       />
       <ScrollView
@@ -110,6 +105,18 @@ export default function HomeMain({ navigation }) {
                 내 안의 가치를 같이 키워보세요
               </Text>
             </View>
+            <Pressable
+              style={styles.townChangeBtn}
+              onPress={() => {
+                navigation.navigate('TownChangePage');
+              }}>
+              <Text style={styles.myTownText}>{myTown}</Text>
+              <Ionicons
+                name={'chevron-down'}
+                size={25}
+                style={{ color: 'white' }}
+              />
+            </Pressable>
           </View>
         </View>
         <View style={styles.mainTitleDescBox}>
@@ -137,14 +144,6 @@ export default function HomeMain({ navigation }) {
             <Text style={{ fontSize: 16, fontFamily: 'SansRegular' }}>
               새로 등록된 도서
             </Text>
-            {/* <Ionicons
-              name={'add-outline'}
-              size={25}
-              onPress={() => {
-                navigation.navigate('OurTownPage');
-              }}
-              style={{ color: 'black', bottom: 2 }}
-            /> */}
           </View>
           {posts ? (
             <FlatList
@@ -155,10 +154,13 @@ export default function HomeMain({ navigation }) {
                     key={post.id}
                     navigation={navigation}
                     post={post.item}
+                    scrapList={scrapList}
+                    userCheck={userCheck}
+                    myEmail={myEmail}
                   />
                 );
               }}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => String(item.id)}
               onEndReachedThreshold={0.1}
               onEndReached={async () => {
                 let nextPosts = await getPostedBook(currentPage + 1);
@@ -236,6 +238,21 @@ const styles = StyleSheet.create({
     height: 20,
     paddingHorizontal: 20,
     marginTop: 20,
+  },
+  townChangeBtn: {
+    width: 100,
+    height: 30,
+    backgroundColor: '#31B11C',
+    borderRadius: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 30,
+  },
+  myTownText: {
+    fontFamily: 'SCDream5',
+    fontSize: 14,
+    color: 'white',
   },
   newBooksScroll: {
     height: 140,
