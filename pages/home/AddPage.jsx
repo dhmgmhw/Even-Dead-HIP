@@ -115,8 +115,6 @@ export default function AddPage({ navigation }) {
     }
   };
 
-  useEffect(() => {}, []);
-
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -261,7 +259,6 @@ export default function AddPage({ navigation }) {
                   navigation.navigate('MultiAddPage', setImageUri);
                 }}>
                 <Ionicons
-                  onPress={bookTitleSearch}
                   name='image-outline'
                   size={30}
                   style={{ alignSelf: 'center', color: '#4CB73B' }}
