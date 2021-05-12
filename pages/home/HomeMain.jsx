@@ -7,6 +7,7 @@ import {
   ScrollView,
   FlatList,
   Image,
+  LogBox,
 } from 'react-native';
 import { Header } from 'react-native-elements';
 import { Button } from 'native-base';
@@ -24,14 +25,19 @@ const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
 export default function HomeMain({ navigation }) {
+  LogBox.ignoreLogs(['Warning: ...']);
   const [currentPage, setCurrentPage] = useState(1);
   const [posts, setPosts] = useState([]);
+  const [scrapList, setScrapList] = useState([]);
 
   const [myTown, setMyTown] = useState();
+  const [myEmail, setMyEmail] = useState();
 
   const userCheck = async () => {
     const myInfo = await getUserProfile();
     setMyTown(myInfo.results.town);
+    setScrapList(myInfo.results.scrapList);
+    setMyEmail(myInfo.results.email);
   };
 
   const download = async () => {
@@ -68,11 +74,12 @@ export default function HomeMain({ navigation }) {
         }
         centerComponent={''}
         rightComponent={
-          <Ionicons
-            name={'notifications-outline'}
-            size={25}
-            style={{ color: '#398E3D' }}
-          />
+          ''
+          // <Ionicons
+          //   name={'notifications-outline'}
+          //   size={25}
+          //   style={{ color: '#398E3D' }}
+          // />
         }
       />
       <ScrollView
@@ -147,6 +154,9 @@ export default function HomeMain({ navigation }) {
                     key={post.id}
                     navigation={navigation}
                     post={post.item}
+                    scrapList={scrapList}
+                    userCheck={userCheck}
+                    myEmail={myEmail}
                   />
                 );
               }}
