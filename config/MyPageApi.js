@@ -86,3 +86,22 @@ export async function delScrapBook(townBookId) {
         alert('스크랩을 삭제 할 수 없습니다 :(')
     }
 }
+
+
+export async function getMyScrap() {
+    const token = await AsyncStorage.getItem("session")
+    try {
+        const response = await axios({
+            method: "get",
+            url: host + '/api/users/scraps',
+            headers: {
+                token: token,
+            },
+        });
+        // console.log(response.data.results)
+        return response.data.results
+    } catch (err) {
+        console.log(err)
+        alert('내 스크랩을 조회할 수 없습니다.')
+    }
+}
