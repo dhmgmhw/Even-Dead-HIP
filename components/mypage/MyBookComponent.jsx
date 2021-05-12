@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,17 +6,21 @@ import {
   Pressable,
   Dimensions,
   Image,
-} from "react-native"
+} from 'react-native';
 
-const diviceWidth = Dimensions.get("window").width
-const diviceHeight = Dimensions.get("window").height
+const diviceWidth = Dimensions.get('window').width;
+const diviceHeight = Dimensions.get('window').height;
 
-export default function MyBookComponent({ navigation }) {
+export default function MyBookComponent({ navigation, post }) {
+  useEffect(() => {
+    console.log(post);
+  }, []);
+
   return (
     <>
       <Pressable
         onPress={() => {
-          console.log("나는 곰돌이푸")
+          navigation.navigate('PostDetailPage', post);
         }}
         style={styles.container}>
         <View
@@ -25,63 +29,78 @@ export default function MyBookComponent({ navigation }) {
           }}>
           <Image
             style={styles.bookCoverImg}
-            resizeMode="cover"
+            resizeMode='cover'
             source={{
-              uri:
-                "http://image.yes24.com/momo/TopCate2841/MidCate009/179530372(2).jpg",
+              uri: post.image,
             }}
           />
         </View>
         <View style={{ width: diviceWidth * 0.65 }}>
           <View
             style={{
-              flexDirection: "column",
+              flexDirection: 'column',
             }}>
-            <Text style={styles.state}>S급</Text>
-            <Text numberOfLines={1} ellipsizeMode={"tail"} style={styles.title}>
-              나는 곰돌이푸
+            <Text numberOfLines={1} ellipsizeMode={'tail'} style={styles.title}>
+              {post.title}
             </Text>
-            <Text style={styles.region}>송파구 잠실동 2</Text>
-            <Text style={styles.time}>16분전</Text>
+            <Text style={styles.author}>{post.author}</Text>
+            <Text style={styles.town}>{post.town}</Text>
           </View>
+
+          {post.finish === 0 ? null : (
+            <View style={styles.doneBox}>
+              <Text style={styles.done}>교환완료</Text>
+            </View>
+          )}
         </View>
       </Pressable>
       <View style={styles.bottomBar}></View>
     </>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 20,
   },
   bookCoverImg: {
-    width: 90,
-    height: 130,
+    width: 70,
+    height: 100,
     marginHorizontal: 20,
     borderRadius: 5,
   },
-  state: {
-    fontFamily: "SCDream5",
-    fontSize: 18,
-    color: "#4CB73B",
-  },
   title: {
-    fontFamily: "SCDream5",
-    fontSize: 16,
-    marginVertical: 10,
+    fontFamily: 'SansBold',
+    fontSize: 14,
+    marginVertical: 5,
   },
-  region: {
-    fontFamily: "SCDream5",
-    fontSize: 16,
-    marginVertical: 10,
+  author: {
+    fontFamily: 'SansRegular',
+    fontSize: 12,
+    marginVertical: 5,
   },
-  time: { fontFamily: "SCDream5", color: "#9A9A9A" },
+  town: { fontFamily: 'SansRegular', color: '#9A9A9A', fontSize: 12 },
   bottomBar: {
     height: 5,
-    width: diviceWidth,
-    backgroundColor: "#F7F6FF",
+    marginHorizontal: 20,
+    backgroundColor: '#F7F6FF',
   },
-})
+  doneBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 25,
+    width: 80,
+    borderRadius: 15,
+    backgroundColor: '#54B65E',
+    top: 5,
+    alignSelf: 'flex-end',
+  },
+  done: {
+    fontFamily: 'SansMedium',
+    fontSize: 12,
+    color: 'white',
+  },
+});

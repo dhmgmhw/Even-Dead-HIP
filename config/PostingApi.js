@@ -157,3 +157,23 @@ export async function deleteComment(id) {
         alert('댓글을 삭제할 수 없습니다.')
     }
 }
+
+// export async function tradeConfirm(data, id) {
+//     const token = await AsyncStorage.getItem("session")
+//     try {
+//         const response = await axios({
+//             method: "post",
+//             url: host + '/api/comments/' + id,
+//             headers: {
+//                 token: token,
+//             },
+//             data: { contents: data },
+//         });
+//         // return response.data
+//         console.log(response.data)
+//         // console.log(response.data.msg)
+//     } catch (err) {
+//         console.log(err)
+//         alert('댓글을 남길 수 없어요:(')
+//     }
+// }
