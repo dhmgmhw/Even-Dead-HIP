@@ -1,35 +1,54 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, Dimensions } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import MyBookComponent from './MyBookComponent';
+import { getMyPost } from '../../config/MyPageApi';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
 export default function MyLibraryTab({ navigation }) {
+  const [myPosts, setMyPosts] = useState();
+  const [loading, setLoading] = useState(true);
+
+  const download = async () => {
+    const response = await getMyPost();
+    // console.log(response.length);
+    if (response.length > 0) {
+      setMyPosts(response);
+      // console.log(myPosts);
+    } else {
+      console.log('No Posts');
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    download();
+  }, []);
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.tabTitleBox}>
         <Feather name='book' size={28} color='black' />
         <Text
           style={{
-            fontFamily: 'SCDream5',
+            fontFamily: 'SansBold',
             fontSize: 18,
             marginHorizontal: 10,
           }}>
           내 서재
         </Text>
       </View>
-      <MyBookComponent navigation={navigation} />
-      <MyBookComponent navigation={navigation} />
-      <MyBookComponent navigation={navigation} />
-      <MyBookComponent navigation={navigation} />
-      <MyBookComponent navigation={navigation} />
-      <MyBookComponent navigation={navigation} />
-      <MyBookComponent navigation={navigation} />
-      <MyBookComponent navigation={navigation} />
-      <MyBookComponent navigation={navigation} />
-      <MyBookComponent navigation={navigation} />
+      {loading ? null : (
+        <>
+          {myPosts.map((post, i) => {
+            return (
+              <MyBookComponent navigation={navigation} key={i} post={post} />
+            );
+          })}
+        </>
+      )}
     </ScrollView>
   );
 }
