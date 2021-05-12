@@ -48,7 +48,7 @@ export async function signdetail(town) {
   }
 }
 
-export async function getuserProfile() {
+export async function getUserProfile() {
   try {
     const token = await AsyncStorage.getItem("session")
     const result = await axios({
@@ -124,4 +124,46 @@ export async function changeUserProfile(username, image) {
     console.log(err)
     Alert.alert("다시 시도해 보세요.")
   }
+}
+
+export async function getUserComment() {
+  try {
+    const token = await AsyncStorage.getItem("session")
+    const result = await axios({
+      method: "Get",
+      url: host + "/api/users/comments",
+      headers: {
+        token: token,
+      },
+    })
+    console.log("댓글 조회 완료")
+    console.log(result)
+
+    return result.results
+  } catch (err) {
+    console.log(err)
+    Alert.alert("다시 시도해 보세요.")
+  }
+  console.log(result)
+}
+
+export async function getUserBooks() {
+  try {
+    const token = await AsyncStorage.getItem("session")
+    const result = await axios({
+      method: "Get",
+      url: host + "/api/users/townbooks",
+      headers: {
+        token: token,
+      },
+    })
+    console.log("내가쓴글 조회 완료")
+    console.log(result)
+
+    return result.results
+  } catch (err) {
+    console.log(err)
+    Alert.alert("다시 시도해 보세요.")
+  }
+  console.log(result)
 }

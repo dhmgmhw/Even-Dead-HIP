@@ -11,6 +11,7 @@ import AddPage from "../pages/home/AddPage"
 import OurTownPage from "../pages/home/OurTownPage"
 import MultiAddPage from "../pages/home/MultiAddPage"
 import CatePage from "../pages/search/CatePage"
+import MyPage from "../pages/mypage/MyPage"
 
 const Stack = createStackNavigator()
 
@@ -26,11 +27,13 @@ const StackNavigator = () => {
         options={{ gestureEnabled: false }}
       />
       <Stack.Screen name="SignPlusPage" component={SignPlusPage} />
+
       <Stack.Screen
         name="TabNavigator"
         component={TabNavigator}
         options={{ gestureEnabled: false }}
       />
+      <Stack.Screen name="MyPage" component={MyPage} />
       <Stack.Screen name="OurTownPage" component={OurTownPage} />
       <Stack.Screen name="MultiAddPage" component={MultiAddPage} />
       <Stack.Screen name="PostDetailPage" component={PostDetailPage} />

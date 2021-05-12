@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react"
 import {
   StyleSheet,
   Text,
@@ -11,77 +11,101 @@ import {
   TouchableHighlight,
   Pressable,
   TextInput,
-} from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+  Button,
+} from "react-native"
+import * as ImagePicker from "expo-image-picker"
 
-import { Feather } from '@expo/vector-icons';
-import { ProgressBar, Colors } from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import Modal from "react-native-modal"
 
-import { uploadImg } from '../../config/PostingApi';
+import { Feather } from "@expo/vector-icons"
+import { ProgressBar, Colors } from "react-native-paper"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
-import { getuserProfile } from '../../config/BackData';
-import { changeUserProfile } from '../../config/BackData';
+import { uploadImg } from "../../config/PostingApi"
 
-import { Overlay } from 'react-native-elements';
-import { Alert } from 'react-native';
+import { getUserProfile } from "../../config/BackData"
+import { changeUserProfile } from "../../config/BackData"
+
+import { Overlay } from "react-native-elements"
+import { Alert } from "react-native"
+
+import { getUserComment } from "../../config/BackData"
+import { getUserBooks } from "../../config/BackData"
 
 export default function MyInfoTab({ navigation }) {
-  const [profile, setprofile] = useState('');
-
-  const [visible, setVisible] = useState(false);
-  const [name, setName] = useState(nickName);
-  const [imageUri, setImageUri] = useState(profile.image);
-  const [nickName, setNickName] = useState(nickName);
+  const [profile, setprofile] = useState("")
+  const [CommentLists, setCommentLists] = useState()
+  const [BookLists, setBookLists] = useState()
+  const [visible, setVisible] = useState(false)
+  const [name, setName] = useState(nickName)
+  const [imageUri, setImageUri] = useState(profile.image)
+  const [nickName, setNickName] = useState(nickName)
+  const [isModalVisible, setModalVisible] = useState(false)
 
   useEffect(() => {
-    download();
-    getPermission();
-  }, []);
+    download()
+    getPermission()
+    getComment()
+    getBook()
+  }, [])
 
   const getPermission = async () => {
-    if (Platform.OS !== 'web') {
-      const {
-        status,
-      } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== 'granted') {
-        alert('게시글을 업로드하려면 사진첩 권한이 필요합니다.');
+    if (Platform.OS !== "web") {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
+      if (status !== "granted") {
+        alert("게시글을 업로드하려면 사진첩 권한이 필요합니다.")
       }
     }
-  };
+  }
 
   const download = async () => {
-    const result = await getuserProfile();
-    setprofile(result.results);
-    setNickName(result.results.username);
-    setImageUri(result.results.image);
-  };
+    const result = await getUserProfile()
+    setprofile(result.results)
+    setNickName(result.results.username)
+    setImageUri(result.results.image)
+    navigation.push("MyPage")
+  }
+  const getComment = async () => {
+    const result = await getUserComment()
+    setCommentLists(result.user)
+  }
+  const getBook = async () => {
+    const result = await getUserBooks()
+    setBookLists(result)
+  }
 
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible)
+  }
   const upload = async () => {
-    if (name == '') {
-      Alert.alert('바꿀 닉네임을 작성해 주세요!');
-      return;
+    if (name == "") {
+      Alert.alert("바꿀 닉네임을 작성해 주세요!")
+      return
     }
     if (imageUri === profile.image) {
-      Alert.alert('바꿀 사진을 선택해 주세요!');
-      return;
+      Alert.alert("바꿀 사진을 선택해 주세요!")
+      return
     } else {
-      const formData = new FormData();
-      formData.append('files', {
+      const formData = new FormData()
+      formData.append("files", {
         uri: imageUri,
-        name: 'image.jpg',
-      });
-      let getUri = await uploadImg(formData);
-      console.log(getUri[0]);
-      await changeUserProfile(name, getUri[0]);
-      setVisible(false);
-      download();
+        name: "image.jpg",
+      })
+      let getUri = await uploadImg(formData)
+      console.log(getUri[0])
+      await changeUserProfile(name, getUri[0])
+      setVisible(false)
+      download()
     }
-  };
+  }
 
   const toggleOverlay = () => {
-    setVisible(!visible);
-  };
+    setVisible(!visible)
+  }
+
+  const toggleOver = () => {
+    setVisible(!visible)
+  }
 
   const pickImage = async () => {
     let imageData = await ImagePicker.launchImageLibraryAsync({
@@ -89,13 +113,13 @@ export default function MyInfoTab({ navigation }) {
       allowsEditing: true,
       aspect: [4, 4],
       quality: 0,
-    });
-    getImageUrl(imageData);
-  };
+    })
+    getImageUrl(imageData)
+  }
 
-  const getImageUrl = async (imageData) => {
-    setImageUri(imageData.uri);
-  };
+  const getImageUrl = async imageData => {
+    setImageUri(imageData.uri)
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -104,14 +128,14 @@ export default function MyInfoTab({ navigation }) {
           <View style={{}}>
             <View
               style={{
-                flexDirection: 'row',
-                alignItems: 'center',
+                flexDirection: "row",
+                alignItems: "center",
                 marginVertical: 20,
                 paddingVertical: 20,
               }}>
               <Image
                 style={styles.profileimg}
-                resizeMode='contain'
+                resizeMode="contain"
                 source={{
                   uri: imageUri,
                 }}
@@ -122,13 +146,13 @@ export default function MyInfoTab({ navigation }) {
                 }}>
                 <Text
                   numberOfLines={1}
-                  ellipsizeMode={'tail'}
+                  ellipsizeMode={"tail"}
                   style={styles.nickname}>
                   {nickName}
                 </Text>
                 <Text
                   numberOfLines={1}
-                  ellipsizeMode={'tail'}
+                  ellipsizeMode={"tail"}
                   style={styles.email}>
                   {profile.email}
                 </Text>
@@ -141,15 +165,15 @@ export default function MyInfoTab({ navigation }) {
               <View style={styles.box}>
                 <View
                   style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
+                    flexDirection: "row",
+                    justifyContent: "space-between",
                     marginTop: 10,
                   }}>
                   <TouchableOpacity>
                     <Text
                       style={styles.completetext}
                       onPress={() => {
-                        setVisible(false);
+                        setVisible(false)
                       }}>
                       취소
                     </Text>
@@ -164,7 +188,7 @@ export default function MyInfoTab({ navigation }) {
                 <Pressable style={styles.pickpic} onPress={pickImage}>
                   <Image
                     style={styles.editprofileimg}
-                    resizeMode='contain'
+                    resizeMode="contain"
                     source={{
                       uri: imageUri,
                     }}
@@ -174,10 +198,10 @@ export default function MyInfoTab({ navigation }) {
                 <TextInput
                   maxLength={10}
                   style={styles.textInput}
-                  onChangeText={(text) => setName(text)}
+                  onChangeText={text => setName(text)}
                   value={name}
                   placeholder={nickName}
-                  placeholderTextColor={'grey'}
+                  placeholderTextColor={"grey"}
                 />
               </View>
             </Overlay>
@@ -185,18 +209,18 @@ export default function MyInfoTab({ navigation }) {
         </View>
         <View
           style={{
-            flexDirection: 'row',
+            flexDirection: "row",
           }}>
           <View style={styles.textBox}>
             <TouchableHighlight
               style={styles.circle}
-              underlayColor='#4CB73B'
-              onPress={() => alert('Yaay!', console.log(profile))}>
+              underlayColor="#4CB73B"
+              onPress={() => alert("Yaay!", console.log(profile))}>
               <>
-                <Feather name='align-left' size={28} color='white' />
+                <Feather name="align-left" size={28} color="white" />
               </>
             </TouchableHighlight>
-            <Text style={styles.lists1} color='white'>
+            <Text style={styles.lists1} color="white">
               알림
             </Text>
           </View>
@@ -204,26 +228,35 @@ export default function MyInfoTab({ navigation }) {
           <View style={styles.recommendlist}>
             <TouchableHighlight
               style={styles.circle}
-              underlayColor='#C6C5FF'
-              onPress={() => console.log(profile)}>
+              underlayColor="#C6C5FF"
+              onPress={toggleModal}>
               <>
-                <Feather name='thumbs-up' size={28} color='white' />
+                <Feather name="thumbs-up" size={28} color="white" />
               </>
             </TouchableHighlight>
-            <Text style={styles.lists}>댓글</Text>
+            <View style={{ flex: 1 }}>
+              {/* <Button title="Show modal" onPress={toggleModal} /> */}
+              <TouchableOpacity onpress={toggleModal}></TouchableOpacity>
+              <Text style={styles.lists}> 댓글 </Text>
+              <Modal isVisible={isModalVisible}>
+                <View style={styles.commentbox}>
+                  {/* <Text style={styles.username}>{CommentLists.username}</Text> */}
+                  {/* <Text style={styles.comment}>{CommentLists.comment}</Text> */}
+                  <Button title="돌아가기" onPress={toggleModal} />
+                </View>
+              </Modal>
+            </View>
           </View>
           <View style={styles.likelist}>
-            <TouchableHighlight
+            <TouchableOpacity
               style={styles.circle}
-              underlayColor='#C6C5FF'
-              onPress={() => {
-                console.log('ya');
-              }}>
+              underlayColor="#C6C5FF"
+              onPress={() => navigation.navigate("MyPage")}>
               <>
-                <Feather name='heart' size={28} color='white' />
+                <Feather name="heart" size={28} color="white" />
               </>
-            </TouchableHighlight>
-            <Text style={styles.lists}>스크랩</Text>
+            </TouchableOpacity>
+            <Text style={styles.lists}>좋아요</Text>
           </View>
         </View>
       </View>
@@ -238,79 +271,65 @@ export default function MyInfoTab({ navigation }) {
         />
       </View>
 
-      {/* <TouchableOpacity
-        style={styles.deal}
-        onpress={() => console.log(profile)}>
-        <Text style={styles.downcompo}>거래내역</Text>
-        <Feather
-          style={styles.rarrow}
-          name='chevron-right'
-          size={28}
-          color='black'
-        />
-      </TouchableOpacity> */}
       <View style={styles.border}></View>
       <TouchableOpacity
-        style={[styles.deal, { alignSelf: 'center' }]}
+        style={[styles.deal, { alignSelf: "center" }]}
         onPress={async () => {
-          await AsyncStorage.clear();
-          console.log('스토리지 비움');
-          navigation.push('SignInPage');
+          await AsyncStorage.clear()
+          console.log("스토리지 비움")
+          navigation.push("SignInPage")
         }}>
-        <Text style={[styles.downcompo, { color: 'red' }]}>로그아웃</Text>
+        <Text style={[styles.downcompo, { color: "red" }]}>로그아웃</Text>
       </TouchableOpacity>
       <View style={styles.border}></View>
     </ScrollView>
-  );
-  // : (
-  //   <Load />
-  // )
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   bigborder: {
     height: 10,
-    backgroundColor: '#f2f2f2',
+    backgroundColor: "#f2f2f2",
   },
   border: {
     height: 5,
-    backgroundColor: '#f2f2f2',
+    backgroundColor: "#f2f2f2",
     borderRadius: 100,
   },
   deal: {
     height: 60,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 20,
   },
   mycomment: {
     flex: 1,
     height: 60,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   invitefriend: {
     height: 60,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   myliketext: {
     height: 60,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   myprofile: {
     // height: 150,
-    flexDirection: 'column',
+    flexDirection: "column",
   },
   textInput: {
     height: 40,
-    width: '80%',
+    width: "80%",
     borderWidth: 2,
-    borderColor: '#E0E0E0',
+    borderColor: "#E0E0E0",
     borderRadius: 5,
-    alignSelf: 'center',
+    alignSelf: "center",
     marginTop: 30,
     paddingLeft: 20,
   },
@@ -325,16 +344,16 @@ const styles = StyleSheet.create({
     height: 80,
     width: 80,
     borderRadius: 100,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   nickname: {
-    fontFamily: 'SansBold',
+    fontFamily: "SansBold",
     fontSize: 18,
   },
   email: {
-    fontFamily: 'SansBold',
+    fontFamily: "SansBold",
     fontSize: 13,
-    color: '#adadad',
+    color: "#adadad",
   },
   likenum: {
     marginTop: 5,
@@ -344,25 +363,25 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   profileedit: {
-    height: '50%',
-    width: '100%',
+    height: "50%",
+    width: "100%",
     borderRadius: 100,
     marginTop: 50,
   },
   textBox: {
     marginLeft: 40,
     marginTop: 20,
-    flexDirection: 'column',
+    flexDirection: "column",
   },
   recommendlist: {
     marginLeft: 70,
     marginTop: 20,
-    flexDirection: 'column',
+    flexDirection: "column",
   },
   likelist: {
     marginLeft: 70,
     marginTop: 20,
-    flexDirection: 'column',
+    flexDirection: "column",
   },
   lists: {
     marginTop: 10,
@@ -373,32 +392,32 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   downcompo: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   rarrow: {},
   num: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginTop: 5,
     marginLeft: 5,
   },
   circle: {
     borderRadius: 100,
-    width: Dimensions.get('window').width * 0.15,
-    height: Dimensions.get('window').width * 0.15,
-    backgroundColor: '#4CB73B',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: Dimensions.get("window").width * 0.15,
+    height: Dimensions.get("window").width * 0.15,
+    backgroundColor: "#4CB73B",
+    justifyContent: "center",
+    alignItems: "center",
   },
   box: {
-    width: Dimensions.get('window').width * 0.9,
-    height: Dimensions.get('window').height * 0.5,
+    width: Dimensions.get("window").width * 0.9,
+    height: Dimensions.get("window").height * 0.5,
   },
   nicknamefix: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginLeft: 145,
     marginTop: 10,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   profileimgfix: {
     marginLeft: 45,
@@ -408,38 +427,38 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
   emailfix: {
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   mystatus: {
     height: 120,
     marginTop: 30,
-    backgroundColor: '#F4F4F4',
+    backgroundColor: "#F4F4F4",
   },
   highlite: {
     fontSize: 25,
-    fontWeight: '700',
-    color: '#4CB73B',
-    textAlign: 'center',
+    fontWeight: "700",
+    color: "#4CB73B",
+    textAlign: "center",
   },
   title: {
     fontSize: 25,
     marginTop: 10,
-    fontWeight: '700',
-    color: '#434343',
-    textAlign: 'center',
+    fontWeight: "700",
+    color: "#434343",
+    textAlign: "center",
   },
   editbox: {},
   editbutton: {
     borderWidth: 2,
-    width: Dimensions.get('window').width * 0.9,
-    alignSelf: 'center',
+    width: Dimensions.get("window").width * 0.9,
+    alignSelf: "center",
     paddingVertical: 10,
     borderRadius: 5,
-    borderColor: '#e0e0e0',
+    borderColor: "#e0e0e0",
   },
   editbuttonText: {
-    textAlign: 'center',
-    fontFamily: 'SansBold',
+    textAlign: "center",
+    fontFamily: "SansBold",
     fontSize: 13,
   },
   pickpic: {
@@ -466,19 +485,19 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     marginRight: 50,
     marginTop: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   profiletitle: {
-    textAlign: 'center',
-    fontFamily: 'SansMedium',
+    textAlign: "center",
+    fontFamily: "SansMedium",
     fontSize: 18,
     marginVertical: 20,
   },
   completetext: {
-    fontFamily: 'SansMedium',
-    color: '#4CB73B',
-    alignSelf: 'flex-end',
+    fontFamily: "SansMedium",
+    color: "#4CB73B",
+    alignSelf: "flex-end",
     marginHorizontal: 20,
     fontSize: 18,
   },
@@ -490,4 +509,8 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     marginTop: 10,
   },
-});
+  commentbox: {
+    backgroundColor: "white",
+    flex: 1,
+  },
+})
