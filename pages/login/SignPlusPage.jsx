@@ -11,9 +11,37 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-import { Container, ScrollView } from 'native-base';
+import { Container } from 'native-base';
 
 import { getUserProfile, signdetail } from '../../config/BackData';
+
+const seoul = [
+  '종로구',
+  '중구',
+  '용산구',
+  '성동구',
+  '광진구',
+  '동대문구',
+  '중랑구',
+  '성북구',
+  '북구',
+  '도봉구',
+  '노원구',
+  '은평구',
+  '서대문구',
+  '마포구',
+  '양천구',
+  '강서구',
+  '구로구',
+  '금천구',
+  '영등포구',
+  '동작구',
+  '관악구',
+  '서초구',
+  '강남구',
+  '송파구',
+  '강동구',
+];
 
 export default function SignPlusPage({ navigation }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -21,11 +49,15 @@ export default function SignPlusPage({ navigation }) {
   const [loading, setLoading] = useState(true);
 
   const checkUser = async () => {
-    const userData = await getUserProfile();
-    if (userData.results.town == null) {
-      setLoading(false);
-    } else {
-      navigation.push('TabNavigator');
+    try {
+      const userData = await getUserProfile();
+      if (userData.results.town == null) {
+        setLoading(false);
+      } else {
+        navigation.push('TabNavigator');
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -40,36 +72,11 @@ export default function SignPlusPage({ navigation }) {
     if (searchQuery === '') {
       Alert.alert('우리동네를 입력해 주세요!');
       return;
-    } else if (
-      searchQuery === '종로구' ||
-      '중구' ||
-      '용산구' ||
-      '성동구' ||
-      '광진구' ||
-      '동대문구' ||
-      '중랑구' ||
-      '성북구' ||
-      '북구' ||
-      '도봉구' ||
-      '노원구' ||
-      '은평구' ||
-      '서대문구' ||
-      '마포구' ||
-      '양천구' ||
-      '강서구' ||
-      '구로구' ||
-      '금천구' ||
-      '영등포구' ||
-      '동작구' ||
-      '관악구' ||
-      '서초구' ||
-      '강남구' ||
-      '송파구'
-    ) {
+    } else if (seoul.includes(searchQuery)) {
       await signdetail(searchQuery);
       navigation.push('TabNavigator');
     } else {
-      Alert.alert('아직은 서울 안에서만 가능해요 ;( 예) 송파구');
+      Alert.alert('아직은 서울에서만 가능해요 예) 송파구');
       return;
     }
   };
@@ -114,6 +121,16 @@ export default function SignPlusPage({ navigation }) {
             value={searchQuery}
           />
         </View>
+        <Text
+          style={{
+            fontFamily: 'SCDream6',
+            fontSize: 12,
+            alignSelf: 'center',
+            paddingHorizontal: 10,
+            color: '#e0e0e0',
+          }}>
+          책과 콩나무는 서울특별시를 한정으로 운영중입니다.
+        </Text>
         <Pressable
           style={{
             width: 130,
@@ -143,8 +160,6 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   setarea: {
-    marginTop: 100,
-    marginLeft: 100,
     marginTop: 150,
     marginBottom: 50,
     fontSize: 18,
