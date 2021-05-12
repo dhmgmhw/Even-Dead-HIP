@@ -20,7 +20,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { uploadImg } from '../../config/PostingApi';
 
-import { getuserProfile } from '../../config/BackData';
+import { getUserProfile, signOut } from '../../config/BackData';
 import { changeUserProfile } from '../../config/BackData';
 
 import { Overlay } from 'react-native-elements';
@@ -41,17 +41,21 @@ export default function MyInfoTab({ navigation }) {
 
   const getPermission = async () => {
     if (Platform.OS !== 'web') {
-      const {
-        status,
-      } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const { status } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== 'granted') {
         alert('게시글을 업로드하려면 사진첩 권한이 필요합니다.');
       }
     }
   };
 
+  const logout = () => {
+    console.log('스토리지 비움');
+    signOut(navigation);
+  };
+
   const download = async () => {
-    const result = await getuserProfile();
+    const result = await getUserProfile();
     setprofile(result.results);
     setNickName(result.results.username);
     setImageUri(result.results.image);
@@ -177,7 +181,7 @@ export default function MyInfoTab({ navigation }) {
                   onChangeText={(text) => setName(text)}
                   value={name}
                   placeholder={nickName}
-                  placeholderTextColor={'grey'}
+                  placeholderTextColor={'black'}
                 />
               </View>
             </Overlay>
@@ -252,11 +256,7 @@ export default function MyInfoTab({ navigation }) {
       <View style={styles.border}></View>
       <TouchableOpacity
         style={[styles.deal, { alignSelf: 'center' }]}
-        onPress={async () => {
-          await AsyncStorage.clear();
-          console.log('스토리지 비움');
-          navigation.push('SignInPage');
-        }}>
+        onPress={logout}>
         <Text style={[styles.downcompo, { color: 'red' }]}>로그아웃</Text>
       </TouchableOpacity>
       <View style={styles.border}></View>
@@ -319,6 +319,8 @@ const styles = StyleSheet.create({
     height: 70,
     width: 70,
     borderRadius: 100,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
   },
   editprofileimg: {
     marginVertical: 10,
@@ -326,6 +328,8 @@ const styles = StyleSheet.create({
     width: 80,
     borderRadius: 100,
     alignSelf: 'center',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
   },
   nickname: {
     fontFamily: 'SansBold',

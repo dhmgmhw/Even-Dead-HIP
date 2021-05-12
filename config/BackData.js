@@ -48,7 +48,7 @@ export async function signdetail(town) {
   }
 }
 
-export async function getuserProfile() {
+export async function getUserProfile() {
   try {
     const token = await AsyncStorage.getItem("session")
     const result = await axios({
@@ -59,7 +59,6 @@ export async function getuserProfile() {
       },
     })
     console.log("조회 완료")
-
     return result.data
   } catch (err) {
     console.log(err)
@@ -123,5 +122,17 @@ export async function changeUserProfile(username, image) {
   } catch (err) {
     console.log(err)
     Alert.alert("다시 시도해 보세요.")
+  }
+}
+
+
+export async function signOut(navigation) {
+  try {
+    await AsyncStorage.clear();
+    Alert.alert("로그아웃합니다");
+    navigation.push("SignInPage");
+  } catch (err) {
+    Alert.alert('로그아웃 오류가 발생했습니다');
+    console.log(err)
   }
 }
