@@ -80,9 +80,9 @@ export default function PostFixPage({ navigation, route }) {
     } else if (stateInfo == '') {
       Alert.alert('수정할 책의 상태를 선택해 주세요');
       return;
-      // } else if (imageUri == '') {
-      //   Alert.alert('수정할 사진을 최소 한 장 선택해 주세요');
-      //   return;
+    } else if (imageUri == '') {
+      Alert.alert('수정할 사진을 최소 한 장 선택해 주세요');
+      return;
     } else if (contentInfo == '') {
       Alert.alert('수정할 책을 간단히 소개해 주세요');
       return;
@@ -98,6 +98,7 @@ export default function PostFixPage({ navigation, route }) {
         status: stateInfo,
         price: priceInfo,
         contentInfo: contentInfo,
+        captureImages: imageUri,
       };
       // const formData = new FormData();
       // for (let i = 0; i < imageUri.length; i++) {
@@ -108,11 +109,6 @@ export default function PostFixPage({ navigation, route }) {
       // }
       // const imgList = await uploadImg(formData);
       // data.captureImages = imgList;
-      data.captureImages = [
-        'https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F19422E4C50D99D0E16',
-        'http://topclass.chosun.com/news_img/1807/1807_008.jpg',
-      ];
-      // console.log(data);
       await updatePost(data, bookHerit.id, navigation);
     }
   };
@@ -234,7 +230,26 @@ export default function PostFixPage({ navigation, route }) {
         />
         <View style={styles.addPicsBox}>
           {imageUri == '' ? (
-            <></>
+            <>
+              <Pressable
+                style={[styles.userPicBox, { marginHorizontal: 20 }]}
+                onPress={() => {
+                  navigation.navigate('MultiFixPage', setImageUri);
+                }}>
+                <Ionicons
+                  name='image-outline'
+                  size={30}
+                  style={{ alignSelf: 'center', color: '#4CB73B' }}
+                />
+              </Pressable>
+              <View style={{ justifyContent: 'center' }}>
+                <View>
+                  <Text style={styles.photoGuidanceText}>
+                    상품의 상태가 잘 보이게 찍어주세요
+                  </Text>
+                </View>
+              </View>
+            </>
           ) : (
             <ScrollView
               horizontal={true}
@@ -245,7 +260,8 @@ export default function PostFixPage({ navigation, route }) {
                   <Pressable
                     key={i}
                     onPress={() => {
-                      navigation.navigate('MultiAddPage', setImageUri);
+                      // navigation.navigate('MultiAddPage', setImageUri);
+                      Alert.alert('한 번 올린 사진은 변경할 수 없어요 :(');
                     }}>
                     <Image source={{ uri: image }} style={styles.userPicBox} />
                   </Pressable>
