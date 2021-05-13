@@ -17,15 +17,19 @@ export default function MyLibraryTab({ navigation }) {
     if (response.length > 0) {
       setMyPosts(response);
       // console.log(myPosts);
+      setLoading(false);
     } else {
       console.log('No Posts');
+      setLoading(true);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
-    download();
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      download();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <ScrollView style={styles.container}>
