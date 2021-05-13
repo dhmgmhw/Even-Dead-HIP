@@ -33,11 +33,22 @@ export default function MyInfoTab({ navigation }) {
   const [name, setName] = useState(nickName);
   const [imageUri, setImageUri] = useState(profile.image);
   const [nickName, setNickName] = useState(nickName);
+  const [point, setPoint] = useState(0);
 
   useEffect(() => {
-    download();
     getPermission();
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      download();
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  const goTownChange = () => {
+    navigation.push('TownChangePage');
+  };
 
   const getPermission = async () => {
     if (Platform.OS !== 'web') {
@@ -59,11 +70,16 @@ export default function MyInfoTab({ navigation }) {
     setprofile(result.results);
     setNickName(result.results.username);
     setImageUri(result.results.image);
+    setPoint(result.results.point);
   };
 
   const upload = async () => {
     if (name == '') {
       Alert.alert('바꿀 닉네임을 작성해 주세요!');
+      return;
+    }
+    if (name.length > 6) {
+      Alert.alert('닉네임은 최대 6자까지 가능합니다.');
       return;
     }
     if (imageUri === profile.image) {
@@ -231,34 +247,35 @@ export default function MyInfoTab({ navigation }) {
           </View>
         </View> */}
       </View>
-      {/* <View style={styles.mystatus}>
+      <View style={styles.mystatus}>
         <Text style={styles.title}>
           콩나무 <Text style={styles.highlite}>새싹 단계</Text>
         </Text>
         <ProgressBar
           style={styles.seed}
-          progress={0.6}
+          progress={point}
           color={Colors.green800}
         />
-      </View> */}
-
-      {/* <TouchableOpacity
-        style={styles.deal}
-        onpress={() => console.log(profile)}>
-        <Text style={styles.downcompo}>거래내역</Text>
+      </View>
+      <Pressable style={styles.deal} onPress={goTownChange}>
+        <Text style={styles.downcompo}>동네 설정</Text>
         <Feather
           style={styles.rarrow}
           name='chevron-right'
           size={28}
           color='black'
         />
-      </TouchableOpacity> */}
+      </Pressable>
       <View style={styles.border}></View>
-      <TouchableOpacity
-        style={[styles.deal, { alignSelf: 'center' }]}
-        onPress={logout}>
+      <Pressable style={styles.deal} onPress={logout}>
         <Text style={[styles.downcompo, { color: 'red' }]}>로그아웃</Text>
-      </TouchableOpacity>
+        <Feather
+          style={styles.rarrow}
+          name='chevron-right'
+          size={28}
+          color='black'
+        />
+      </Pressable>
       <View style={styles.border}></View>
     </ScrollView>
   );
@@ -273,9 +290,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#f2f2f2',
   },
   border: {
-    height: 5,
+    height: 3,
+    marginHorizontal: 20,
     backgroundColor: '#f2f2f2',
-    borderRadius: 100,
   },
   deal: {
     height: 60,
@@ -374,7 +391,8 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   downcompo: {
-    fontWeight: 'bold',
+    fontFamily: 'SansRegular',
+    fontSize: 13,
   },
   rarrow: {},
   num: {
@@ -413,21 +431,20 @@ const styles = StyleSheet.create({
   },
   mystatus: {
     height: 120,
-    marginTop: 30,
+    marginVertical: 30,
     backgroundColor: '#F4F4F4',
+    padding: 20,
   },
   highlite: {
-    fontSize: 25,
-    fontWeight: '700',
+    fontSize: 18,
+    fontFamily: 'SCDream6',
     color: '#4CB73B',
-    textAlign: 'center',
   },
   title: {
-    fontSize: 25,
+    fontSize: 18,
     marginTop: 10,
-    fontWeight: '700',
+    fontFamily: 'SCDream6',
     color: '#434343',
-    textAlign: 'center',
   },
   editbox: {},
   editbutton: {
@@ -464,8 +481,6 @@ const styles = StyleSheet.create({
   //   elevation: 3,
   // },
   seed: {
-    marginLeft: 50,
-    marginRight: 50,
     marginTop: 20,
     justifyContent: 'center',
     alignItems: 'center',
