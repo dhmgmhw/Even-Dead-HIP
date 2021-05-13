@@ -38,6 +38,7 @@
     "react-native-easy-grid": "^0.2.2",
     "react-native-elements": "^3.4.1",
     "react-native-gesture-handler": "~1.10.2",
+    "react-native-image-blur-loading": "^1.1.5",
     "react-native-json-tree": "^1.2.1",
     "react-native-keyboard-aware-scroll-view": "^0.9.4",
     "react-native-paper": "^4.8.1",

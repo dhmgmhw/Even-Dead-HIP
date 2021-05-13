@@ -6290,6 +6290,11 @@ react-native-gesture-handler@~1.10.2:
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
+react-native-image-blur-loading@^1.1.5:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/react-native-image-blur-loading/-/react-native-image-blur-loading-1.1.5.tgz#31a03cfa51952d5b0ff4e0e70c5792065874b691"
+  integrity sha512-BiINpSeXlSgH2lt2cQ4mXBj1WL1zmO+FuU7/lPyd2kloI2UvJL2AB15afbioiUQU3gBDQj0CAjW6jWhTTVCPxQ==
+
 react-native-iphone-x-helper@^1.0.3, react-native-iphone-x-helper@^1.3.0, react-native-iphone-x-helper@^1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.3.1.tgz#20c603e9a0e765fd6f97396638bdeb0e5a60b010"
