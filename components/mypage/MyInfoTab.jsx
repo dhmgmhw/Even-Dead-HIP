@@ -120,8 +120,8 @@ export default function MyInfoTab({ navigation }) {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.myprofile}>
-        <View style={{}}>
-          <View style={{}}>
+        <View>
+          <View>
             <View
               style={{
                 flexDirection: 'row',
@@ -253,7 +253,7 @@ export default function MyInfoTab({ navigation }) {
         </Text>
         <ProgressBar
           style={styles.seed}
-          progress={point}
+          progress={point / 1000}
           color={Colors.green800}
         />
       </View>
