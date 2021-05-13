@@ -77,18 +77,23 @@ export default function AddPage({ navigation }) {
     setUploader(true);
     if (title == '') {
       Alert.alert('등록할 책을 선택해 주세요');
+      setUploader(false);
       return;
     } else if (genreInfo == '') {
       Alert.alert('해쉬태그를 선택해 주세요');
+      setUploader(false);
       return;
     } else if (stateInfo == '') {
       Alert.alert('책의 상태를 선택해 주세요');
+      setUploader(false);
       return;
     } else if (imageUri == '') {
       Alert.alert('사진을 최소 한 장 선택해 주세요');
+      setUploader(false);
       return;
     } else if (contentInfo == '') {
       Alert.alert('책을 간단히 소개해 주세요');
+      setUploader(false);
       return;
     } else {
       let data = {
