@@ -9,12 +9,12 @@ import {
   Image,
   LogBox,
 } from 'react-native';
-import { Header } from 'react-native-elements';
 import { Button } from 'native-base';
 
 import { Ionicons } from '@expo/vector-icons';
 
 import GenreComponent from '../../components/home/GenreComponent';
+import MainUserBox from '../../components/home/MainUserBox';
 
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { getPostedBook } from '../../config/MainPageApi';
@@ -26,23 +26,33 @@ const diviceHeight = Dimensions.get('window').height;
 
 export default function HomeMain({ navigation }) {
   LogBox.ignoreLogs(['Warning: ...']);
+
   const [currentPage, setCurrentPage] = useState(1);
+  const [bannerPosts, setBannerPosts] = useState([]);
+
   const [posts, setPosts] = useState([]);
   const [scrapList, setScrapList] = useState([]);
 
   const [myTown, setMyTown] = useState();
   const [myEmail, setMyEmail] = useState();
+  const [myName, setMyName] = useState();
+  const [myImg, setMyImg] = useState();
 
   const userCheck = async () => {
     const myInfo = await getUserProfile();
     setMyTown(myInfo.results.town);
     setScrapList(myInfo.results.scrapList);
     setMyEmail(myInfo.results.email);
+    setMyName(myInfo.results.username);
+    setMyImg(myInfo.results.image);
+    console.log(myInfo.results);
   };
 
   const download = async () => {
     const result = await getPostedBook(currentPage);
+    const banner = await getPostedBook(1);
     setPosts(result);
+    setBannerPosts(banner);
   };
 
   useEffect(() => {
@@ -55,90 +65,94 @@ export default function HomeMain({ navigation }) {
 
   return (
     <>
-      <Header
-        containerStyle={{
-          paddingHorizontal: 20,
-          borderBottomWidth: 0,
-          backgroundColor: 'white',
-        }}
-        leftComponent={
+      <View style={styles.statusAvoid}></View>
+      <View style={styles.mainHeader}>
+        <View style={styles.headerLComp}>
           <Image
             style={{ height: 25, width: 40 }}
             resizeMode='contain'
             source={require('../../assets/mainlogo.png')}
           />
-        }
-        centerComponent={''}
-        rightComponent={
-          ''
-          // <Ionicons
-          //   name={'notifications-outline'}
-          //   size={25}
-          //   style={{ color: '#398E3D' }}
-          // />
-        }
-      />
+        </View>
+        <View style={styles.headerCComp}></View>
+        <View style={styles.headerRComp}></View>
+      </View>
       <ScrollView
         style={{ backgroundColor: 'white' }}
         showsVerticalScrollIndicator={false}>
-        <View style={styles.mainTitleBox}>
-          <View>
-            <Text style={styles.mainTitleDesc}>좋은 책을 좋은 이웃과 함께</Text>
-            <Text style={styles.mainTitleText}>우리 동네 책장</Text>
-            <View
-              style={{
-                height: 20,
-                backgroundColor: '#31B11C',
-                position: 'relative',
-                bottom: 20,
-                zIndex: 2,
-              }}></View>
+        <MainUserBox myName={myName} myImg={myImg} />
+        <View
+          style={{
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 1,
+              height: 4,
+            },
+            shadowOpacity: 0.3,
+            shadowRadius: 5,
+            zIndex: 99,
+          }}>
+          <View style={styles.mainTitleBox}>
             <View>
-              <Text style={styles.mainTitleDesc2}>
-                지역에서 관심있는 책을 교환하며
+              <Text style={styles.mainTitleDesc}>
+                좋은 책을 좋은 이웃과 함께
               </Text>
-              <Text style={styles.mainTitleDesc2}>
-                내 안의 가치를 같이 키워보세요
-              </Text>
+              <Text style={styles.mainTitleText}>우리 동네 책장</Text>
+              <View
+                style={{
+                  height: 20,
+                  backgroundColor: '#31B11C',
+                  position: 'relative',
+                  bottom: 20,
+                  zIndex: 2,
+                }}></View>
+              <View>
+                <Text style={styles.mainTitleDesc2}>
+                  지역에서 관심있는 책을 교환하며
+                </Text>
+                <Text style={styles.mainTitleDesc2}>
+                  내 안의 가치를 같이 키워보세요
+                </Text>
+              </View>
+              <Pressable
+                style={styles.townChangeBtn}
+                onPress={() => {
+                  navigation.navigate('TownChangePage');
+                }}>
+                <Text style={styles.myTownText}>{myTown}</Text>
+                <Ionicons
+                  name={'chevron-down'}
+                  size={25}
+                  style={{ color: 'white' }}
+                />
+              </Pressable>
             </View>
-            <Pressable
-              style={styles.townChangeBtn}
-              onPress={() => {
-                navigation.navigate('TownChangePage');
-              }}>
-              <Text style={styles.myTownText}>{myTown}</Text>
-              <Ionicons
-                name={'chevron-down'}
-                size={25}
-                style={{ color: 'white' }}
-              />
-            </Pressable>
           </View>
-        </View>
-        <View style={styles.mainTitleDescBox}>
-          <Text style={styles.mainTitleDesc3}>다양한 분야의 책도 만나고</Text>
-          <Text style={styles.mainTitleDesc3}>동네 이웃도 만나고</Text>
-          <Text style={styles.mainTitleDesc4}>같이하는 가치나눔</Text>
-          <Ionicons
-            name={'chevron-down'}
-            size={25}
-            style={{ color: 'white', top: 15 }}
-          />
-          <Ionicons
-            name={'chevron-down'}
-            size={25}
-            style={{ color: 'lightgrey' }}
-          />
-          <Ionicons
-            name={'chevron-down'}
-            size={25}
-            style={{ color: 'grey', bottom: 15 }}
-          />
+          <View style={styles.mainTitleDescBox}>
+            <Text style={styles.mainTitleDesc3}>다양한 분야의 책도 만나고</Text>
+            <Text style={styles.mainTitleDesc3}>동네 이웃도 만나고</Text>
+            <Text style={styles.mainTitleDesc4}>같이하는 가치나눔</Text>
+            <Ionicons
+              name={'chevron-down'}
+              size={25}
+              style={{ color: 'white', top: 15 }}
+            />
+            <Ionicons
+              name={'chevron-down'}
+              size={25}
+              style={{ color: 'lightgrey' }}
+            />
+            <Ionicons
+              name={'chevron-down'}
+              size={25}
+              style={{ color: 'grey', bottom: 15 }}
+            />
+          </View>
         </View>
         <View>
           <View style={styles.subTitleBox}>
             <Text style={{ fontSize: 16, fontFamily: 'SansRegular' }}>
-              새로 등록된 도서
+              우리동네 새로 등록된 도서
             </Text>
           </View>
           {posts ? (
@@ -186,6 +200,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
+    top: 1,
     backgroundColor: '#64BB35',
     paddingTop: getStatusBarHeight(),
   },
@@ -284,5 +299,35 @@ const styles = StyleSheet.create({
   loader: {
     marginTop: 10,
     alignSelf: 'center',
+  },
+  statusAvoid: {
+    height: getStatusBarHeight(),
+    backgroundColor: 'white',
+  },
+  mainHeader: {
+    width: diviceWidth,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: 'white',
+    height: 45,
+  },
+  headerLComp: {
+    height: 45,
+    width: diviceWidth / 3,
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+  },
+  headerCComp: {
+    width: diviceWidth / 3,
+    height: 45,
+    justifyContent: 'center',
+  },
+  headerRComp: {
+    width: diviceWidth / 3,
+    height: 45,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    paddingHorizontal: 20,
   },
 });
