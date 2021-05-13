@@ -30,9 +30,9 @@ export default function MyInfoTab({ navigation }) {
   const [profile, setprofile] = useState('');
 
   const [visible, setVisible] = useState(false);
-  const [name, setName] = useState(nickName);
+  const [name, setName] = useState(profile.username);
   const [imageUri, setImageUri] = useState(profile.image);
-  const [nickName, setNickName] = useState(nickName);
+  const [nickName, setNickName] = useState(profile.username);
   const [point, setPoint] = useState(0);
 
   useEffect(() => {
@@ -101,6 +101,8 @@ export default function MyInfoTab({ navigation }) {
 
   const toggleOverlay = () => {
     setVisible(!visible);
+    download();
+    setName(nickName);
   };
 
   const pickImage = async () => {
@@ -192,12 +194,11 @@ export default function MyInfoTab({ navigation }) {
                 </Pressable>
                 <Text style={styles.emailfix}>{profile.email}</Text>
                 <TextInput
-                  maxLength={10}
                   style={styles.textInput}
-                  onChangeText={(text) => setName(text)}
+                  onChangeText={setName}
                   value={name}
-                  placeholder={nickName}
-                  placeholderTextColor={'black'}
+                  placeholder={profile.username}
+                  placeholderTextColor={'grey'}
                 />
               </View>
             </Overlay>
