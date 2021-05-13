@@ -46,13 +46,13 @@ export default function SignInPage({ navigation }) {
   _onAuthGoogle = async () => {
     const { type, accessToken, user } = await Google.logInAsync({
       androidClientId:
-        '161728779966-m3u3d79dtk3f1eac5922csif029sokdd.apps.googleusercontent.com',
+        '161728779966-9pjjn580gfj749pq88j8f9hnpmhpa4nm.apps.googleusercontent.com',
       expoClientId:
         '747037265612-5o4lk93m2n098dhirk4gshnqlugi86nv.apps.googleusercontent.com',
       iosStandaloneAppClientId:
         '161728779966-berb0fukqq2aidubgq4v5o04h56b9hvr.apps.googleusercontent.com',
       androidStandaloneAppClientId:
-        '161728779966-m3u3d79dtk3f1eac5922csif029sokdd.apps.googleusercontent.com',
+        '161728779966-9pjjn580gfj749pq88j8f9hnpmhpa4nm.apps.googleusercontent.com',
       iosClientId:
         '161728779966-berb0fukqq2aidubgq4v5o04h56b9hvr.apps.googleusercontent.com',
       expoClientId:
