@@ -33,7 +33,7 @@ export default function MainUserBox({ myName, myImg }) {
             borderRadius: 5,
           }}>
           <Image
-            style={styles.bookCoverImg}
+            style={styles.userImg}
             resizeMode='contain'
             source={{ uri: myImg }}
           />
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     zIndex: 100,
   },
 
-  bookCoverImg: {
+  userImg: {
     width: 100,
     height: 100,
     borderRadius: 100,
