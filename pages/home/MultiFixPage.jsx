@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
-import { Text, View, StyleSheet, SafeAreaView, Alert } from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  SafeAreaView,
+  Alert,
+  Platform,
+} from 'react-native';
 import { AssetsSelector } from 'expo-images-picker';
 import { Ionicons } from '@expo/vector-icons';
 import StatusBarPlaceHolder from '../../components/AddPage/StatusBarPlaceHolder';
@@ -95,5 +102,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     bottom: getStatusBarHeight() / 2,
+    marginTop: Platform.OS === 'ios' ? 0 : 30,
   },
 });
