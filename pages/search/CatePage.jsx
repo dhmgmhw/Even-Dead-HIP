@@ -14,7 +14,7 @@ import { Header } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 
 import { searchByCate } from '../../config/SearchApi';
-import GenreComponent from '../../components/home/GenreComponent';
+import GenreSearchComponent from '../../components/search/GenreSearchResult';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
@@ -72,11 +72,7 @@ export default function CatePage({ navigation, route }) {
         centerComponent={''}
         rightComponent={''}
       />
-      <ScrollView
-        style={styles.container}
-        showsVerticalScrollIndicator={false}
-        // contentContainerStyle={{ paddingHorizontal: 10 }}
-      >
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         {posts ? (
           <>
             {posts.map((post, i) => {
@@ -86,7 +82,7 @@ export default function CatePage({ navigation, route }) {
                     console.log(post);
                   }}
                   key={i}>
-                  <GenreComponent navigation={navigation} post={post} />
+                  <GenreSearchComponent navigation={navigation} post={post} />
                 </Pressable>
               );
             })}
