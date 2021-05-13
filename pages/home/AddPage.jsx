@@ -10,9 +10,11 @@ import {
   Pressable,
   Keyboard,
   TouchableWithoutFeedback,
+  KeyboardAvoidingView,
   Alert,
   ActivityIndicator,
 } from 'react-native';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { Header, Overlay } from 'react-native-elements';
 import { Item } from 'native-base';
 
@@ -121,13 +123,9 @@ export default function AddPage({ navigation }) {
         Keyboard.dismiss();
       }}>
       <View style={{ backgroundColor: 'white', height: diviceHeight }}>
-        <Header
-          containerStyle={{
-            backgroundColor: 'white',
-            alignSelf: 'center',
-            borderBottomWidth: 1,
-          }}
-          leftComponent={
+        <View style={styles.statusAvoid}></View>
+        <View style={styles.mainHeader}>
+          <View style={styles.headerLComp}>
             <Text
               onPress={() => {
                 navigation.pop();
@@ -135,16 +133,20 @@ export default function AddPage({ navigation }) {
               style={styles.headerTitle}>
               취소
             </Text>
-          }
-          centerComponent={<Text style={styles.headerTitle}>도서 등록</Text>}
-          rightComponent={
+          </View>
+          <View style={styles.headerCComp}>
+            <Text style={[styles.headerTitle, { textAlign: 'center' }]}>
+              도서 등록
+            </Text>
+          </View>
+          <View style={styles.headerRComp}>
             <Text
               onPress={upload}
               style={[styles.headerTitle, { color: '#757575' }]}>
               등록
             </Text>
-          }
-        />
+          </View>
+        </View>
         {switcher ? (
           <View style={styles.bookResBox}>
             <View style={styles.bookResImgBox}>
@@ -294,14 +296,16 @@ export default function AddPage({ navigation }) {
             </ScrollView>
           )}
         </View>
-        <TextInput
-          multiline
-          style={styles.bookDescBox}
-          onChangeText={setContentInfo}
-          value={contentInfo}
-          placeholder='| 도서내용과 상태를 작성해주세요'
-          placeholderTextColor={'#757575'}
-        />
+        <KeyboardAvoidingView>
+          <TextInput
+            multiline
+            style={styles.bookDescBox}
+            onChangeText={setContentInfo}
+            value={contentInfo}
+            placeholder='| 도서내용과 상태를 작성해주세요'
+            placeholderTextColor={'#757575'}
+          />
+        </KeyboardAvoidingView>
         <Overlay
           overlayStyle={
             finderHeight ? styles.overlayBoxWith : styles.overlayBoxWithout
@@ -380,6 +384,36 @@ export default function AddPage({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  statusAvoid: {
+    height: getStatusBarHeight(),
+    backgroundColor: 'white',
+  },
+  mainHeader: {
+    width: diviceWidth,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: 'white',
+    height: 45,
+  },
+  headerLComp: {
+    height: 45,
+    width: diviceWidth / 3,
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+  },
+  headerCComp: {
+    width: diviceWidth / 3,
+    height: 45,
+    justifyContent: 'center',
+  },
+  headerRComp: {
+    width: diviceWidth / 3,
+    height: 45,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    paddingHorizontal: 20,
+  },
   headerTitle: {
     fontSize: 18,
     paddingHorizontal: 10,
@@ -458,7 +492,6 @@ const styles = StyleSheet.create({
     fontFamily: 'SansMedium',
     padding: 15,
     paddingVertical: 10,
-    marginTop: 20,
   },
   bookSearchOpener: {
     backgroundColor: '#efefef',
