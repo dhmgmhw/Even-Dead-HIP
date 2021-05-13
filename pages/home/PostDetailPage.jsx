@@ -11,9 +11,10 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   ActivityIndicator,
-  StatusBar,
 } from 'react-native';
-import { Header, Image, Tooltip, Overlay } from 'react-native-elements';
+import { Image, Tooltip, Overlay } from 'react-native-elements';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+import { StatusBar } from 'expo-status-bar';
 
 import { Ionicons } from '@expo/vector-icons';
 
@@ -90,13 +91,9 @@ export default function PostDetailPage({ navigation, route }) {
   };
 
   useEffect(() => {
-    download();
-    userCheck();
-  }, []);
-
-  useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       download();
+      userCheck();
     });
     return unsubscribe;
   }, [navigation]);
@@ -119,13 +116,10 @@ export default function PostDetailPage({ navigation, route }) {
         imageStyle={{ opacity: 0.3 }}>
         <KeyboardAvoidingView behavior='position'>
           <ScrollView showsVerticalScrollIndicator={false}>
-            <Header
-              containerStyle={{
-                backgroundColor: 'transparent',
-                borderBottomWidth: 0,
-                alignSelf: 'center',
-              }}
-              leftComponent={
+            <StatusBar style='light' />
+            <View style={styles.statusAvoid}></View>
+            <View style={styles.mainHeader}>
+              <View style={styles.headerLComp}>
                 <Ionicons
                   onPress={() => {
                     navigation.goBack();
@@ -134,9 +128,9 @@ export default function PostDetailPage({ navigation, route }) {
                   size={27}
                   color={'white'}
                 />
-              }
-              centerComponent={''}
-              rightComponent={
+              </View>
+              <View style={styles.headerCComp}></View>
+              <View style={styles.headerRComp}>
                 <View style={{ flexDirection: 'row' }}>
                   {/* <Ionicons
                     name={'open-outline'}
@@ -201,8 +195,8 @@ export default function PostDetailPage({ navigation, route }) {
                     </Tooltip>
                   ) : null}
                 </View>
-              }
-            />
+              </View>
+            </View>
             <Swiper
               height={340}
               width={210}
@@ -550,5 +544,33 @@ const styles = StyleSheet.create({
     fontFamily: 'SansMedium',
     fontSize: 12,
     color: 'white',
+  },
+  statusAvoid: {
+    height: getStatusBarHeight(),
+  },
+  mainHeader: {
+    width: diviceWidth,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: 45,
+  },
+  headerLComp: {
+    height: 45,
+    width: diviceWidth / 3,
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+  },
+  headerCComp: {
+    width: diviceWidth / 3,
+    height: 45,
+    justifyContent: 'center',
+  },
+  headerRComp: {
+    width: diviceWidth / 3,
+    height: 45,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    paddingHorizontal: 20,
   },
 });

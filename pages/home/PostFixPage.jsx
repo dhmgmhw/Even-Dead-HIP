@@ -14,13 +14,14 @@ import {
 } from 'react-native';
 import { Header, Overlay } from 'react-native-elements';
 import { Item } from 'native-base';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 import DropDownPicker from 'react-native-dropdown-picker';
 
 import { Ionicons } from '@expo/vector-icons';
 import { getSearchBook } from '../../config/KakaoApi';
 import KakaoResultCardComponent from '../../components/home/KakaoResultCardComponent';
-import { uploadImg, updatePost } from '../../config/PostingApi';
+import { updatePost } from '../../config/PostingApi';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
@@ -100,22 +101,9 @@ export default function PostFixPage({ navigation, route }) {
         contentInfo: contentInfo,
         captureImages: imageUri,
       };
-      // const formData = new FormData();
-      // for (let i = 0; i < imageUri.length; i++) {
-      //   formData.append('files', {
-      //     uri: imageUri[i].uri,
-      //     name: 'image' + i + '.jpg',
-      //   });
-      // }
-      // const imgList = await uploadImg(formData);
-      // data.captureImages = imgList;
       await updatePost(data, bookHerit.id, navigation);
     }
   };
-
-  useEffect(() => {
-    // console.log(bookHerit);
-  }, []);
 
   return (
     <TouchableWithoutFeedback
@@ -123,13 +111,9 @@ export default function PostFixPage({ navigation, route }) {
         Keyboard.dismiss();
       }}>
       <View style={{ backgroundColor: 'white', height: diviceHeight }}>
-        <Header
-          containerStyle={{
-            backgroundColor: 'white',
-            alignSelf: 'center',
-            borderBottomWidth: 1,
-          }}
-          leftComponent={
+        <View style={styles.statusAvoid}></View>
+        <View style={styles.mainHeader}>
+          <View style={styles.headerLComp}>
             <Text
               onPress={() => {
                 navigation.pop();
@@ -137,16 +121,21 @@ export default function PostFixPage({ navigation, route }) {
               style={styles.headerTitle}>
               취소
             </Text>
-          }
-          centerComponent={<Text style={styles.headerTitle}>등록글 수정</Text>}
-          rightComponent={
+          </View>
+          <View style={styles.headerCComp}>
+            <Text style={[styles.headerTitle, { textAlign: 'center' }]}>
+              등록글 수정
+            </Text>
+          </View>
+          <View style={styles.headerRComp}>
             <Text
               onPress={update}
               style={[styles.headerTitle, { color: '#757575' }]}>
               수정
             </Text>
-          }
-        />
+          </View>
+        </View>
+
         <View style={styles.bookResBox}>
           <View style={styles.bookResImgBox}>
             <Image
@@ -260,7 +249,6 @@ export default function PostFixPage({ navigation, route }) {
                   <Pressable
                     key={i}
                     onPress={() => {
-                      // navigation.navigate('MultiAddPage', setImageUri);
                       Alert.alert('한 번 올린 사진은 변경할 수 없어요 :(');
                     }}>
                     <Image source={{ uri: image }} style={styles.userPicBox} />
@@ -349,6 +337,37 @@ export default function PostFixPage({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
+  statusAvoid: {
+    height: getStatusBarHeight(),
+    backgroundColor: 'white',
+  },
+  mainHeader: {
+    width: diviceWidth,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: 'white',
+    height: 45,
+  },
+  headerLComp: {
+    height: 45,
+    width: diviceWidth / 3,
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+  },
+  headerCComp: {
+    width: diviceWidth / 3,
+    height: 45,
+    justifyContent: 'center',
+  },
+  headerRComp: {
+    width: diviceWidth / 3,
+    height: 45,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    paddingHorizontal: 20,
+  },
+
   headerTitle: {
     fontSize: 18,
     paddingHorizontal: 10,
