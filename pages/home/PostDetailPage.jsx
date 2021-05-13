@@ -25,6 +25,7 @@ import { Grid } from 'native-base';
 import { Alert } from 'react-native';
 import { getUserProfile } from '../../config/BackData';
 import { delScrapBook, postScrapBook } from '../../config/MyPageApi';
+import ImageBlurLoading from 'react-native-image-blur-loading';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
@@ -234,20 +235,22 @@ export default function PostDetailPage({ navigation, route }) {
                         toggleOverlay();
                         setInnerImg(photo);
                       }}>
-                      <Image
+                      <ImageBlurLoading
                         style={styles.InnerBookImage}
                         resizeMode='cover'
                         source={{ uri: photo }}
-                        PlaceholderContent={<ActivityIndicator />}
+                        thumbnailSource={{ uri: photo }}
+                        withIndicator
                       />
                       <Overlay
                         isVisible={visible}
                         onBackdropPress={toggleOverlay}>
-                        <Image
+                        <ImageBlurLoading
                           style={styles.overlayImage}
                           resizeMode='contain'
                           source={{ uri: innerImg }}
-                          PlaceholderContent={<ActivityIndicator />}
+                          thumbnailSource={{ uri: photo }}
+                          withIndicator
                         />
                       </Overlay>
                     </Pressable>
