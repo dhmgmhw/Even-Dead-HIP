@@ -7,7 +7,6 @@ import {
   ScrollView,
   FlatList,
   Image,
-  LogBox,
 } from 'react-native';
 import { Button } from 'native-base';
 
@@ -25,8 +24,6 @@ const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
 export default function HomeMain({ navigation }) {
-  LogBox.ignoreLogs(['Warning: ...']);
-
   const [currentPage, setCurrentPage] = useState(1);
   const [bannerPosts, setBannerPosts] = useState([]);
 
@@ -45,7 +42,6 @@ export default function HomeMain({ navigation }) {
     setMyEmail(myInfo.results.email);
     setMyName(myInfo.results.username);
     setMyImg(myInfo.results.image);
-    console.log(myInfo.results);
   };
 
   const download = async () => {
