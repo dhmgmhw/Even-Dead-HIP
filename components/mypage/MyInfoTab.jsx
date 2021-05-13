@@ -187,7 +187,7 @@ export default function MyInfoTab({ navigation }) {
             </Overlay>
           </View>
         </View>
-        <View
+        {/* <View
           style={{
             flexDirection: 'row',
           }}>
@@ -229,9 +229,9 @@ export default function MyInfoTab({ navigation }) {
             </TouchableHighlight>
             <Text style={styles.lists}>스크랩</Text>
           </View>
-        </View>
+        </View> */}
       </View>
-      <View style={styles.mystatus}>
+      {/* <View style={styles.mystatus}>
         <Text style={styles.title}>
           콩나무 <Text style={styles.highlite}>새싹 단계</Text>
         </Text>
@@ -240,7 +240,7 @@ export default function MyInfoTab({ navigation }) {
           progress={0.6}
           color={Colors.green800}
         />
-      </View>
+      </View> */}
 
       {/* <TouchableOpacity
         style={styles.deal}
@@ -262,9 +262,6 @@ export default function MyInfoTab({ navigation }) {
       <View style={styles.border}></View>
     </ScrollView>
   );
-  // : (
-  //   <Load />
-  // )
 }
 
 const styles = StyleSheet.create({
