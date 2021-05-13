@@ -129,7 +129,7 @@ export default function MyInfoTab({ navigation }) {
                 style={styles.profileimg}
                 resizeMode="contain"
                 source={{
-                  uri: imageUri,
+                  uri: profile.image,
                 }}
               />
               <View
@@ -199,20 +199,20 @@ export default function MyInfoTab({ navigation }) {
             </Overlay>
           </View>
         </View>
-        <View
+        {/* <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
           }}>
           <View style={styles.textBox}>
             <TouchableHighlight
               style={styles.circle}
-              underlayColor="#4CB73B"
-              onPress={() => alert("Yaay!", console.log(profile))}>
+              underlayColor='#4CB73B'
+              onPress={() => alert('Yaay!', console.log(profile))}>
               <>
-                <Feather name="align-left" size={28} color="white" />
+                <Feather name='align-left' size={28} color='white' />
               </>
             </TouchableHighlight>
-            <Text style={styles.lists1} color="white">
+            <Text style={styles.lists1} color='white'>
               알림
             </Text>
           </View>
@@ -220,37 +220,28 @@ export default function MyInfoTab({ navigation }) {
           <View style={styles.recommendlist}>
             <TouchableHighlight
               style={styles.circle}
-              underlayColor="#C6C5FF"
-              onPress={toggleModal}>
+              underlayColor='#C6C5FF'
+              onPress={() => console.log(profile)}>
               <>
-                <Feather name="thumbs-up" size={28} color="white" />
+                <Feather name='thumbs-up' size={28} color='white' />
               </>
             </TouchableHighlight>
-            <View style={{ flex: 1 }}>
-              {/* <Button title="Show modal" onPress={toggleModal} /> */}
-              <TouchableOpacity onpress={toggleModal}></TouchableOpacity>
-              <Text style={styles.lists}> 댓글 </Text>
-              <Modal isVisible={isModalVisible}>
-                <View style={styles.commentbox}>
-                  {/* <Text style={styles.username}>{CommentLists.username}</Text> */}
-                  {/* <Text style={styles.comment}>{CommentLists.comment}</Text> */}
-                  <Button title="돌아가기" onPress={toggleModal} />
-                </View>
-              </Modal>
-            </View>
+            <Text style={styles.lists}>댓글</Text>
           </View>
           <View style={styles.likelist}>
-            <TouchableOpacity
+            <TouchableHighlight
               style={styles.circle}
-              underlayColor="#C6C5FF"
-              onPress={() => navigation.navigate("MyPage")}>
+              underlayColor='#C6C5FF'
+              onPress={() => {
+                console.log('ya');
+              }}>
               <>
-                <Feather name="heart" size={28} color="white" />
+                <Feather name='heart' size={28} color='white' />
               </>
-            </TouchableOpacity>
-            <Text style={styles.lists}>좋아요</Text>
+            </TouchableHighlight>
+            <Text style={styles.lists}>스크랩</Text>
           </View>
-        </View>
+        </View> */}
       </View>
       <View style={styles.mystatus}>
         <Text style={styles.title}>
@@ -258,17 +249,29 @@ export default function MyInfoTab({ navigation }) {
         </Text>
         <ProgressBar
           style={styles.seed}
-          progress={0.6}
+          progress={point}
           color={Colors.green800}
         />
       </View>
-
+      <Pressable style={styles.deal} onPress={goTownChange}>
+        <Text style={styles.downcompo}>동네 설정</Text>
+        <Feather
+          style={styles.rarrow}
+          name="chevron-right"
+          size={28}
+          color="black"
+        />
+      </Pressable>
       <View style={styles.border}></View>
-      <TouchableOpacity
-        style={[styles.deal, { alignSelf: "center" }]}
-        onPress={logout}>
+      <Pressable style={styles.deal} onPress={logout}>
         <Text style={[styles.downcompo, { color: "red" }]}>로그아웃</Text>
-      </TouchableOpacity>
+        <Feather
+          style={styles.rarrow}
+          name="chevron-right"
+          size={28}
+          color="black"
+        />
+      </Pressable>
       <View style={styles.border}></View>
     </ScrollView>
   )

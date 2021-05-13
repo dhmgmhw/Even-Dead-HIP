@@ -53,10 +53,6 @@ export default function HomeMain({ navigation }) {
     return unsubscribe;
   }, [navigation]);
 
-  useEffect(() => {
-    download();
-  }, []);
-
   return (
     <>
       <Header

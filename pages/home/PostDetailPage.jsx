@@ -11,6 +11,7 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   ActivityIndicator,
+  StatusBar,
 } from 'react-native';
 import { Header, Image, Tooltip, Overlay } from 'react-native-elements';
 
@@ -22,6 +23,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { deletePost, postComment, postDetail } from '../../config/PostingApi';
 import { Grid } from 'native-base';
 import { Alert } from 'react-native';
+import { getUserProfile } from '../../config/BackData';
+import { delScrapBook, postScrapBook } from '../../config/MyPageApi';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
@@ -30,6 +33,7 @@ export default function PostDetailPage({ navigation, route }) {
   const detailData = route.params;
 
   const [myEmail, setMyEmail] = useState();
+  const [scrapList, setScrapList] = useState([]);
 
   const [data, setData] = useState([]);
   const [ready, setReady] = useState(true);
@@ -44,6 +48,16 @@ export default function PostDetailPage({ navigation, route }) {
   const [innerImg, setInnerImg] = useState();
 
   const [scrap, setScrap] = useState(false);
+
+  const bookMark = async () => {
+    await postScrapBook(detailData.id);
+    await userCheck();
+  };
+
+  const delBookMark = async () => {
+    await delScrapBook(detailData.id);
+    await userCheck();
+  };
 
   const toggleOverlay = () => {
     setVisible(!visible);
@@ -65,13 +79,18 @@ export default function PostDetailPage({ navigation, route }) {
     const res = await postDetail(detailData.id);
     setBubbles(res.comments);
     setData(res);
-    const result = await AsyncStorage.getItem('email');
-    setMyEmail(result);
     setReady(false);
+  };
+
+  const userCheck = async () => {
+    const myInfo = await getUserProfile();
+    setScrapList(myInfo.results.scrapList);
+    setMyEmail(myInfo.results.email);
   };
 
   useEffect(() => {
     download();
+    userCheck();
   }, []);
 
   useEffect(() => {
@@ -100,7 +119,6 @@ export default function PostDetailPage({ navigation, route }) {
         <KeyboardAvoidingView behavior='position'>
           <ScrollView showsVerticalScrollIndicator={false}>
             <Header
-              barStyle='light-content'
               containerStyle={{
                 backgroundColor: 'transparent',
                 borderBottomWidth: 0,
@@ -274,16 +292,25 @@ export default function PostDetailPage({ navigation, route }) {
                     </Text>
                   </View>
                 </View>
-                {/* {detailData.user.email == myEmail ? null : (
-                  <Ionicons
-                    name={scrap ? 'bookmark' : 'bookmark-outline'}
-                    onPress={() => {
-                      scrap ? setScrap(false) : setScrap(true);
-                    }}
-                    size={24}
-                    style={[styles.scrap, { color: scrap ? 'green' : 'black' }]}
-                  />
-                )} */}
+                {detailData.user.email == myEmail ? null : (
+                  <>
+                    {scrapList.includes(detailData.id) ? (
+                      <Ionicons
+                        name={'bookmark'}
+                        onPress={delBookMark}
+                        size={25}
+                        style={[styles.scrap, { color: 'green' }]}
+                      />
+                    ) : (
+                      <Ionicons
+                        name={'bookmark-outline'}
+                        onPress={bookMark}
+                        size={25}
+                        style={[styles.scrap, { color: 'gray' }]}
+                      />
+                    )}
+                  </>
+                )}
               </View>
               <View style={styles.descMiddleBorder}></View>
               <Text style={styles.bookCate}>#{detailData.category}</Text>

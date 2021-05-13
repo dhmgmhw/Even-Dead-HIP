@@ -12,7 +12,7 @@ import {
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { Ionicons } from '@expo/vector-icons';
 
-import GenreComponent from '../../components/home/GenreComponent';
+import GenreSearchResult from '../../components/search/GenreSearchResult';
 import CateSelectComponent from '../../components/search/CateSelectComponent';
 
 import { searchBook } from '../../config/SearchApi';
@@ -87,7 +87,11 @@ export default function SearchMain({ navigation }) {
           <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
             {posts.map((post, i) => {
               return (
-                <GenreComponent key={i} navigation={navigation} post={post} />
+                <GenreSearchResult
+                  key={i}
+                  navigation={navigation}
+                  post={post}
+                />
               );
             })}
           </ScrollView>

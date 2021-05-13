@@ -8,15 +8,17 @@ import {
   View,
   ActivityIndicator,
 } from "react-native"
-import JSONTree from "react-native-json-tree"
-
-import * as Linking from "expo-linking"
 import * as Facebook from "expo-facebook"
 import * as Google from "expo-google-app-auth"
 import { FontAwesome } from "@expo/vector-icons"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 import { login } from "../../config/BackData"
+import * as Linking from "expo-linking"
+
+import { StatusBar } from "expo-status-bar"
+import { ScrollView } from "react-native-gesture-handler"
+import { getMyScrap } from "../../config/MyPageApi"
 
 import { StatusBar } from "expo-status-bar"
 import { ScrollView } from "react-native-gesture-handler"
@@ -47,7 +49,7 @@ export default function SignInPage({ navigation }) {
   }, [])
 
   _onAuthGoogle = async () => {
-    const { type, accessToken, user, idToken } = await Google.logInAsync({
+    const { type, accessToken, user } = await Google.logInAsync({
       androidClientId:
         "161728779966-9pjjn580gfj749pq88j8f9hnpmhpa4nm.apps.googleusercontent.com",
 
@@ -84,30 +86,24 @@ export default function SignInPage({ navigation }) {
     await login(user.name, user.email, user.photoUrl, navigation)
     await AsyncStorage.setItem("accessToken", accessToken)
     console.log(accessToken)
-
     navigation.push("SignPlusPage")
   }
 
   // const signoutWithGoogleAsync = async () => {
   //   try {
-  //     console.log("token in delete", accessToken)
+  //     console.log('token in delete', accessToken);
   //     await Google.logOutAsync({
   //       accessToken,
   //       iosClientId:
-  //         "161728779966-berb0fukqq2aidubgq4v5o04h56b9hvr.apps.googleusercontent.com",
+  //         '161728779966-berb0fukqq2aidubgq4v5o04h56b9hvr.apps.googleusercontent.com',
   //       androidClientId:
-  //         "161728779966-m3u3d79dtk3f1eac5922csif029sokdd.apps.googleusercontent.com",
-  //     })
-  //     await AsyncStorage.setItem("accessToken", accessToken)
+  //         '161728779966-m3u3d79dtk3f1eac5922csif029sokdd.apps.googleusercontent.com',
+  //     });
+  //     await AsyncStorage.setItem('accessToken', accessToken);
   //   } catch (err) {
-  //     throw new Error(err)
+  //     throw new Error(err);
   //   }
-  // }
-
-  const readI = async () => {
-    const initialUrl = await Linking.getInitialURL()
-    console.log(initialUrl)
-  }
+  // };
 
   _onAuthFacebook = async () => {
     try {
@@ -121,16 +117,21 @@ export default function SignInPage({ navigation }) {
           `https://graph.facebook.com/me?fields=id,name,email&access_token=${token}`
         )
         const json_rep = await response.json()
-        setJsonObject(json_rep)
+        // setJsonObject(json_rep);
+
         console.log(json_rep)
+        // await login(
+        //   json_rep.name,
+        //   json_rep.email,
+        //   'https://images.unsplash.com/photo-1508873787497-1b513a18217a?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=3300&q=80',
+        //   navigation
+        // );
       } else {
         console.log("Facebook Login cancelled")
       }
     } catch ({ message }) {
       alert(`페이스북 로그인 에러: ${message}`)
     }
-    console.log(jsonObject.name, jsonObject.email)
-    // await login(jsonObject.name, jsonObject.email, null, navigation);
   }
 
   return ready ? (

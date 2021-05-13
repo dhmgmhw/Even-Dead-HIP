@@ -19,7 +19,7 @@
     "axios": "^0.21.1",
     "babel-preset-expo": "^8.1.0",
     "expo": "^41.0.1",
-    "expo-facebook": "^11.0.5",
+    "expo-facebook": "~11.0.5",
     "expo-font": "~9.1.0",
     "expo-google-app-auth": "^8.1.7",
     "expo-image-picker": "~10.1.4",
