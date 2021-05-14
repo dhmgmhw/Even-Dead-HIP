@@ -62,44 +62,9 @@ export async function getUserProfile() {
     return result.data
   } catch (err) {
     console.log(err)
-    Alert.alert("다시 시도해 보세요.")
+    Alert.alert("유저 정보를 받아올 수 없어요 :(")
   }
 }
-
-// export async function getuserProfile(
-//   nickname,
-//   img,
-//   comment,
-//   star,
-//   interested,
-//   town
-// ) {
-//   try {
-//     const token = await AsyncStorage.getItem("session")
-//     const result = await axios({
-//       method: "Get",
-//       url: host + "/api/usercheck",
-//       headers: {
-//         token: token,
-//       },
-
-//       data: {
-//         nickname: nickname,
-//         img: img,
-//         comment: comment,
-//         star: star,
-//         town: town,
-//         interested: interested,
-//       },
-//     })
-//     Alert.alert("조회 완료")
-//     return result.data
-//   } catch (err) {
-//     console.log(err)
-//     Alert.alert("다시 시도해 보세요.")
-//   }
-//   console.log(result)
-// }
 
 export async function changeUserProfile(username, image) {
   try {

@@ -11,15 +11,14 @@ import {
   TouchableHighlight,
   Pressable,
   TextInput,
-  Button,
 } from "react-native"
 import * as ImagePicker from "expo-image-picker"
-
-import Modal from "react-native-modal"
 
 import { Feather } from "@expo/vector-icons"
 import { ProgressBar, Colors } from "react-native-paper"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+
+import { uploadImg } from "../../config/PostingApi"
 
 import { getUserProfile, signOut } from "../../config/BackData"
 import { changeUserProfile } from "../../config/BackData"
@@ -27,24 +26,29 @@ import { changeUserProfile } from "../../config/BackData"
 import { Overlay } from "react-native-elements"
 import { Alert } from "react-native"
 
-import { getUserComment } from "../../config/BackData"
-import { getUserBooks } from "../../config/BackData"
-
 export default function MyInfoTab({ navigation }) {
   const [profile, setprofile] = useState("")
-  const [CommentLists, setCommentLists] = useState()
-  const [BookLists, setBookLists] = useState()
+
   const [visible, setVisible] = useState(false)
-  const [name, setName] = useState(nickName)
+  const [name, setName] = useState(profile.username)
   const [imageUri, setImageUri] = useState(profile.image)
-  const [nickName, setNickName] = useState(nickName)
-  const [isModalVisible, setModalVisible] = useState(false)
+  const [nickName, setNickName] = useState(profile.username)
   const [point, setPoint] = useState(0)
 
   useEffect(() => {
-    download()
     getPermission()
   }, [])
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      download()
+    })
+    return unsubscribe
+  }, [navigation])
+
+  const goTownChange = () => {
+    navigation.push("TownChangePage")
+  }
 
   const getPermission = async () => {
     if (Platform.OS !== "web") {
@@ -62,22 +66,20 @@ export default function MyInfoTab({ navigation }) {
 
   const download = async () => {
     const result = await getUserProfile()
+    console.log(result)
     setprofile(result.results)
     setNickName(result.results.username)
     setImageUri(result.results.image)
     setPoint(result.results.point)
   }
 
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible)
-  }
-  const goTownChange = () => {
-    navigation.push("TownChangePage")
-  }
-
   const upload = async () => {
     if (name == "") {
       Alert.alert("바꿀 닉네임을 작성해 주세요!")
+      return
+    }
+    if (name.length > 6) {
+      Alert.alert("닉네임은 최대 6자까지 가능합니다.")
       return
     }
     if (imageUri === profile.image) {
@@ -99,10 +101,8 @@ export default function MyInfoTab({ navigation }) {
 
   const toggleOverlay = () => {
     setVisible(!visible)
-  }
-
-  const toggleOver = () => {
-    setVisible(!visible)
+    download()
+    setName(nickName)
   }
 
   const pickImage = async () => {
@@ -122,8 +122,8 @@ export default function MyInfoTab({ navigation }) {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.myprofile}>
-        <View style={{}}>
-          <View style={{}}>
+        <View>
+          <View>
             <View
               style={{
                 flexDirection: "row",
@@ -194,17 +194,59 @@ export default function MyInfoTab({ navigation }) {
                 </Pressable>
                 <Text style={styles.emailfix}>{profile.email}</Text>
                 <TextInput
-                  maxLength={10}
                   style={styles.textInput}
-                  onChangeText={text => setName(text)}
+                  onChangeText={setName}
                   value={name}
-                  placeholder={nickName}
-                  placeholderTextColor={"black"}
+                  placeholder={profile.username}
+                  placeholderTextColor={"grey"}
                 />
               </View>
             </Overlay>
           </View>
         </View>
+        {/* <View
+          style={{
+            flexDirection: 'row',
+          }}>
+          <View style={styles.textBox}>
+            <TouchableHighlight
+              style={styles.circle}
+              underlayColor='#4CB73B'
+              onPress={() => alert('Yaay!', console.log(profile))}>
+              <>
+                <Feather name='align-left' size={28} color='white' />
+              </>
+            </TouchableHighlight>
+            <Text style={styles.lists1} color='white'>
+              알림
+            </Text>
+          </View>
+
+          <View style={styles.recommendlist}>
+            <TouchableHighlight
+              style={styles.circle}
+              underlayColor='#C6C5FF'
+              onPress={() => console.log(profile)}>
+              <>
+                <Feather name='thumbs-up' size={28} color='white' />
+              </>
+            </TouchableHighlight>
+            <Text style={styles.lists}>댓글</Text>
+          </View>
+          <View style={styles.likelist}>
+            <TouchableHighlight
+              style={styles.circle}
+              underlayColor='#C6C5FF'
+              onPress={() => {
+                console.log('ya');
+              }}>
+              <>
+                <Feather name='heart' size={28} color='white' />
+              </>
+            </TouchableHighlight>
+            <Text style={styles.lists}>스크랩</Text>
+          </View>
+        </View> */}
       </View>
       <View style={styles.mystatus}>
         <Text style={styles.title}>
@@ -212,7 +254,7 @@ export default function MyInfoTab({ navigation }) {
         </Text>
         <ProgressBar
           style={styles.seed}
-          progress={point * 0.01}
+          progress={point / 1000}
           color={Colors.green800}
         />
       </View>
@@ -249,9 +291,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#f2f2f2",
   },
   border: {
-    height: 5,
+    height: 3,
+    marginHorizontal: 20,
     backgroundColor: "#f2f2f2",
-    borderRadius: 100,
   },
   deal: {
     height: 60,
@@ -350,7 +392,8 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   downcompo: {
-    fontWeight: "bold",
+    fontFamily: "SansRegular",
+    fontSize: 13,
   },
   rarrow: {},
   num: {
@@ -389,21 +432,20 @@ const styles = StyleSheet.create({
   },
   mystatus: {
     height: 120,
-    marginTop: 30,
+    marginVertical: 30,
     backgroundColor: "#F4F4F4",
+    padding: 20,
   },
   highlite: {
-    fontSize: 25,
-    fontWeight: "700",
+    fontSize: 18,
+    fontFamily: "SCDream6",
     color: "#4CB73B",
-    textAlign: "center",
   },
   title: {
-    fontSize: 25,
+    fontSize: 18,
     marginTop: 10,
-    fontWeight: "700",
+    fontFamily: "SCDream6",
     color: "#434343",
-    textAlign: "center",
   },
   editbox: {},
   editbutton: {
@@ -440,8 +482,6 @@ const styles = StyleSheet.create({
   //   elevation: 3,
   // },
   seed: {
-    marginLeft: 50,
-    marginRight: 50,
     marginTop: 20,
     justifyContent: "center",
     alignItems: "center",
@@ -466,9 +506,5 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingLeft: 20,
     marginTop: 10,
-  },
-  commentbox: {
-    backgroundColor: "white",
-    flex: 1,
   },
 })

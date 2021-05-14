@@ -107,6 +107,7 @@ const styles = StyleSheet.create({
     height: diviceHeight,
   },
   searchBar: {
+    width: diviceWidth / 1.5,
     height: 50,
     borderColor: '#E0E0E0',
     marginLeft: 10,

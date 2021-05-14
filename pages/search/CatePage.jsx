@@ -9,11 +9,11 @@ import {
   Alert,
   Pressable,
 } from 'react-native';
-import { Header } from 'react-native-elements';
 
 import { Ionicons } from '@expo/vector-icons';
 
 import { searchByCate } from '../../config/SearchApi';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 import GenreSearchComponent from '../../components/search/GenreSearchResult';
 
 const diviceWidth = Dimensions.get('window').width;
@@ -51,13 +51,9 @@ export default function CatePage({ navigation, route }) {
     />
   ) : (
     <>
-      <Header
-        containerStyle={{
-          backgroundColor: 'white',
-          alignSelf: 'center',
-          borderBottomWidth: 0,
-        }}
-        leftComponent={
+      <View style={styles.statusAvoid}></View>
+      <View style={styles.mainHeader}>
+        <View style={styles.headerLComp}>
           <View style={styles.headerLeftBox}>
             <Ionicons
               onPress={() => {
@@ -68,10 +64,10 @@ export default function CatePage({ navigation, route }) {
             />
             <Text style={styles.headerLeftText}>{cate}</Text>
           </View>
-        }
-        centerComponent={''}
-        rightComponent={''}
-      />
+        </View>
+        <View style={styles.headerCComp}></View>
+        <View style={styles.headerRComp}></View>
+      </View>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         {posts ? (
           <>
@@ -108,5 +104,35 @@ const styles = StyleSheet.create({
     fontFamily: 'SansBold',
     marginLeft: 10,
     color: '#4CB73B',
+  },
+  statusAvoid: {
+    height: getStatusBarHeight(),
+    backgroundColor: 'white',
+  },
+  mainHeader: {
+    width: diviceWidth,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: 'white',
+    height: 45,
+  },
+  headerLComp: {
+    height: 45,
+    width: diviceWidth / 3,
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+  },
+  headerCComp: {
+    width: diviceWidth / 3,
+    height: 45,
+    justifyContent: 'center',
+  },
+  headerRComp: {
+    width: diviceWidth / 3,
+    height: 45,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    paddingHorizontal: 20,
   },
 });
