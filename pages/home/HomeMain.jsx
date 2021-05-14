@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,6 +7,7 @@ import {
   ScrollView,
   FlatList,
   Image,
+  RefreshControl,
 } from 'react-native';
 import { Button } from 'native-base';
 
@@ -34,6 +35,22 @@ export default function HomeMain({ navigation }) {
   const [myEmail, setMyEmail] = useState();
   const [myName, setMyName] = useState();
   const [myImg, setMyImg] = useState();
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const wait = (timeout) => {
+    return new Promise((resolve) => setTimeout(resolve, timeout));
+  };
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    console.log('새로고침');
+    wait(1000).then(() => {
+      download();
+      userCheck();
+      setRefreshing(false);
+    });
+  }, []);
 
   const userCheck = async () => {
     const myInfo = await getUserProfile();
@@ -75,7 +92,10 @@ export default function HomeMain({ navigation }) {
       </View>
       <ScrollView
         style={{ backgroundColor: 'white' }}
-        showsVerticalScrollIndicator={false}>
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <MainUserBox myName={myName} myImg={myImg} />
         <View
           style={{
@@ -152,33 +172,36 @@ export default function HomeMain({ navigation }) {
             </Text>
           </View>
           {posts ? (
-            <FlatList
-              data={posts}
-              renderItem={(post) => {
-                return (
-                  <GenreComponent
-                    key={post.id}
-                    navigation={navigation}
-                    post={post.item}
-                    scrapList={scrapList}
-                    userCheck={userCheck}
-                    myEmail={myEmail}
-                  />
-                );
-              }}
-              keyExtractor={(item) => String(item.id)}
-              onEndReachedThreshold={0.1}
-              onEndReached={async () => {
-                let nextPosts = await getPostedBook(currentPage + 1);
-                if (nextPosts.length != null) {
-                  setCurrentPage(currentPage + 1);
-                  let allPosts = [...posts, ...nextPosts];
-                  setPosts(allPosts);
-                } else {
-                  console.log('불러올 정보가 없어요');
-                }
-              }}
-            />
+            <View>
+              <FlatList
+                data={posts}
+                renderItem={(post) => {
+                  return (
+                    <GenreComponent
+                      key={post.id}
+                      navigation={navigation}
+                      post={post.item}
+                      scrapList={scrapList}
+                      userCheck={userCheck}
+                      myEmail={myEmail}
+                    />
+                  );
+                }}
+                keyExtractor={(item) => String(item.id)}
+                onEndReachedThreshold={0.1}
+                onEndReached={async () => {
+                  let nextPosts = await getPostedBook(currentPage + 1);
+                  // if (nextPosts.length != 0) {
+                  if (nextPosts != undefined) {
+                    setCurrentPage(currentPage + 1);
+                    let allPosts = [...posts, ...nextPosts];
+                    setPosts(allPosts);
+                  } else {
+                    console.log('불러올 정보가 없어요');
+                  }
+                }}
+              />
+            </View>
           ) : null}
         </View>
       </ScrollView>
