@@ -39,6 +39,7 @@ export default function MyInfoTab({ navigation }) {
   const [imageUri, setImageUri] = useState(profile.image)
   const [nickName, setNickName] = useState(nickName)
   const [isModalVisible, setModalVisible] = useState(false)
+  const [point, setPoint] = useState(0)
 
   useEffect(() => {
     download()
@@ -64,11 +65,16 @@ export default function MyInfoTab({ navigation }) {
     setprofile(result.results)
     setNickName(result.results.username)
     setImageUri(result.results.image)
+    setPoint(result.results.point)
   }
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible)
   }
+  const goTownChange = () => {
+    navigation.push("TownChangePage")
+  }
+
   const upload = async () => {
     if (name == "") {
       Alert.alert("바꿀 닉네임을 작성해 주세요!")
@@ -199,49 +205,6 @@ export default function MyInfoTab({ navigation }) {
             </Overlay>
           </View>
         </View>
-        {/* <View
-          style={{
-            flexDirection: 'row',
-          }}>
-          <View style={styles.textBox}>
-            <TouchableHighlight
-              style={styles.circle}
-              underlayColor='#4CB73B'
-              onPress={() => alert('Yaay!', console.log(profile))}>
-              <>
-                <Feather name='align-left' size={28} color='white' />
-              </>
-            </TouchableHighlight>
-            <Text style={styles.lists1} color='white'>
-              알림
-            </Text>
-          </View>
-
-          <View style={styles.recommendlist}>
-            <TouchableHighlight
-              style={styles.circle}
-              underlayColor='#C6C5FF'
-              onPress={() => console.log(profile)}>
-              <>
-                <Feather name='thumbs-up' size={28} color='white' />
-              </>
-            </TouchableHighlight>
-            <Text style={styles.lists}>댓글</Text>
-          </View>
-          <View style={styles.likelist}>
-            <TouchableHighlight
-              style={styles.circle}
-              underlayColor='#C6C5FF'
-              onPress={() => {
-                console.log('ya');
-              }}>
-              <>
-                <Feather name='heart' size={28} color='white' />
-              </>
-            </TouchableHighlight>
-            <Text style={styles.lists}>스크랩</Text>
-          </View>
-        </View> */}
       </View>
       <View style={styles.mystatus}>
         <Text style={styles.title}>
@@ -249,7 +212,7 @@ export default function MyInfoTab({ navigation }) {
         </Text>
         <ProgressBar
           style={styles.seed}
-          progress={point}
+          progress={point * 0.01}
           color={Colors.green800}
         />
       </View>

@@ -20,8 +20,6 @@ import { StatusBar } from "expo-status-bar"
 import { ScrollView } from "react-native-gesture-handler"
 import { getMyScrap } from "../../config/MyPageApi"
 
-import { StatusBar } from "expo-status-bar"
-import { ScrollView } from "react-native-gesture-handler"
 import color from "color"
 
 const bImage = require("../../assets/back.png")
@@ -45,7 +43,7 @@ export default function SignInPage({ navigation }) {
         }
       })
     })
-    readI()
+    // ready()
   }, [])
 
   _onAuthGoogle = async () => {

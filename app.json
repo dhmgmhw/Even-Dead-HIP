@@ -18,12 +18,22 @@
       "**/*"
     ],
     "ios": {
+      "supportstable": true,
       "bundleIdentifier": "com.ybmb.evendeadhip",
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.0.0",
+      "config":{
+        "googleSignIn":{
+          "reservedClientId": "161728779966-berb0fukqq2aidubgq4v5o04h56b9hvr.apps.googleusercontent.com"
+        }
+      }
     },
     "android": {
       "versionCode": 1,
-      "package": "com.conner_kim.evendeadhip"
+      "package": "com.conner_kim.evendeadhip",
+      "googleSignIn": {
+        "apiKey": "161728779966-9pjjn580gfj749pq88j8f9hnpmhpa4nm.apps.googleusercontent.com",
+        "certificateHash": "F9:FB:EA:7A:F0:F4:23:43:52:50:C5:91:C6:67:F9:41:78:D2:96:A8"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
