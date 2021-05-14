@@ -38,6 +38,7 @@ export default function SignInPage({ navigation }) {
           navigation.push('TabNavigator');
         } else {
           setReady(false);
+          console.log(err);
         }
       });
     });
