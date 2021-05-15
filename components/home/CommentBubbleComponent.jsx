@@ -11,8 +11,8 @@ import {
   Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons } from '@expo/vector-icons';
 
-import { Tooltip } from 'react-native-elements';
 import { changeComment, deleteComment } from '../../config/PostingApi';
 
 const diviceWidth = Dimensions.get('window').width;
@@ -30,9 +30,14 @@ export default function CommentBubbleComponent({ post, download }) {
 
   useEffect(() => {
     checkEmail();
+    console.log(post);
   }, []);
 
   const fixComment = async () => {
+    if (text === post.contents) {
+      Alert.alert('수정할 내용을 작성해주세요');
+      return;
+    }
     await changeComment(post.commentId, text);
     setCommentChanger(false);
     download();
@@ -40,13 +45,14 @@ export default function CommentBubbleComponent({ post, download }) {
 
   const delComment = async () => {
     await deleteComment(post.commentId);
+    setCommentChanger(false);
     download();
   };
 
   return (
     <Pressable
       onPress={() => {
-        console.log(post.email);
+        // console.log(post.contents);
       }}>
       <View style={styles.bubbleBox}>
         <View style={styles.userImgBox}>
@@ -60,57 +66,55 @@ export default function CommentBubbleComponent({ post, download }) {
         </View>
         <View style={styles.commentBox}>
           {commentChanger ? (
-            <TextInput
-              style={[
-                styles.commentText,
-                {
-                  borderBottomWidth: 2,
-                  paddingBottom: 3,
-                  borderColor: 'lightgrey',
-                },
-              ]}
-              onChangeText={setText}
-              value={text}
-              placeholder='수정할 내용을 작성해 주세요'
-              placeholderTextColor={'#757575'}
-            />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <TextInput
+                style={[
+                  styles.commentText,
+                  {
+                    borderBottomWidth: 2,
+                    paddingBottom: 3,
+                    borderColor: 'lightgrey',
+                    width: '85%',
+                  },
+                ]}
+                onChangeText={setText}
+                value={text}
+                placeholder='수정할 내용을 작성해 주세요'
+                placeholderTextColor={'#757575'}
+              />
+              <Ionicons
+                active
+                onPress={fixComment}
+                name='checkmark-sharp'
+                size={22}
+                style={{
+                  paddingRight: 5,
+                  color: 'grey',
+                }}
+              />
+            </View>
           ) : (
             <Text style={styles.commentText}>{post.contents}</Text>
           )}
           <View style={styles.optionBox}>
             <Text style={styles.commentText}>by. {post.username} </Text>
             <View style={{ flexDirection: 'row' }}>
-              {/* <Text style={styles.dataText}>2021.04.29 </Text> */}
               {post.email == myEmail ? (
-                <Tooltip
-                  withOverlay={false}
-                  containerStyle={{
-                    height: 60,
-                    backgroundColor: '#438732',
-                  }}
-                  pointerColor={'#438732'}
-                  popover={
-                    <>
-                      <Pressable
-                        style={styles.tooltipBtn}
-                        onPress={() => {
-                          setCommentChanger(true);
-                        }}>
-                        <Text style={styles.tooltipText}>수정</Text>
-                      </Pressable>
-                      <View
-                        style={{
-                          height: 1,
-                          backgroundColor: 'white',
-                          width: 100,
-                        }}></View>
-                      <Pressable style={styles.tooltipBtn} onPress={delComment}>
-                        <Text style={styles.tooltipText}>삭제</Text>
-                      </Pressable>
-                    </>
-                  }>
+                <>
                   {commentChanger ? (
                     <View style={{ flexDirection: 'row' }}>
+                      <Text
+                        onPress={delComment}
+                        style={[
+                          styles.dataText,
+                          { color: 'red', marginLeft: 10 },
+                        ]}>
+                        삭제하기
+                      </Text>
                       <Text
                         onPress={() => {
                           setCommentChanger(false);
@@ -119,21 +123,20 @@ export default function CommentBubbleComponent({ post, download }) {
                           styles.dataText,
                           { color: 'black', marginLeft: 10 },
                         ]}>
-                        취소
-                      </Text>
-                      <Text
-                        onPress={fixComment}
-                        style={[
-                          styles.dataText,
-                          { color: 'black', marginLeft: 10 },
-                        ]}>
-                        수정하기
+                        돌아가기
                       </Text>
                     </View>
                   ) : (
-                    <Text style={styles.dataText}> 수정/삭제</Text>
+                    <Text
+                      onPress={() => {
+                        setCommentChanger(true);
+                        setText(post.contents);
+                      }}
+                      style={styles.dataText}>
+                      수정/삭제
+                    </Text>
                   )}
-                </Tooltip>
+                </>
               ) : null}
             </View>
           </View>
@@ -174,18 +177,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'SansThin',
     color: 'black',
-  },
-  tooltipBtn: {
-    width: 100,
-    height: 30,
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  tooltipText: {
-    fontFamily: 'SCDream5',
-    fontSize: 14,
-    color: 'white',
-    textAlign: 'center',
   },
 });
