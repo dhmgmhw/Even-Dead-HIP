@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
-  ImageBackground,
   Image,
   Text,
   TouchableOpacity,
@@ -14,13 +13,10 @@ import { FontAwesome } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { login } from '../../config/BackData';
-import * as Linking from 'expo-linking';
 
 import { StatusBar } from 'expo-status-bar';
 import { ScrollView } from 'react-native-gesture-handler';
-import { getMyScrap } from '../../config/MyPageApi';
 
-const bImage = require('../../assets/back.png');
 const logo = require('../../assets/mainlogo.png');
 
 export default function SignInPage({ navigation }) {
@@ -38,7 +34,6 @@ export default function SignInPage({ navigation }) {
           navigation.push('TabNavigator');
         } else {
           setReady(false);
-          console.log(err);
         }
       });
     });
@@ -78,50 +73,17 @@ export default function SignInPage({ navigation }) {
     navigation.push('SignPlusPage');
   };
 
-  // const signoutWithGoogleAsync = async () => {
-  //   try {
-  //     console.log('token in delete', accessToken);
-  //     await Google.logOutAsync({
-  //       accessToken,
-  //       iosClientId:
-  //         '161728779966-berb0fukqq2aidubgq4v5o04h56b9hvr.apps.googleusercontent.com',
-  //       androidClientId:
-  //         '161728779966-m3u3d79dtk3f1eac5922csif029sokdd.apps.googleusercontent.com',
-  //     });
-  //     await AsyncStorage.setItem('accessToken', accessToken);
-  //   } catch (err) {
-  //     throw new Error(err);
-  //   }
-  // };
-
-  _onAuthFacebook = async () => {
-    try {
-      await Facebook.initializeAsync('3939632819489550');
-      const { type, token, expires, permissions, declinedPermissions } =
-        await Facebook.logInWithReadPermissionsAsync({
-          permissions: ['public_profile', 'email'],
-        });
-      if (type === 'success') {
-        const response = await fetch(
-          `https://graph.facebook.com/me?fields=id,name,email&access_token=${token}`
-        );
-        const json_rep = await response.json();
-        // setJsonObject(json_rep);
-
-        console.log(json_rep);
-        // await login(
-        //   json_rep.name,
-        //   json_rep.email,
-        //   'https://images.unsplash.com/photo-1508873787497-1b513a18217a?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=3300&q=80',
-        //   navigation
-        // );
-      } else {
-        console.log('Facebook Login cancelled');
-      }
-    } catch ({ message }) {
-      alert(`페이스북 로그인 에러: ${message}`);
-    }
+  const loglog = async () => {
+    await login(
+      '문형원',
+      'dhmgmhw@naver.com',
+      'https://sanggubk2.s3.ap-northeast-2.amazonaws.com/1cc47651-6e3b-481d-ba0e-cc2604efce9e.jpg',
+      navigation
+    );
   };
+
+  // 천재승
+  // chunzasang@gmail.com
 
   return ready ? (
     <ActivityIndicator
@@ -160,25 +122,19 @@ export default function SignInPage({ navigation }) {
         <FontAwesome name='google' size={17} color='#ffffff' />
         <Text style={styles.text}>구글로 시작하기</Text>
       </TouchableOpacity>
-      {/* <TouchableOpacity
-        style={styles.logoutbtn}
-        onPress={signoutWithGoogleAsync}>
-        <Text>Logout</Text>
-      </TouchableOpacity> */}
-      {/* <TouchableOpacity
-        onPress={_onAuthFacebook}
+      <TouchableOpacity
+        onPress={loglog}
         style={[styles.button, { backgroundColor: '#3b5998' }]}>
         <FontAwesome
-          name='facebook'
+          name='male'
           size={17}
+          ㅠ
           color='#ffffff'
           style={{ alignSelf: 'center' }}
         />
-        <Text style={styles.text}>페이스북으로 시작하기</Text>
-      </TouchableOpacity> */}
-      {/* <View style={styles.tree}>
-        <JSONTree data={jsonObject} />
-      </View> */}
+        <Text style={styles.text}>임다희로 시작하기</Text>
+        {/* <Text style={styles.text}>천재승으로 시작하기</Text> */}
+      </TouchableOpacity>
     </ScrollView>
   );
 }
