@@ -11,22 +11,24 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   ActivityIndicator,
+  Share,
 } from 'react-native';
 import { Image, Tooltip, Overlay } from 'react-native-elements';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { StatusBar } from 'expo-status-bar';
-
 import { Ionicons } from '@expo/vector-icons';
 
 import Swiper from 'react-native-swiper-hooks';
-import CommentBubbleComponent from '../../components/home/CommentBubbleComponent';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ImageBlurLoading from 'react-native-image-blur-loading';
+import * as Linking from 'expo-linking';
+
+import CommentBubbleComponent from '../../components/home/CommentBubbleComponent';
 import { deletePost, postComment, postDetail } from '../../config/PostingApi';
 import { Grid } from 'native-base';
 import { Alert } from 'react-native';
 import { getUserProfile } from '../../config/BackData';
 import { delScrapBook, postScrapBook } from '../../config/MyPageApi';
-import ImageBlurLoading from 'react-native-image-blur-loading';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
@@ -49,7 +51,9 @@ export default function PostDetailPage({ navigation, route }) {
   const [visible, setVisible] = useState(false);
   const [innerImg, setInnerImg] = useState();
 
-  const [scrap, setScrap] = useState(false);
+  const [description, setDescription] = useState('');
+
+  const [tooltipControl, setTooltipControl] = useState(true);
 
   const bookMark = async () => {
     await postScrapBook(detailData.id);
@@ -79,9 +83,11 @@ export default function PostDetailPage({ navigation, route }) {
 
   const download = async () => {
     const res = await postDetail(detailData.id);
+    setDescription(res.townBook.contentInfo);
     setBubbles(res.comments);
     setData(res);
     setReady(false);
+    console.log(detailData);
   };
 
   const userCheck = async () => {
@@ -90,10 +96,22 @@ export default function PostDetailPage({ navigation, route }) {
     setMyEmail(myInfo.results.email);
   };
 
+  const share = () => {
+    Share.share({
+      message: `${detailData.publisher} | ${detailData.author} \n ${description} \n ${detailData.description} \n\n Daum 책 검색결과\n ${detailData.webUrl}`,
+    });
+  };
+
+  const hyperLink = (link) => {
+    Linking.openURL(link);
+  };
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       download();
       userCheck();
+      setTooltipControl(true);
+      console.log(detailData.image);
     });
     return unsubscribe;
   }, [navigation]);
@@ -132,67 +150,74 @@ export default function PostDetailPage({ navigation, route }) {
               <View style={styles.headerCComp}></View>
               <View style={styles.headerRComp}>
                 <View style={{ flexDirection: 'row' }}>
-                  {/* <Ionicons
+                  <Ionicons
                     name={'open-outline'}
                     size={27}
                     color={'white'}
                     style={{ marginHorizontal: 10 }}
-                    onPress={() => {
-                      console.log(detailData.user.email);
-                      console.log(myEmail);
-                      navigation.navigate('TradeConfirmPage');
-                    }}
-                  /> */}
-                  {detailData.user.email == myEmail ? (
-                    <Tooltip
-                      withOverlay={false}
-                      containerStyle={{
-                        height: 130,
-                        backgroundColor: '#438732',
-                      }}
-                      pointerColor={'#438732'}
-                      popover={
-                        <>
-                          <Pressable
-                            style={styles.tooltipBtn}
-                            onPress={() => {
-                              navigation.navigate('PostFixPage', detailData);
-                            }}>
-                            <Text style={styles.tooltipText}>수정</Text>
-                          </Pressable>
-                          <Pressable
-                            style={styles.tooltipBtn}
-                            onPress={() => {
-                              deletePost(detailData.id, navigation);
-                              alert('게시글을 삭제했습니다!');
-                            }}>
-                            <Text style={styles.tooltipText}>삭제</Text>
-                          </Pressable>
-                          {data.townBook.finish === 1 ? null : (
-                            <Pressable
-                              style={styles.tooltipBtn}
-                              onPress={() => {
-                                if (bubbles == '') {
-                                  Alert.alert('교환할 상대가 없습니다');
-                                  return;
-                                } else {
-                                  navigation.navigate('TradeSelectPage', [
-                                    detailData,
-                                    bubbles,
-                                  ]);
-                                }
-                              }}>
-                              <Text style={styles.tooltipText}>거래완료</Text>
-                            </Pressable>
-                          )}
-                        </>
-                      }>
-                      <Ionicons
-                        name={'ellipsis-vertical'}
-                        color={'white'}
-                        size={27}
-                      />
-                    </Tooltip>
+                    onPress={share}
+                  />
+                  {tooltipControl ? (
+                    <>
+                      {detailData.user.email == myEmail ? (
+                        <Tooltip
+                          withOverlay={false}
+                          containerStyle={{
+                            height: 130,
+                            backgroundColor: '#438732',
+                          }}
+                          pointerColor={'#438732'}
+                          popover={
+                            <>
+                              <Pressable
+                                style={styles.tooltipBtn}
+                                onPress={() => {
+                                  setTooltipControl(false);
+                                  navigation.navigate(
+                                    'PostFixPage',
+                                    detailData
+                                  );
+                                }}>
+                                <Text style={styles.tooltipText}>수정</Text>
+                              </Pressable>
+                              <Pressable
+                                style={styles.tooltipBtn}
+                                onPress={() => {
+                                  deletePost(detailData.id, navigation);
+                                  alert('게시글을 삭제했습니다!');
+                                }}>
+                                <Text style={styles.tooltipText}>삭제</Text>
+                              </Pressable>
+                              {data.townBook.finish === 1 ? null : (
+                                <Pressable
+                                  style={styles.tooltipBtn}
+                                  onPress={() => {
+                                    if (bubbles == '') {
+                                      Alert.alert('교환할 상대가 없습니다');
+                                      return;
+                                    } else {
+                                      setTooltipControl(false);
+                                      navigation.navigate('TradeSelectPage', [
+                                        detailData,
+                                        bubbles,
+                                      ]);
+                                    }
+                                  }}>
+                                  <Text style={styles.tooltipText}>
+                                    거래완료
+                                  </Text>
+                                </Pressable>
+                              )}
+                            </>
+                          }>
+                          <Ionicons
+                            name={'ellipsis-vertical'}
+                            color={'white'}
+                            size={27}
+                          />
+                        </Tooltip>
+                      ) : null}
+                    </>
                   ) : null}
                 </View>
               </View>
@@ -217,7 +242,11 @@ export default function PostDetailPage({ navigation, route }) {
                   style={styles.bookImage}
                   resizeMode='cover'
                   PlaceholderContent={<ActivityIndicator />}
-                  source={{ uri: detailData.image }}
+                  source={
+                    detailData.image
+                      ? { uri: detailData.image }
+                      : require('../../assets/splash.png')
+                  }
                 />
               </View>
               <Grid style={styles.bookImageBox}>
@@ -321,22 +350,19 @@ export default function PostDetailPage({ navigation, route }) {
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Text style={styles.subTitle}>상태 |</Text>
                 <View style={styles.bookStatusBadge}>
-                  <Text
-                    style={{
-                      fontFamily: 'SansBold',
-                      fontSize: 18,
-                      color: '#54b65e',
-                      bottom: 2,
-                    }}>
-                    {detailData.status}
-                  </Text>
+                  <Text style={styles.statusBadge}>{detailData.status}</Text>
                 </View>
               </View>
-              <Text style={styles.bookDesc}>{detailData.contentInfo}</Text>
+              <Text style={styles.bookDesc}>{description}</Text>
               <View style={styles.descMiddleBorder}></View>
               <Text style={styles.subTitle}>작품소개</Text>
               <Text style={styles.bookDesc}>{detailData.description}</Text>
-              {/* <Text style={{ textAlign: 'right' }}>하이퍼링크</Text> */}
+              <Text
+                style={styles.hyperLink}
+                onPress={() => hyperLink(detailData.webUrl)}>
+                Daum 책 자세히보기 {'>'}
+                {'>'}
+              </Text>
               <View style={styles.descMiddleBorder}></View>
               <Text style={styles.subTitle}>가치 나누기</Text>
               <View style={styles.commentBox}>
@@ -468,6 +494,11 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     marginVertical: 15,
   },
+  hyperLink: {
+    textAlign: 'right',
+    fontFamily: 'SansThin',
+    fontSize: 12,
+  },
   subTitle: { fontSize: 16, fontFamily: 'SansBold', color: '#4CB73B' },
   bookStatusBadge: {
     marginLeft: 10,
@@ -487,6 +518,12 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.2,
     shadowRadius: 5,
+  },
+  statusBadge: {
+    fontFamily: 'SansBold',
+    fontSize: 18,
+    color: '#54b65e',
+    position: 'absolute',
   },
   commentBox: {
     backgroundColor: '#E5E9E4',
