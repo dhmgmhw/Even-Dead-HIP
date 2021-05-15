@@ -2,8 +2,7 @@ import { Alert } from "react-native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const host = 'http://3.35.216.159'
-const mockhost = 'https://607434bc066e7e0017e794f9.mockapi.io/'
+const host = 'http://13.124.182.223'
 
 export async function uploadImg(data) {
     try {
@@ -12,11 +11,11 @@ export async function uploadImg(data) {
             url: host + '/api/images',
             data: data,
         });
-        console.log(response.data)
+        // console.log(response.data)
         return response.data
     } catch (err) {
         console.log(err)
-        alert('이미지 업로드 오류')
+        alert(err)
     }
 }
 
@@ -26,7 +25,6 @@ export async function postBook(data) {
         const response = await axios({
             method: "post",
             url: host + '/api/townbooks',
-            // url: mockhost + '/towndata',
             headers: {
                 token: token,
             },
@@ -47,12 +45,6 @@ export async function postDetail(id) {
             method: "get",
             url: host + '/api/townbooks/' + id,
         });
-        // console.log(response.data.comments)
-
-        // for (let i = 0; i < response.data.length; i++) {
-        //     console.log(response.data[i].contents)
-        // }
-
         return response.data
     } catch (err) {
         console.log(err)
@@ -67,7 +59,6 @@ export async function updatePost(data, id, navigation) {
         await axios({
             method: "put",
             url: host + '/api/townbooks/' + id,
-            // url: mockhost + '/towndata/' + id,
             headers: {
                 token: token,
             },
@@ -111,9 +102,7 @@ export async function postComment(data, id) {
             },
             data: { contents: data },
         });
-        // return response.data
         console.log(response.data)
-        // console.log(response.data.msg)
     } catch (err) {
         console.log(err)
         alert('댓글을 남길 수 없어요:(')
@@ -157,23 +146,3 @@ export async function deleteComment(id) {
         alert('댓글을 삭제할 수 없습니다.')
     }
 }
-
-// export async function tradeConfirm(data, id) {
-//     const token = await AsyncStorage.getItem("session")
-//     try {
-//         const response = await axios({
-//             method: "post",
-//             url: host + '/api/comments/' + id,
-//             headers: {
-//                 token: token,
-//             },
-//             data: { contents: data },
-//         });
-//         // return response.data
-//         console.log(response.data)
-//         // console.log(response.data.msg)
-//     } catch (err) {
-//         console.log(err)
-//         alert('댓글을 남길 수 없어요:(')
-//     }
-// }
