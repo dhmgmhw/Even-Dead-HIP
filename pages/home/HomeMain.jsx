@@ -9,7 +9,6 @@ import {
   Image,
   RefreshControl,
 } from 'react-native';
-import { Button } from 'native-base';
 
 import { Ionicons } from '@expo/vector-icons';
 
@@ -96,17 +95,18 @@ export default function HomeMain({ navigation }) {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
-        <MainUserBox myName={myName} myImg={myImg} />
+        <MainUserBox navigation={navigation} myName={myName} myImg={myImg} />
         <View
           style={{
             shadowColor: '#000',
             shadowOffset: {
               width: 1,
-              height: 4,
+              height: 10,
             },
             shadowOpacity: 0.3,
-            shadowRadius: 5,
+            shadowRadius: 4,
             zIndex: 99,
+            backgroundColor: '#64BB35',
           }}>
           <View style={styles.mainTitleBox}>
             <View>
@@ -205,11 +205,6 @@ export default function HomeMain({ navigation }) {
           ) : null}
         </View>
       </ScrollView>
-      <Button
-        style={styles.addBtn}
-        onPress={() => navigation.navigate('AddPage')}>
-        <Ionicons name={'add'} size={30} style={{ color: 'white' }} />
-      </Button>
     </>
   );
 }
@@ -219,9 +214,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    top: 1,
     backgroundColor: '#64BB35',
-    paddingTop: getStatusBarHeight(),
   },
   mainTitleDescBox: {
     backgroundColor: '#64BB35',
@@ -296,24 +289,6 @@ const styles = StyleSheet.create({
     height: 5,
     marginHorizontal: 20,
     backgroundColor: '#F3F3F3',
-  },
-  addBtn: {
-    backgroundColor: '#398E3D',
-    width: 60,
-    height: 60,
-    borderRadius: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    bottom: '3%',
-    right: '10%',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 1,
-      height: 3,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
   },
   loader: {
     marginTop: 10,

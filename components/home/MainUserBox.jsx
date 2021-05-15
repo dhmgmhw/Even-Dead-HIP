@@ -7,14 +7,16 @@ import {
   Dimensions,
   Image,
 } from 'react-native';
+import { Button } from 'native-base';
+import { Ionicons } from '@expo/vector-icons';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
-export default function MainUserBox({ myName, myImg }) {
+export default function MainUserBox({ navigation, myName, myImg }) {
   return (
-    <>
-      <Pressable style={styles.container}>
+    <View style={{ paddingBottom: 10, backgroundColor: '#64BB35' }}>
+      <View style={styles.container}>
         <View>
           <View
             style={{
@@ -38,8 +40,17 @@ export default function MainUserBox({ myName, myImg }) {
             source={{ uri: myImg }}
           />
         </View>
-      </Pressable>
-    </>
+      </View>
+      <View style={styles.decoyBox}>
+        <Button
+          style={styles.addBtn}
+          onPress={() => navigation.navigate('AddPage')}>
+          <Ionicons name={'add'} size={30} style={{ color: 'white' }} />
+        </Button>
+        <View style={styles.innerTopDecoyBox}></View>
+        <View style={styles.innerBottomDecoyBox}></View>
+      </View>
+    </View>
   );
 }
 
@@ -50,14 +61,7 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: 'space-between',
     backgroundColor: 'white',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 1,
-      height: 7,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    zIndex: 100,
+    zIndex: 1300,
   },
 
   userImg: {
@@ -103,5 +107,35 @@ const styles = StyleSheet.create({
     fontFamily: 'SansMedium',
     fontSize: 12,
     color: 'white',
+  },
+  addBtn: {
+    backgroundColor: '#4CB73B',
+    width: 60,
+    height: 60,
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: '0%',
+    right: '10%',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 1,
+      height: 3,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    zIndex: 100,
+  },
+  decoyBox: {
+    height: 60,
+  },
+  innerTopDecoyBox: {
+    backgroundColor: 'white',
+    height: 30,
+  },
+  innerBottomDecoyBox: {
+    height: 30,
+    backgroundColor: '#64BB35',
   },
 });
