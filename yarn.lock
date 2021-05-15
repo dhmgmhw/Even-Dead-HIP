@@ -3795,6 +3795,13 @@ expo-google-app-auth@^8.1.7:
   dependencies:
     expo-app-auth "~10.1.2"
 
+expo-google-sign-in@~9.1.0:
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/expo-google-sign-in/-/expo-google-sign-in-9.1.0.tgz#9d52c8eaf8ab78bd3c579dea5c730b33026b22f8"
+  integrity sha512-IxbTU3R6bfgiIhiFIP2n52iRNtv7IE22pZVQCVVo3xMTMj5kmafh25daPYOEqkBB3G2AQofY8hCxD4gCLW7GnQ==
+  dependencies:
+    invariant "^2.2.4"
+
 expo-image-manipulator@^9.0.0:
   version "9.1.0"
   resolved "https://registry.yarnpkg.com/expo-image-manipulator/-/expo-image-manipulator-9.1.0.tgz#c1bac33c071e116a97a654f9f11bf50f7ff8932c"
