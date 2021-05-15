@@ -12,7 +12,7 @@ import {
   TouchableWithoutFeedback,
   Alert,
 } from 'react-native';
-import { Header, Overlay } from 'react-native-elements';
+import { Overlay } from 'react-native-elements';
 import { Item } from 'native-base';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
