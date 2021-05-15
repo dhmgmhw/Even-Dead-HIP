@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 export default function KakaoResultCardComponent({ book }) {
   const bookCover =
     book.thumbnail == ''
-      ? require('../../assets/basicbookcover.png')
+      ? require('../../assets/splash.png')
       : { uri: book.thumbnail };
   return (
     <View style={styles.container}>

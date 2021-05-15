@@ -8,16 +8,12 @@ import {
   Text,
   LogBox,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { delScrapBook, postScrapBook } from '../../config/MyPageApi';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
 export default function GenreSearchResult({ navigation, post }) {
   LogBox.ignoreLogs(['Warning: ...']);
-
-  useEffect(() => {}, []);
 
   return (
     <Pressable
@@ -30,7 +26,11 @@ export default function GenreSearchResult({ navigation, post }) {
           <Image
             style={styles.cardImage}
             resizeMode='cover'
-            source={{ uri: post.image }}
+            source={
+              post.image
+                ? { uri: post.image }
+                : require('../../assets/splash.png')
+            }
           />
           <View style={styles.cardTitleBox}>
             <View>
