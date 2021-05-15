@@ -82,17 +82,17 @@ export default function MyInfoTab({ navigation }) {
       Alert.alert('닉네임은 최대 6자까지 가능합니다.');
       return;
     }
-    if (imageUri === profile.image) {
+    if (imageUri == '') {
       Alert.alert('바꿀 사진을 선택해 주세요!');
       return;
     } else {
       const formData = new FormData();
       formData.append('files', {
         uri: imageUri,
+        type: 'image/jpeg',
         name: 'image.jpg',
       });
       let getUri = await uploadImg(formData);
-      console.log(getUri[0]);
       await changeUserProfile(name, getUri[0]);
       setVisible(false);
       download();
@@ -112,7 +112,9 @@ export default function MyInfoTab({ navigation }) {
       aspect: [4, 4],
       quality: 0,
     });
-    getImageUrl(imageData);
+    {
+      imageData.cancelled ? null : getImageUrl(imageData);
+    }
   };
 
   const getImageUrl = async (imageData) => {
@@ -131,13 +133,15 @@ export default function MyInfoTab({ navigation }) {
                 marginVertical: 20,
                 paddingVertical: 20,
               }}>
-              <Image
-                style={styles.profileimg}
-                resizeMode='contain'
-                source={{
-                  uri: profile.image,
-                }}
-              />
+              <View style={styles.profileimgBox}>
+                <Image
+                  style={styles.profileimg}
+                  resizeMode='cover'
+                  source={{
+                    uri: profile.image,
+                  }}
+                />
+              </View>
               <View
                 style={{
                   marginLeft: 20,
@@ -184,13 +188,15 @@ export default function MyInfoTab({ navigation }) {
                 </View>
                 <Text style={styles.profiletitle}>프로필 수정</Text>
                 <Pressable style={styles.pickpic} onPress={pickImage}>
-                  <Image
-                    style={styles.editprofileimg}
-                    resizeMode='contain'
-                    source={{
-                      uri: imageUri,
-                    }}
-                  />
+                  <View style={styles.editprofileimgBox}>
+                    <Image
+                      style={styles.editprofileimg}
+                      resizeMode='cover'
+                      source={{
+                        uri: imageUri,
+                      }}
+                    />
+                  </View>
                 </Pressable>
                 <Text style={styles.emailfix}>{profile.email}</Text>
                 <TextInput
@@ -329,20 +335,30 @@ const styles = StyleSheet.create({
     marginTop: 30,
     paddingLeft: 20,
   },
-  profileimg: {
+  profileimgBox: {
     marginLeft: 20,
+    height: 70,
+    width: 70,
+    borderRadius: 100,
+  },
+  profileimg: {
     height: 70,
     width: 70,
     borderRadius: 100,
     borderWidth: 1,
     borderColor: '#E0E0E0',
   },
-  editprofileimg: {
+  editprofileimgBox: {
     marginVertical: 10,
     height: 80,
     width: 80,
     borderRadius: 100,
     alignSelf: 'center',
+  },
+  editprofileimg: {
+    height: 80,
+    width: 80,
+    borderRadius: 100,
     borderWidth: 1,
     borderColor: '#E0E0E0',
   },

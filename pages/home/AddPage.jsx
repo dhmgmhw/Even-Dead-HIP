@@ -98,7 +98,7 @@ export default function AddPage({ navigation }) {
     } else {
       let data = {
         title: title,
-        image: bookImg,
+        image: bookImg ? bookImg : '',
         publisher: publisher,
         webUrl: webUrl,
         author: author,
@@ -112,16 +112,17 @@ export default function AddPage({ navigation }) {
       for (let i = 0; i < imageUri.length; i++) {
         formData.append('files', {
           uri: imageUri[i].uri,
+          type: 'image/jpeg',
           name: 'image' + i + '.jpg',
         });
       }
       try {
         const imgList = await uploadImg(formData);
+        data.captureImages = imgList;
       } catch (error) {
         Alert.alert('사진 업로드 오류');
         return;
       }
-      data.captureImages = imgList;
       await postBook(data);
       navigation.pop();
     }
@@ -167,7 +168,7 @@ export default function AddPage({ navigation }) {
                   source={
                     bookImg
                       ? { uri: bookImg }
-                      : require('../../assets/nodata.png')
+                      : require('../../assets/splash.png')
                   }
                 />
               </View>
@@ -354,7 +355,7 @@ export default function AddPage({ navigation }) {
                   <Image
                     style={styles.foundImg}
                     resizeMode='contain'
-                    source={require('../../assets/nodata.png')}
+                    source={require('../../assets/splash.png')}
                   />
                 </View>
               ) : (
