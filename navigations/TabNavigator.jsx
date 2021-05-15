@@ -22,10 +22,10 @@ const TabNavigator = () => {
             iconName += 'home';
           } else if (route.name === 'SearchMain') {
             iconName += 'search-outline';
-            // } else if (route.name === 'ChatMain') {
-            //   iconName += 'chatbox';
+          } else if (route.name === 'ChatMain') {
+            iconName += 'chatbubble-outline';
           } else if (route.name === 'MyPageMain') {
-            iconName += 'person-sharp';
+            iconName += 'person-outline';
           }
           return (
             <Ionicons
@@ -47,7 +47,7 @@ const TabNavigator = () => {
       }}>
       <Tabs.Screen name='HomeMain' component={HomeMain} />
       <Tabs.Screen name='SearchMain' component={SearchMain} />
-      {/* <Tabs.Screen
+      <Tabs.Screen
         name='ChatMain'
         // options={{
         //   tabBarBadge: '0',
@@ -56,7 +56,7 @@ const TabNavigator = () => {
         //   },
         // }}
         component={ChatMain}
-      /> */}
+      />
       <Tabs.Screen name='MyPageMain' component={MyPageMain} />
     </Tabs.Navigator>
   );
