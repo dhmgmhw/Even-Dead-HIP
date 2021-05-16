@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
+import Carousel, { ParallaxImage } from 'react-native-snap-carousel';
 
 import GenreComponent from '../../components/home/GenreComponent';
 import MainUserBox from '../../components/home/MainUserBox';
@@ -24,6 +25,8 @@ const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
 export default function HomeMain({ navigation }) {
+  const carouselRef = useRef(null);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [bannerPosts, setBannerPosts] = useState([]);
 
@@ -60,17 +63,39 @@ export default function HomeMain({ navigation }) {
     setMyImg(myInfo.results.image);
   };
 
-  const download = async () => {
-    const result = await getPostedBook(currentPage);
+  const bannerLoad = async () => {
     const banner = await getPostedBook(1);
-    setPosts(result);
     setBannerPosts(banner);
   };
+
+  const download = async () => {
+    const result = await getPostedBook(currentPage);
+    setPosts(result);
+  };
+
+  // const renderItem = ({ item }) => {
+  //   return (
+  //     <Pressable
+  //       onPress={() => {
+  //         navigation.navigate('PostDetailPage', item);
+  //       }}
+  //       style={styles.item}>
+  //       <ParallaxImage
+  //         source={{ uri: item.image }}
+  //         containerStyle={styles.imageContainer}
+  //         style={styles.image}
+  //         parallaxFactor={0.1}
+  //         hasParallaxImages={true}
+  //       />
+  //     </Pressable>
+  //   );
+  // };
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       download();
       userCheck();
+      bannerLoad();
     });
     return unsubscribe;
   }, [navigation]);
@@ -144,6 +169,55 @@ export default function HomeMain({ navigation }) {
               </Pressable>
             </View>
           </View>
+          {/* <Carousel
+            ref={carouselRef}
+            sliderWidth={diviceWidth}
+            sliderHeight={diviceWidth}
+            itemWidth={diviceWidth - 200}
+            data={bannerPosts}
+            renderItem={renderItem}
+            hasParallaxImages={true}
+          /> */}
+          {bannerPosts ? (
+            <ScrollView
+              showsHorizontalScrollIndicator={false}
+              horizontal={true}
+              contentContainerStyle={{
+                height: 200,
+              }}>
+              {bannerPosts.map((banner, i) => {
+                return (
+                  <Pressable
+                    style={{
+                      shadowColor: '#000',
+                      shadowOffset: {
+                        width: 0,
+                        height: 2,
+                      },
+                      shadowOpacity: 0.25,
+                      shadowRadius: 3.84,
+                      elevation: 5,
+                    }}
+                    onPress={() => {
+                      navigation.navigate('PostDetailPage', banner);
+                    }}>
+                    <Image
+                      key={i}
+                      style={{
+                        height: 190,
+                        width: 125,
+                        marginLeft: 20,
+                        borderRadius: 10,
+                        backgroundColor: '#e5e5e5',
+                      }}
+                      resizeMode='cover'
+                      source={{ uri: banner.image }}
+                    />
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
+          ) : null}
           <View style={styles.mainTitleDescBox}>
             <Text style={styles.mainTitleDesc3}>다양한 분야의 책도 만나고</Text>
             <Text style={styles.mainTitleDesc3}>동네 이웃도 만나고</Text>
@@ -166,9 +240,23 @@ export default function HomeMain({ navigation }) {
           </View>
         </View>
         <View>
+          <Pressable
+            style={styles.townChangeSubBtn}
+            onPress={() => {
+              navigation.navigate('TownChangePage');
+            }}>
+            <Text style={[styles.myTownText, { color: '#31B11C' }]}>
+              {myTown}
+            </Text>
+            <Ionicons
+              name={'chevron-down'}
+              size={25}
+              style={{ color: '#31B11C' }}
+            />
+          </Pressable>
           <View style={styles.subTitleBox}>
-            <Text style={{ fontSize: 16, fontFamily: 'SansRegular' }}>
-              우리동네 새로 등록된 도서
+            <Text style={{ fontSize: 16, fontFamily: 'SansMedium' }}>
+              새로 등록된 도서
             </Text>
           </View>
           {posts ? (
@@ -191,7 +279,6 @@ export default function HomeMain({ navigation }) {
                 onEndReachedThreshold={0.1}
                 onEndReached={async () => {
                   let nextPosts = await getPostedBook(currentPage + 1);
-                  // if (nextPosts.length != 0) {
                   if (nextPosts != undefined) {
                     setCurrentPage(currentPage + 1);
                     let allPosts = [...posts, ...nextPosts];
@@ -218,7 +305,7 @@ const styles = StyleSheet.create({
   },
   mainTitleDescBox: {
     backgroundColor: '#64BB35',
-    paddingTop: 10,
+    paddingTop: 30,
     alignItems: 'center',
   },
   mainTitleDesc: {
@@ -255,12 +342,8 @@ const styles = StyleSheet.create({
     left: 5,
   },
   subTitleBox: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     height: 20,
     paddingHorizontal: 20,
-    marginTop: 20,
   },
   townChangeBtn: {
     width: 100,
@@ -272,6 +355,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginVertical: 30,
   },
+  townChangeSubBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 25,
+    marginBottom: 10,
+    paddingHorizontal: 20,
+  },
   myTownText: {
     fontFamily: 'SCDream5',
     fontSize: 14,
@@ -280,19 +370,6 @@ const styles = StyleSheet.create({
   newBooksScroll: {
     height: 140,
     marginBottom: 20,
-  },
-  subTitleBtn: {
-    width: 35,
-    height: 30,
-  },
-  borderBox: {
-    height: 5,
-    marginHorizontal: 20,
-    backgroundColor: '#F3F3F3',
-  },
-  loader: {
-    marginTop: 10,
-    alignSelf: 'center',
   },
   statusAvoid: {
     height: getStatusBarHeight(),
@@ -323,5 +400,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-end',
     paddingHorizontal: 20,
+  },
+  item: {
+    width: 180,
+    height: 270,
+    alignSelf: 'center',
+  },
+  imageContainer: {
+    flex: 1,
+    width: 180,
+    height: 270,
+    backgroundColor: 'white',
+    borderRadius: 10,
+  },
+  image: {
+    resizeMode: 'contain',
   },
 });
