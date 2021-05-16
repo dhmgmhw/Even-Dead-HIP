@@ -37,6 +37,7 @@ export default function HomeMain({ navigation }) {
   const [myEmail, setMyEmail] = useState();
   const [myName, setMyName] = useState();
   const [myImg, setMyImg] = useState();
+  const [myPoint, setMyPoint] = useState();
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -61,6 +62,7 @@ export default function HomeMain({ navigation }) {
     setMyEmail(myInfo.results.email);
     setMyName(myInfo.results.username);
     setMyImg(myInfo.results.image);
+    setMyPoint(myInfo.results.point);
   };
 
   const bannerLoad = async () => {
@@ -120,7 +122,12 @@ export default function HomeMain({ navigation }) {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }>
-        <MainUserBox navigation={navigation} myName={myName} myImg={myImg} />
+        <MainUserBox
+          navigation={navigation}
+          myName={myName}
+          myImg={myImg}
+          myPoint={myPoint}
+        />
         <View
           style={{
             shadowColor: '#000',
@@ -188,6 +195,7 @@ export default function HomeMain({ navigation }) {
               {bannerPosts.map((banner, i) => {
                 return (
                   <Pressable
+                    key={i}
                     style={{
                       shadowColor: '#000',
                       shadowOffset: {
@@ -202,7 +210,6 @@ export default function HomeMain({ navigation }) {
                       navigation.navigate('PostDetailPage', banner);
                     }}>
                     <Image
-                      key={i}
                       style={{
                         height: 190,
                         width: 125,
