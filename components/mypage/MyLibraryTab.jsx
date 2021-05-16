@@ -13,10 +13,8 @@ export default function MyLibraryTab({ navigation }) {
 
   const download = async () => {
     const response = await getMyPost();
-    // console.log(response.length);
     if (response.length > 0) {
       setMyPosts(response);
-      // console.log(myPosts);
       setLoading(false);
     } else {
       console.log('No Posts');

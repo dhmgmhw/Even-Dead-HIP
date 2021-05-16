@@ -4,7 +4,6 @@ import {
   Dimensions,
   TextInput,
   View,
-  KeyboardAvoidingView,
   Image,
   Pressable,
   Platform,
