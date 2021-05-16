@@ -19,7 +19,7 @@ export async function uploadImg(data) {
     }
 }
 
-export async function postBook(data) {
+export async function postBook(data, navigation) {
     const token = await AsyncStorage.getItem("session")
     try {
         const response = await axios({
@@ -33,6 +33,7 @@ export async function postBook(data) {
         // return response.data
         // console.log(response.data)
         alert('게시글을 업로드했어요!')
+        navigation.pop();
     } catch (err) {
         console.log(err)
         alert('게시글을 올릴 수 없어요:(')
