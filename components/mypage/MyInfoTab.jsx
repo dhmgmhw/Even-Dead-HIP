@@ -16,7 +16,6 @@ import * as ImagePicker from 'expo-image-picker';
 
 import { Feather } from '@expo/vector-icons';
 import { ProgressBar, Colors } from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { uploadImg } from '../../config/PostingApi';
 
@@ -274,19 +273,6 @@ export default function MyInfoTab({ navigation }) {
         />
       </Pressable>
       <View style={styles.border}></View>
-      <Pressable
-        style={styles.deal}
-        onPress={() => {
-          navigation.push('ChatGifted');
-        }}>
-        <Text style={styles.downcompo}>나의 채팅</Text>
-        <Feather
-          style={styles.rarrow}
-          name='chevron-right'
-          size={28}
-          color='black'
-        />
-      </Pressable>
       <View style={styles.border}></View>
       <Pressable style={styles.deal} onPress={logout}>
         <Text style={[styles.downcompo, { color: 'red' }]}>로그아웃</Text>

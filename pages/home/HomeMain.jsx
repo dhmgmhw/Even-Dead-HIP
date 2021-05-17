@@ -9,9 +9,7 @@ import {
   Image,
   RefreshControl,
 } from 'react-native';
-
 import { Ionicons } from '@expo/vector-icons';
-import Carousel, { ParallaxImage } from 'react-native-snap-carousel';
 
 import GenreComponent from '../../components/home/GenreComponent';
 import MainUserBox from '../../components/home/MainUserBox';
@@ -74,24 +72,6 @@ export default function HomeMain({ navigation }) {
     const result = await getPostedBook(currentPage);
     setPosts(result);
   };
-
-  // const renderItem = ({ item }) => {
-  //   return (
-  //     <Pressable
-  //       onPress={() => {
-  //         navigation.navigate('PostDetailPage', item);
-  //       }}
-  //       style={styles.item}>
-  //       <ParallaxImage
-  //         source={{ uri: item.image }}
-  //         containerStyle={styles.imageContainer}
-  //         style={styles.image}
-  //         parallaxFactor={0.1}
-  //         hasParallaxImages={true}
-  //       />
-  //     </Pressable>
-  //   );
-  // };
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -176,15 +156,6 @@ export default function HomeMain({ navigation }) {
               </Pressable>
             </View>
           </View>
-          {/* <Carousel
-            ref={carouselRef}
-            sliderWidth={diviceWidth}
-            sliderHeight={diviceWidth}
-            itemWidth={diviceWidth - 200}
-            data={bannerPosts}
-            renderItem={renderItem}
-            hasParallaxImages={true}
-          /> */}
           {bannerPosts ? (
             <ScrollView
               showsHorizontalScrollIndicator={false}
@@ -407,20 +378,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-end',
     paddingHorizontal: 20,
-  },
-  item: {
-    width: 180,
-    height: 270,
-    alignSelf: 'center',
-  },
-  imageContainer: {
-    flex: 1,
-    width: 180,
-    height: 270,
-    backgroundColor: 'white',
-    borderRadius: 10,
-  },
-  image: {
-    resizeMode: 'contain',
   },
 });
