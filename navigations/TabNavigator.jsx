@@ -47,7 +47,7 @@ const TabNavigator = () => {
       }}>
       <Tabs.Screen name='HomeMain' component={HomeMain} />
       <Tabs.Screen name='SearchMain' component={SearchMain} />
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name='ChatMain'
         // options={{
         //   tabBarBadge: '0',
@@ -56,7 +56,7 @@ const TabNavigator = () => {
         //   },
         // }}
         component={ChatMain}
-      />
+      /> */}
       <Tabs.Screen name='MyPageMain' component={MyPageMain} />
     </Tabs.Navigator>
   );
