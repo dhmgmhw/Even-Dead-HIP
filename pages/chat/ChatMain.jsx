@@ -31,10 +31,6 @@ export default function ChatMain({ navigation }) {
         style={styles.container}
         contentContainerStyle={{ marginTop: 20 }}>
         <ChatRoomComponent navigation={navigation} />
-        <ChatRoomComponent navigation={navigation} />
-        <ChatRoomComponent navigation={navigation} />
-        <ChatRoomComponent navigation={navigation} />
-        <ChatRoomComponent navigation={navigation} />
       </ScrollView>
     </>
   );

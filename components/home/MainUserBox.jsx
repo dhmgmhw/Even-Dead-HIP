@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 100,
     marginRight: 15,
+    borderWidth: 0.1,
   },
   title: {
     fontFamily: 'SCDream6',
