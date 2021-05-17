@@ -2,7 +2,7 @@ import { Alert } from "react-native"
 import axios from "axios"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
-const host = "http://13.124.182.223"
+const host = "http://3.34.178.136"
 
 export async function login(username, email, image, navigation) {
   try {
