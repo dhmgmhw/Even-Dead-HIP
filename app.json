@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "evendeadhip",
+    "name": "책과 콩나무",
     "slug": "evendeadhip",
     "scheme": "evendeadhip",
     "version": "1.0.0",
@@ -28,8 +28,13 @@
       }
     },
     "android": {
-      "versionCode": 1,
+      "versionCode": 2,
       "package": "com.conner_kim.evendeadhip",
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ],
       "config": {
         "googleSignIn": {
           "apiKey": "161728779966-9pjjn580gfj749pq88j8f9hnpmhpa4nm.apps.googleusercontent.com",
