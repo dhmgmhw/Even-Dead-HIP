@@ -12,6 +12,7 @@ export default function MyLibraryTab({ navigation }) {
   const [loading, setLoading] = useState(true);
 
   const download = async () => {
+    console.log('ha');
     const response = await getMyPost();
     if (response.length > 0) {
       setMyPosts(response);
@@ -23,11 +24,8 @@ export default function MyLibraryTab({ navigation }) {
   };
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      download();
-    });
-    return unsubscribe;
-  }, [navigation]);
+    download();
+  }, []);
 
   return (
     <ScrollView style={styles.container}>
