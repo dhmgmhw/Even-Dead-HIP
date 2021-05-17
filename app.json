@@ -4,6 +4,10 @@
     "slug": "evendeadhip",
     "scheme": "evendeadhip",
     "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -18,7 +22,7 @@
       "**/*"
     ],
     "ios": {
-      "supportstable": true,
+      "supportsTablet": true,
       "bundleIdentifier": "com.ybmb.evendeadhip",
       "buildNumber": "1.0.0",
       "config":{
@@ -27,12 +31,14 @@
         }
       }
     },
-    "android": {
+    "android":{
+      "package": "com.conner_kim.evendeadhip2",
       "versionCode": 1,
-      "package": "com.conner_kim.evendeadhip",
-      "googleSignIn": {
-        "apiKey": "161728779966-9pjjn580gfj749pq88j8f9hnpmhpa4nm.apps.googleusercontent.com",
-        "certificateHash": "F9:FB:EA:7A:F0:F4:23:43:52:50:C5:91:C6:67:F9:41:78:D2:96:A8"
+      "config":{
+        "googleSignIn":{
+          "apiKey":"AIzaSyAr--NAfai5EjJlIZYDm6dVs92HeDqyup0",
+          "certificateHash":"0F9E0B268C88C74E39E902248484E8A2E9F74C48"
+        }
       }
     },
     "web": {
