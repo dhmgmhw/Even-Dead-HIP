@@ -287,6 +287,14 @@ const styles = StyleSheet.create({
     bottom: 0,
     flexDirection: 'row',
     padding: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.37,
+    shadowRadius: 7.49,
+    elevation: 12,
   },
   modalTitle: {
     fontFamily: 'SansBold',
@@ -298,14 +306,6 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     backgroundColor: '#4CB73B',
     padding: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 6,
-    },
-    shadowOpacity: 0.37,
-    shadowRadius: 7.49,
-    elevation: 12,
     marginTop: 20,
   },
   userImg: {
