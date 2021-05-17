@@ -3,7 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
-  Pressable,
+  Platform,
   Dimensions,
   Image,
 } from 'react-native';
@@ -13,7 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
-export default function MainUserBox({ navigation, myName, myImg }) {
+export default function MainUserBox({ navigation, myName, myImg, myPoint }) {
   return (
     <View style={{ paddingBottom: 10, backgroundColor: '#64BB35' }}>
       <View style={styles.container}>
@@ -28,6 +28,13 @@ export default function MainUserBox({ navigation, myName, myImg }) {
             </Text>
             <Text style={styles.town}>책을 교환하면 포인트를</Text>
             <Text style={styles.town}>얻을 수 있어요!</Text>
+            <Text
+              style={[
+                styles.town,
+                { marginTop: Platform.OS == 'ios' ? 5 : 0 },
+              ]}>
+              내 콩나무 포인트 : {myPoint} 점
+            </Text>
           </View>
         </View>
         <View
