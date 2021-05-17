@@ -13,7 +13,7 @@ export default function ChatRoomComponent({ navigation }) {
   return (
     <Pressable
       onPress={() => {
-        navigation.push('ChatPage');
+        navigation.push('ChatRoom');
       }}
       style={styles.chatBox}>
       <View style={styles.userBox}>
