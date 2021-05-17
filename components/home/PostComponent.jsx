@@ -22,7 +22,11 @@ export default function PostComponent({ navigation, post }) {
           <Image
             style={styles.cardImage}
             resizeMode='cover'
-            source={{ uri: post.image }}
+            source={
+              post.image
+                ? { uri: post.image }
+                : require('../../assets/splash.png')
+            }
           />
         </View>
         <View style={styles.cardTitleBox}>

@@ -3,9 +3,11 @@ import {
   StyleSheet,
   Dimensions,
   TextInput,
-  KeyboardAvoidingView,
+  View,
+  Image,
+  Pressable,
+  Platform,
 } from 'react-native';
-import { Item } from 'native-base';
 
 import { Ionicons } from '@expo/vector-icons';
 
@@ -20,68 +22,39 @@ export default function ChatInputComponent() {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.messageBar} behavior='position'>
-      <Item style={styles.messageBox}>
-        <TextInput
+    <View style={styles.messageBar}>
+      <View style={styles.messageBox}>
+        <View
           style={{
-            paddingLeft: 20,
-            backgroundColor: '#eeeeee',
-            margin: 7,
-            height: 40,
-            borderWidth: 1,
-            borderColor: 'lightgrey',
-            borderRadius: 100,
-            width: diviceWidth * 0.8,
-          }}
-          onChangeText={setText}
-          value={text}
-          placeholder='메시지를 입력하세요'
-        />
-        <Ionicons
-          active
-          onPress={leaveMessage}
-          name='chatbox'
-          size={27}
-          style={{ marginHorizontal: 10, color: '#202540' }}
-        />
-      </Item>
-    </KeyboardAvoidingView>
+            width: '85%',
+          }}>
+          <TextInput
+            style={{
+              paddingLeft: 20,
+              backgroundColor: 'white',
+              margin: 7,
+              height: 30,
+              borderRadius: 15,
+              width: '100%',
+            }}
+            onChangeText={setText}
+            value={text}
+            placeholder='메시지를 입력하세요'
+          />
+        </View>
+        <Pressable onPress={leaveMessage}>
+          <Image
+            style={{ height: 35, width: 40, padding: 5 }}
+            resizeMode='contain'
+            source={require('../../assets/mainlogo.png')}
+          />
+        </Pressable>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { backgroundColor: 'white' },
-  chatInfoBox: {
-    width: diviceWidth,
-    height: 80,
-    borderWidth: 2,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  chatBox: {
-    width: diviceWidth,
-    height: 80,
-    borderWidth: 2,
-    marginTop: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  userBox: {
-    width: 60,
-    height: 60,
-    borderRadius: 100,
-    backgroundColor: 'grey',
-  },
-  descBox: {
-    width: '60%',
-    height: 70,
-    backgroundColor: 'lightgrey',
-  },
-  bookBox: {
-    width: 60,
-    height: 70,
-    backgroundColor: 'grey',
-  },
   messageBar: {
     width: diviceWidth,
     position: 'absolute',
@@ -91,12 +64,11 @@ const styles = StyleSheet.create({
   },
   messageBox: {
     width: diviceWidth,
-    height: 45,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: '#E4E4E4',
+    paddingHorizontal: 10,
+    backgroundColor: '#EEF5ED',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingBottom: Platform.OS === 'ios' ? 13 : 0,
   },
 });

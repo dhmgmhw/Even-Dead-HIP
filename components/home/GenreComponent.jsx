@@ -7,6 +7,8 @@ import {
   Pressable,
   Text,
   LogBox,
+  Modal,
+  ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { delScrapBook, postScrapBook } from '../../config/MyPageApi';
@@ -22,6 +24,8 @@ export default function GenreComponent({
   myEmail,
 }) {
   LogBox.ignoreLogs(['Warning: ...']);
+
+  const [modalVisible, setModalVisible] = useState(false);
 
   const bookMark = async () => {
     await postScrapBook(post.id);
@@ -42,16 +46,139 @@ export default function GenreComponent({
     <Pressable
       style={styles.cardBox}
       onPress={() => {
-        navigation.navigate('PostDetailPage', post);
-        // console.log(myEmail);
-        // console.log(post.user.email);
+        // navigation.navigate('PostDetailPage', post);
+        setModalVisible(!modalVisible);
       }}>
+      <Modal
+        animationType='slide'
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.modalBox}>
+          <ScrollView
+            style={{ width: '100%' }}
+            showsVerticalScrollIndicator={false}>
+            <Ionicons
+              name={'close'}
+              onPress={() => setModalVisible(!modalVisible)}
+              size={25}
+              style={{ alignSelf: 'flex-end', color: 'grey' }}
+            />
+            <Image
+              style={styles.cardModalImage}
+              resizeMode='cover'
+              source={
+                post.image
+                  ? { uri: post.image }
+                  : require('../../assets/splash.png')
+              }
+            />
+            <View style={{ alignItems: 'center' }}>
+              <Text
+                style={{
+                  fontFamily: 'SansMedium',
+                  fontSize: 12,
+                  color: '#4CB73B',
+                  marginVertical: 10,
+                }}>
+                #{post.category}
+              </Text>
+              <Text numberOfLines={2} style={styles.modalTitle}>
+                {post.title}
+              </Text>
+              <Text
+                numberOfLines={2}
+                style={{
+                  fontFamily: 'SansRegular',
+                  fontSize: 13,
+                  marginTop: 10,
+                }}>
+                {post.author} 지음 |
+              </Text>
+              <Text
+                numberOfLines={2}
+                style={{
+                  fontFamily: 'SansRegular',
+                  fontSize: 13,
+                }}>
+                {post.publisher} 출판
+              </Text>
+            </View>
+            <View style={styles.postedBox}>
+              <View style={{ flexDirection: 'row' }}>
+                <View
+                  style={{
+                    shadowColor: '#000',
+                    shadowOffset: {
+                      width: 0,
+                      height: 7,
+                    },
+                    shadowOpacity: 0.43,
+                    shadowRadius: 9.51,
+                    elevation: 15,
+                  }}>
+                  <Image
+                    style={styles.userImg}
+                    resizeMode='cover'
+                    source={{ uri: post.user.image }}
+                  />
+                </View>
+                <View style={styles.postedTextBox}>
+                  <Text style={styles.status}>상태 | {post.status}</Text>
+                  <Text style={styles.postedBy}>{post.user.username}</Text>
+                  <Text style={styles.postedTown}>{post.user.town}</Text>
+                </View>
+                {post.user.email == myEmail ? null : (
+                  <>
+                    {scrapList.includes(post.id) ? (
+                      <Ionicons
+                        name={'bookmark'}
+                        onPress={delBookMark}
+                        size={25}
+                        style={[styles.innerScrap, { color: 'green' }]}
+                      />
+                    ) : (
+                      <Ionicons
+                        name={'bookmark-outline'}
+                        onPress={bookMark}
+                        size={25}
+                        style={[styles.innerScrap, { color: 'white' }]}
+                      />
+                    )}
+                  </>
+                )}
+              </View>
+              <Pressable
+                style={styles.goBtn}
+                onPress={() => {
+                  setModalVisible(false);
+                  navigation.navigate('PostDetailPage', post);
+                }}>
+                <Text
+                  style={{
+                    fontFamily: 'SansBold',
+                    fontSize: 16,
+                    color: 'white',
+                  }}>
+                  가치 교환하기
+                </Text>
+              </Pressable>
+            </View>
+          </ScrollView>
+        </View>
+      </Modal>
       <View style={styles.card}>
         <View style={styles.cardFlex}>
           <Image
             style={styles.cardImage}
             resizeMode='cover'
-            source={{ uri: post.image }}
+            source={
+              post.image
+                ? { uri: post.image }
+                : require('../../assets/splash.png')
+            }
           />
           <View style={styles.cardTitleBox}>
             <View>
@@ -124,7 +251,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   cardTitleBox: {
-    width: diviceWidth * 0.7,
+    maxWidth: diviceWidth * 0.6,
     flexDirection: 'column',
     justifyContent: 'space-between',
     marginLeft: 10,
@@ -134,5 +261,77 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignSelf: 'flex-end',
     top: '60%',
+  },
+  innerScrap: {
+    position: 'absolute',
+    top: 10,
+    left: '90%',
+  },
+  cardModalImage: {
+    width: 100,
+    height: 150,
+    borderRadius: 5,
+    alignSelf: 'center',
+    borderWidth: 1,
+    borderColor: '#e5e5e5',
+  },
+  modalBox: {
+    borderWidth: 1,
+    borderColor: '#e5e5e5',
+    width: diviceWidth,
+    height: diviceHeight * 0.75,
+    borderTopRightRadius: 15,
+    borderTopLeftRadius: 15,
+    backgroundColor: 'white',
+    position: 'absolute',
+    bottom: 0,
+    flexDirection: 'row',
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.37,
+    shadowRadius: 7.49,
+    elevation: 12,
+  },
+  modalTitle: {
+    fontFamily: 'SansBold',
+    fontSize: 16,
+    maxWidth: '70%',
+  },
+  postedBox: {
+    width: '100%',
+    borderRadius: 15,
+    backgroundColor: '#4CB73B',
+    padding: 20,
+    marginTop: 20,
+  },
+  userImg: {
+    width: 70,
+    height: 70,
+    borderRadius: 100,
+    backgroundColor: '#e5e5e5',
+  },
+  postedTextBox: { marginLeft: 20 },
+  status: {
+    fontFamily: 'SansBold',
+    fontSize: 18,
+    color: 'white',
+    marginBottom: 10,
+  },
+  postedBy: { fontFamily: 'SansExtra', fontSize: 14, color: 'white' },
+  postedTown: { fontFamily: 'SansMedium', fontSize: 14, color: 'white' },
+  goBtn: {
+    width: 130,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 15,
+    backgroundColor: '#1ea608',
+    paddingVertical: 3,
+    alignSelf: 'flex-end',
+    marginTop: 10,
   },
 });

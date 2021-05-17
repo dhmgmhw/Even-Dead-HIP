@@ -2,8 +2,7 @@ import { Alert } from "react-native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const host = 'http://3.35.216.159'
-const mockhost = 'https://607434bc066e7e0017e794f9.mockapi.io/'
+const host = 'http://13.124.182.223'
 
 
 export async function searchBook(book) {

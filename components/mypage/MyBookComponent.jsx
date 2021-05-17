@@ -30,9 +30,11 @@ export default function MyBookComponent({ navigation, post }) {
           <Image
             style={styles.bookCoverImg}
             resizeMode='cover'
-            source={{
-              uri: post.image,
-            }}
+            source={
+              post.image
+                ? { uri: post.image }
+                : require('../../assets/splash.png')
+            }
           />
         </View>
         <View style={{ width: diviceWidth * 0.65 }}>

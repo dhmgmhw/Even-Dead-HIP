@@ -98,7 +98,7 @@ export default function AddPage({ navigation }) {
     } else {
       let data = {
         title: title,
-        image: bookImg,
+        image: bookImg ? bookImg : "",
         publisher: publisher,
         webUrl: webUrl,
         author: author,
@@ -112,13 +112,18 @@ export default function AddPage({ navigation }) {
       for (let i = 0; i < imageUri.length; i++) {
         formData.append("files", {
           uri: imageUri[i].uri,
+          type: "image/jpeg",
           name: "image" + i + ".jpg",
         })
       }
-      const imgList = await uploadImg(formData)
-      data.captureImages = imgList
-      await postBook(data)
-      navigation.pop()
+      try {
+        const imgList = await uploadImg(formData)
+        data.captureImages = imgList
+      } catch (error) {
+        Alert.alert("사진 업로드 오류")
+        return
+      }
+      await postBook(data, navigation)
     }
   }
 
@@ -128,262 +133,270 @@ export default function AddPage({ navigation }) {
         Keyboard.dismiss()
       }}>
       <View style={{ backgroundColor: "white", height: diviceHeight }}>
-        <View style={styles.statusAvoid}></View>
-        <View style={styles.mainHeader}>
-          <View style={styles.headerLComp}>
-            <Text
-              onPress={() => {
-                navigation.pop()
-              }}
-              style={styles.headerTitle}>
-              취소
-            </Text>
-          </View>
-          <View style={styles.headerCComp}>
-            <Text style={[styles.headerTitle, { textAlign: "center" }]}>
-              도서 등록
-            </Text>
-          </View>
-          <View style={styles.headerRComp}>
-            <Text
-              onPress={upload}
-              style={[styles.headerTitle, { color: "#757575" }]}>
-              등록
-            </Text>
-          </View>
-        </View>
-        {switcher ? (
-          <View style={styles.bookResBox}>
-            <View style={styles.bookResImgBox}>
-              <Image
-                style={styles.bookResImg}
-                resizeMode="cover"
-                source={
-                  bookImg
-                    ? { uri: bookImg }
-                    : require("../../assets/nodata.png")
-                }
-              />
-            </View>
-            <View style={{ width: diviceWidth * 0.65 }}>
-              <View style={styles.bookResTitleBox}>
-                <Text
-                  numberOfLines={1}
-                  ellipsizeMode={"tail"}
-                  style={styles.bookResText}>
-                  {title}
-                </Text>
-                <Ionicons
-                  active
-                  onPress={toggleFinder}
-                  name="close-circle-outline"
-                  size={20}
-                  style={{ paddingRight: 5, color: "grey" }}
-                />
-              </View>
-              <View style={styles.bookResBorder}></View>
-              <View style={styles.bookResDescBox}>
-                <Text
-                  numberOfLines={1}
-                  ellipsizeMode={"tail"}
-                  style={styles.bookResText}>
-                  {author} 저 | {publisher} | {dateChagner(publishedInfo)}
-                </Text>
-              </View>
-            </View>
-          </View>
-        ) : (
-          <>
-            <Text style={styles.bookSearchTitle}>도서 제목</Text>
-            <Pressable style={styles.bookSearchOpener} onPress={toggleFinder}>
+        <KeyboardAvoidingView behavior="position">
+          <View style={styles.statusAvoid}></View>
+          <View style={styles.mainHeader}>
+            <View style={styles.headerLComp}>
               <Text
-                style={{
-                  fontFamily: "SansMedium",
-                  color: "#757575",
-                  fontSize: 13,
-                }}>
-                | 도서명 검색하기
-              </Text>
-              <Ionicons
-                active
-                onPress={bookTitleSearch}
-                name="search"
-                size={20}
-                style={{ marginHorizontal: 10, color: "grey" }}
-              />
-            </Pressable>
-          </>
-        )}
-        <DropDownPicker
-          items={[
-            { label: "#소설", value: "소설" },
-            { label: "#시/에세이", value: "시/에세이" },
-            { label: "#인문", value: "인문" },
-            { label: "#경제/경영", value: "경제/경영" },
-            { label: "#정치/사회", value: "정치/사회" },
-            { label: "#언어", value: "언어" },
-            { label: "#과학", value: "과학" },
-            { label: "#예술", value: "예술" },
-            { label: "#역사", value: "역사" },
-            { label: "#철학", value: "철학" },
-            { label: "#종교", value: "종교" },
-            { label: "#해외도서", value: "해외도서" },
-            { label: "#어린이", value: "어린이" },
-            { label: "#청소년", value: "청소년" },
-            { label: "#취업/수험서", value: "취업/수험서" },
-            { label: "#기타", value: "기타" },
-          ]}
-          showArrow={false}
-          labelStyle={{ fontFamily: "SansMedium" }}
-          placeholder="해쉬태그"
-          containerStyle={styles.dropBox}
-          onChangeItem={item => {
-            setGenreInfo(item.value)
-          }}
-        />
-        <DropDownPicker
-          items={[
-            { label: "S", value: "S" },
-            { label: "A", value: "A" },
-            { label: "B", value: "B" },
-            { label: "C", value: "C" },
-          ]}
-          showArrow={false}
-          zIndex={4000}
-          labelStyle={{ fontFamily: "SansMedium" }}
-          placeholder="상품상태"
-          containerStyle={styles.dropBox}
-          onChangeItem={item => {
-            setStateInfo(item.value)
-          }}
-        />
-        <View style={styles.addPicsBox}>
-          {imageUri == "" ? (
-            <>
-              <Pressable
-                style={[styles.userPicBox, { marginHorizontal: 20 }]}
                 onPress={() => {
-                  navigation.navigate("MultiAddPage", setImageUri)
-                }}>
-                <Text style={{ fontFamily: "SCDream4" }}>카메라</Text>
-                <Ionicons
-                  name="image-outline"
-                  size={30}
-                  style={{ alignSelf: "center", color: "#4CB73B" }}
-                />
-              </Pressable>
-              <View style={{ justifyContent: "center" }}>
-                <View>
-                  <Text style={styles.photoGuidanceText}>
-                    상품의 상태가 잘 보이게 찍어주세요
-                  </Text>
+                  navigation.pop()
+                }}
+                style={styles.headerTitle}>
+                취소
+              </Text>
+            </View>
+            <View style={styles.headerCComp}>
+              <Text style={[styles.headerTitle, { textAlign: "center" }]}>
+                도서 등록
+              </Text>
+            </View>
+            <View style={styles.headerRComp}>
+              <Text
+                onPress={upload}
+                style={[styles.headerTitle, { color: "#757575" }]}>
+                등록
+              </Text>
+            </View>
+          </View>
+          <ScrollView>
+            {switcher ? (
+              <View style={styles.bookResBox}>
+                <View style={styles.bookResImgBox}>
+                  <Image
+                    style={styles.bookResImg}
+                    resizeMode="cover"
+                    source={
+                      bookImg
+                        ? { uri: bookImg }
+                        : require("../../assets/splash.png")
+                    }
+                  />
+                </View>
+                <View style={{ width: diviceWidth * 0.65 }}>
+                  <View style={styles.bookResTitleBox}>
+                    <Text
+                      numberOfLines={1}
+                      ellipsizeMode={"tail"}
+                      style={styles.bookResText}>
+                      {title}
+                    </Text>
+                    <Ionicons
+                      active
+                      onPress={toggleFinder}
+                      name="close-circle-outline"
+                      size={20}
+                      style={{ paddingRight: 5, color: "grey" }}
+                    />
+                  </View>
+                  <View style={styles.bookResBorder}></View>
+                  <View style={styles.bookResDescBox}>
+                    <Text
+                      numberOfLines={1}
+                      ellipsizeMode={"tail"}
+                      style={styles.bookResText}>
+                      {author} 저 | {publisher} | {dateChagner(publishedInfo)}
+                    </Text>
+                  </View>
                 </View>
               </View>
-            </>
-          ) : (
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ paddingHorizontal: 10 }}>
-              {imageUri.map((image, i) => {
-                return (
+            ) : (
+              <>
+                <Text style={styles.bookSearchTitle}>도서 제목</Text>
+                <Pressable
+                  style={styles.bookSearchOpener}
+                  onPress={toggleFinder}>
+                  <Text
+                    style={{
+                      fontFamily: "SansMedium",
+                      color: "#757575",
+                      fontSize: 13,
+                    }}>
+                    | 도서명 검색하기
+                  </Text>
+                  <Ionicons
+                    active
+                    onPress={bookTitleSearch}
+                    name="search"
+                    size={20}
+                    style={{ marginHorizontal: 10, color: "grey" }}
+                  />
+                </Pressable>
+              </>
+            )}
+            <DropDownPicker
+              items={[
+                { label: "#소설", value: "소설" },
+                { label: "#시/에세이", value: "시/에세이" },
+                { label: "#인문", value: "인문" },
+                { label: "#경제/경영", value: "경제/경영" },
+                { label: "#정치/사회", value: "정치/사회" },
+                { label: "#언어", value: "언어" },
+                { label: "#과학", value: "과학" },
+                { label: "#예술", value: "예술" },
+                { label: "#역사", value: "역사" },
+                { label: "#철학", value: "철학" },
+                { label: "#종교", value: "종교" },
+                { label: "#해외도서", value: "해외도서" },
+                { label: "#어린이", value: "어린이" },
+                { label: "#청소년", value: "청소년" },
+                { label: "#취업/수험서", value: "취업/수험서" },
+                { label: "#기타", value: "기타" },
+              ]}
+              showArrow={false}
+              labelStyle={{ fontFamily: "SansMedium" }}
+              placeholder="해쉬태그"
+              containerStyle={styles.dropBox}
+              onChangeItem={item => {
+                setGenreInfo(item.value)
+              }}
+            />
+            <DropDownPicker
+              items={[
+                { label: "S", value: "S" },
+                { label: "A", value: "A" },
+                { label: "B", value: "B" },
+                { label: "C", value: "C" },
+              ]}
+              showArrow={false}
+              zIndex={4000}
+              labelStyle={{ fontFamily: "SansMedium" }}
+              placeholder="상품상태"
+              containerStyle={styles.dropBox}
+              onChangeItem={item => {
+                setStateInfo(item.value)
+              }}
+            />
+            <View style={styles.addPicsBox}>
+              {imageUri == "" ? (
+                <>
                   <Pressable
-                    key={i}
+                    style={[styles.userPicBox, { marginHorizontal: 20 }]}
                     onPress={() => {
                       navigation.navigate("MultiAddPage", setImageUri)
                     }}>
-                    <Image
-                      source={{ uri: image.uri }}
-                      style={styles.userPicBox}
+                    <Ionicons
+                      name="image-outline"
+                      size={30}
+                      style={{ alignSelf: "center", color: "#4CB73B" }}
                     />
                   </Pressable>
-                )
-              })}
-            </ScrollView>
-          )}
-        </View>
-        <KeyboardAvoidingView>
-          <TextInput
-            multiline
-            style={styles.bookDescBox}
-            onChangeText={setContentInfo}
-            value={contentInfo}
-            placeholder="| 도서내용과 상태를 작성해주세요"
-            placeholderTextColor={"#757575"}
-          />
-        </KeyboardAvoidingView>
-        <Overlay
-          overlayStyle={
-            finderHeight ? styles.overlayBoxWith : styles.overlayBoxWithout
-          }
-          isVisible={finderOpen}
-          onBackdropPress={toggleFinder}>
-          <View
-            style={{
-              borderWidth: 2,
-              borderColor: "#4CB73B",
-              marginBottom: 20,
-            }}>
-            <Item>
-              <TextInput
-                style={styles.bookTitleBox}
-                onChangeText={setText}
-                value={text}
-                placeholder="도서명 입력하기"
+                  <View style={{ justifyContent: "center" }}>
+                    <View>
+                      <Text style={styles.photoGuidanceText}>
+                        상품의 상태가 잘 보이게 찍어주세요
+                      </Text>
+                    </View>
+                  </View>
+                </>
+              ) : (
+                <ScrollView
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={{ paddingHorizontal: 10 }}>
+                  {imageUri.map((image, i) => {
+                    return (
+                      <Pressable
+                        key={i}
+                        onPress={() => {
+                          navigation.navigate("MultiAddPage", setImageUri)
+                        }}>
+                        <Image
+                          source={{ uri: image.uri }}
+                          style={styles.userPicBox}
+                        />
+                      </Pressable>
+                    )
+                  })}
+                </ScrollView>
+              )}
+            </View>
+            <TextInput
+              multiline
+              style={styles.bookDescBox}
+              onChangeText={setContentInfo}
+              value={contentInfo}
+              placeholder="| 도서내용과 상태를 작성해주세요"
+              placeholderTextColor={"#757575"}
+            />
+            <Overlay
+              overlayStyle={
+                finderHeight ? styles.overlayBoxWith : styles.overlayBoxWithout
+              }
+              isVisible={finderOpen}
+              onBackdropPress={toggleFinder}>
+              <View
+                style={{
+                  borderWidth: 2,
+                  borderColor: "#4CB73B",
+                  marginBottom: 20,
+                }}>
+                <Item>
+                  <TextInput
+                    style={styles.bookTitleBox}
+                    onChangeText={setText}
+                    value={text}
+                    placeholder="도서명 입력하기"
+                  />
+                  <View style={styles.bookSearchBtn}>
+                    <Ionicons
+                      active
+                      onPress={bookTitleSearch}
+                      name="search"
+                      size={20}
+                      style={{ alignSelf: "center" }}
+                    />
+                  </View>
+                </Item>
+              </View>
+              <View style={{ height: "90%" }}>
+                {books == "" ? (
+                  <View
+                    style={{ alignItems: "center", justifyContent: "center" }}>
+                    <Image
+                      style={styles.foundImg}
+                      resizeMode="contain"
+                      source={require("../../assets/splash.png")}
+                    />
+                  </View>
+                ) : (
+                  <ScrollView>
+                    {books.map((book, i) => {
+                      return (
+                        <Pressable
+                          key={i}
+                          onPress={() => {
+                            setTitle(book.title)
+                            setAuthor(book.authors.join(" "))
+                            setBookImg(book.thumbnail)
+                            setStory(makePerfectSentence(book.contents))
+                            setPublisher(book.publisher)
+                            setPublishedInfo(book.datetime)
+                            setPriceInfo(book.price)
+                            setFinderOpen(false)
+                            setSwitcher(true)
+                            setWebUrl(book.url)
+                          }}>
+                          <KakaoResultCardComponent book={book} />
+                        </Pressable>
+                      )
+                    })}
+                  </ScrollView>
+                )}
+              </View>
+            </Overlay>
+            {uploader ? (
+              <ActivityIndicator
+                style={{
+                  position: "absolute",
+                  alignSelf: "center",
+                  top: "50%",
+                }}
+                size="large"
+                color="grey"
               />
-              <View style={styles.bookSearchBtn}>
-                <Ionicons
-                  active
-                  onPress={bookTitleSearch}
-                  name="search"
-                  size={20}
-                  style={{ alignSelf: "center" }}
-                />
-              </View>
-            </Item>
-          </View>
-          <View style={{ height: "90%" }}>
-            {books == "" ? (
-              <View style={{ alignItems: "center", justifyContent: "center" }}>
-                <Image
-                  style={styles.foundImg}
-                  resizeMode="contain"
-                  source={require("../../assets/nodata.png")}
-                />
-              </View>
-            ) : (
-              <ScrollView>
-                {books.map((book, i) => {
-                  return (
-                    <Pressable
-                      key={i}
-                      onPress={() => {
-                        setTitle(book.title)
-                        setAuthor(book.authors.join(" "))
-                        setBookImg(book.thumbnail)
-                        setStory(makePerfectSentence(book.contents))
-                        setPublisher(book.publisher)
-                        setPublishedInfo(book.datetime)
-                        setPriceInfo(book.price)
-                        setFinderOpen(false)
-                        setSwitcher(true)
-                        setWebUrl(book.url)
-                      }}>
-                      <KakaoResultCardComponent book={book} />
-                    </Pressable>
-                  )
-                })}
-              </ScrollView>
-            )}
-          </View>
-        </Overlay>
-        {uploader ? (
-          <ActivityIndicator
-            style={{ position: "absolute", alignSelf: "center", top: "50%" }}
-            size="large"
-            color="grey"
-          />
-        ) : null}
+            ) : null}
+          </ScrollView>
+        </KeyboardAvoidingView>
       </View>
     </TouchableWithoutFeedback>
   )
