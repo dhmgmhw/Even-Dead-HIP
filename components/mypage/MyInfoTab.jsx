@@ -55,7 +55,7 @@ export default function MyInfoTab({ navigation }) {
       const { status } =
         await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== 'granted') {
-        alert('게시글을 업로드하려면 사진첩 권한이 필요합니다.');
+        alert('프로필을 수정하려면 사진첩 접근 권한이 필요합니다.');
       }
     }
   };
@@ -266,6 +266,20 @@ export default function MyInfoTab({ navigation }) {
       </View>
       <Pressable style={styles.deal} onPress={goTownChange}>
         <Text style={styles.downcompo}>동네 설정</Text>
+        <Feather
+          style={styles.rarrow}
+          name='chevron-right'
+          size={28}
+          color='black'
+        />
+      </Pressable>
+      <View style={styles.border}></View>
+      <Pressable
+        style={styles.deal}
+        onPress={() => {
+          navigation.push('ChatGifted');
+        }}>
+        <Text style={styles.downcompo}>나의 채팅</Text>
         <Feather
           style={styles.rarrow}
           name='chevron-right'
