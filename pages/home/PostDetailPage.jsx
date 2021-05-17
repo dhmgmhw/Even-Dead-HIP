@@ -12,6 +12,7 @@ import {
   KeyboardAvoidingView,
   ActivityIndicator,
   Share,
+  Platform,
 } from 'react-native';
 import { Image, Tooltip, Overlay } from 'react-native-elements';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
@@ -132,7 +133,8 @@ export default function PostDetailPage({ navigation, route }) {
         blurRadius={3}
         style={styles.imageBackground}
         imageStyle={{ opacity: 0.3 }}>
-        <KeyboardAvoidingView behavior='position'>
+        <KeyboardAvoidingView
+          behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
           <ScrollView showsVerticalScrollIndicator={false}>
             <StatusBar style='light' />
             <View style={styles.statusAvoid}></View>
@@ -360,8 +362,7 @@ export default function PostDetailPage({ navigation, route }) {
               <Text
                 style={styles.hyperLink}
                 onPress={() => hyperLink(detailData.webUrl)}>
-                Daum 책 자세히보기 {'>'}
-                {'>'}
+                Daum 책 자세히보기
               </Text>
               <View style={styles.descMiddleBorder}></View>
               <Text style={styles.subTitle}>가치 나누기</Text>
@@ -394,6 +395,7 @@ export default function PostDetailPage({ navigation, route }) {
               </View>
             </View>
           </ScrollView>
+
           {data.townBook.finish === 1 ? (
             <Pressable
               style={styles.chatBox}
