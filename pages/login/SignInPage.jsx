@@ -36,24 +36,23 @@ export default function SignInPage({ navigation }) {
   const [ready, setReady] = useState(true)
 
   const [visible, setVisible] = useState(false)
-  const [name, setName] = useState()
   const [email, setEmail] = useState()
-  const [emailError, setEmailError] = useState("")
+  const [password, setPassword] = useState()
 
   const [passwordError, setPasswordError] = useState("")
   const toggleOverlay = () => {
     setVisible(!visible)
   }
 
-  const checkEmail = email => {
-    let reg_email =
-      /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/
-    if (!reg_email.test(email)) {
-      return false
-    } else {
-      return true
-    }
-  }
+  // const checkEmail = (email) => {
+  //   let reg_email =
+  //     /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
+  //   if (!reg_email.test(email)) {
+  //     return false;
+  //   } else {
+  //     return true;
+  //   }
+  // };
 
   useEffect(() => {
     navigation.addListener("beforeRemove", e => {
@@ -100,13 +99,14 @@ export default function SignInPage({ navigation }) {
   _onAuthGoogle = async () => {
     const { type, accessToken, user } = await Google.logInAsync({
       androidClientId:
-        "161728779966-0ri5g755relh4d6fj45eq77gb5qhcs07.apps.googleusercontent.com",
-
+        "446184458188-320sh9t5aja02fkp6mnc980q1hvr4o3t.apps.googleusercontent.com",
+      expoClientId:
+        "747037265612-5o4lk93m2n098dhirk4gshnqlugi86nv.apps.googleusercontent.com",
       iosStandaloneAppClientId:
         "161728779966-berb0fukqq2aidubgq4v5o04h56b9hvr.apps.googleusercontent.com",
 
       androidStandaloneAppClientId:
-        "161728779966-k806srg4093uev2ltrcc0kf1qvcu87qi.apps.googleusercontent.com",
+        "446184458188-320sh9t5aja02fkp6mnc980q1hvr4o3t.apps.googleusercontent.com",
       iosClientId:
         "161728779966-berb0fukqq2aidubgq4v5o04h56b9hvr.apps.googleusercontent.com",
 
@@ -129,33 +129,49 @@ export default function SignInPage({ navigation }) {
     } else {
       console.log("cancel")
     }
-    await login(user.name, user.email, user.photoUrl, navigation)
-    await AsyncStorage.setItem("accessToken", accessToken)
-    // console.log(accessToken)
-    navigation.push("SignPlusPage")
+    // await login(user.name, user.email, user.photoUrl, navigation);
+    Alert.alert(user.name, user.email)
+    // await AsyncStorage.setItem('accessToken', accessToken);
+    // console.log(accessToken);
+    // navigation.push('SignPlusPage');
   }
 
+  // const loglog = async () => {
+  //   if (name == '') {
+  //     Alert.alert('이름을 입력해주세요');
+  //     return;
+  //   }
+  //   if (email == '') {
+  //     Alert.alert('이메일을 입력해주세요');
+  //     return;
+  //   }
+  //   if (checkEmail(email) === false) {
+  //     Alert.alert('이메일을 올바르게 입력해주세요');
+  //     return;
+  //   }
+  //   await login(
+  //     name,
+  //     email,
+  //     'https://sanggubk2.s3.ap-northeast-2.amazonaws.com/1cc47651-6e3b-481d-ba0e-cc2604efce9e.jpg',
+  //     navigation
+  //   );
+  //   setName('');
+  //   setEmail('');
+  //   setVisible(false);
+  // };
+
   const loglog = async () => {
-    if (name == "") {
-      Alert.alert("이름을 입력해주세요")
-      return
-    }
     if (email == "") {
       Alert.alert("이메일을 입력해주세요")
       return
     }
-    if (checkEmail(email) === false) {
-      Alert.alert("이메일을 올바르게 입력해주세요")
+    if (password == "") {
+      Alert.alert("비밀번호를 입력해주세요")
       return
     }
-    await login(
-      name,
-      email,
-      "https://sanggubk2.s3.ap-northeast-2.amazonaws.com/1cc47651-6e3b-481d-ba0e-cc2604efce9e.jpg",
-      navigation
-    )
-    setName("")
+    await login(email, password, navigation)
     setEmail("")
+    setPassword("")
     setVisible(false)
   }
 
@@ -224,7 +240,8 @@ export default function SignInPage({ navigation }) {
         <FontAwesome name="google" size={17} color="#ffffff" />
         <Text style={styles.text}>구글로 시작하기</Text>
       </TouchableOpacity> */}
-        {/* <TouchableOpacity
+
+        {/* {<TouchableOpacity
         onPress={toggleOverlay}
         style={[styles.button, { backgroundColor: "green" }]}>
         <FontAwesome
@@ -266,9 +283,9 @@ export default function SignInPage({ navigation }) {
                   paddingHorizontal: 20,
                   borderRadius: 5,
                 }}
-                onChangeText={setName}
-                value={name}
-                placeholder="이름"
+                onChangeText={setEmail}
+                value={email}
+                placeholder="email"
                 placeholderTextColor={"grey"}
               />
               <TextInput
@@ -282,6 +299,21 @@ export default function SignInPage({ navigation }) {
                   marginTop: 10,
                   marginBottom: 10,
                 }}
+                onChangeText={setPassword}
+                value={password}
+                type={"password"}
+                placeholder="비밀번호"
+                placeholderTextColor={"grey"}
+              />
+              <Text
+                // style={[
+                //   styles.text,
+                //   {
+                //     fontFamily: 'SansRegular',
+                //     fontSize: 12,
+                //     color: 'black',
+                //     marginBottom: 10,
+                //   }}
                 onChangeText={setEmail}
                 value={email}
                 placeholder="이메일"

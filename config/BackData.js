@@ -4,29 +4,50 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 
 const host = "http://3.34.178.136"
 
-export async function login(username, email, image, navigation) {
+// export async function login(username, email, image, navigation) {
+//   try {
+//     const result = await axios({
+//       method: "post",
+//       url: host + "/api/login",
+//       data: {
+//         username: username,
+//         email: email,
+//         image: image,
+//       },
+//     })
+//     if (result.data.ok == true) {
+//       await AsyncStorage.setItem("session", result.data.results)
+//       await AsyncStorage.setItem("email", email)
+//       navigation.push("SignPlusPage")
+//     } else if (result.data.ok == false) {
+//       Alert.alert(result.data.msg)
+//     }
+//   } catch (err) {
+//     console.log(err)
+//     Alert.alert("로그인 할 수 없습니다.")
+//   }
+// }
+
+export async function login(email, password, navigation) {
   try {
     const result = await axios({
       method: "post",
       url: host + "/api/login",
       data: {
-        username: username,
         email: email,
-        image: image,
+        password: password,
       },
     })
-    if (result.data.ok == true) {
-      await AsyncStorage.setItem("session", result.data.results)
-      await AsyncStorage.setItem("email", email)
-      navigation.push("SignPlusPage")
-    } else if (result.data.ok == false) {
-      Alert.alert(result.data.msg)
-    }
+    console.log(result.data)
+    await AsyncStorage.setItem("session", result.data.token)
+    await AsyncStorage.setItem("email", result.data.email)
+    navigation.push("SignPlusPage")
   } catch (err) {
     console.log(err)
     Alert.alert("로그인 할 수 없습니다.")
   }
 }
+
 
 export async function signdetail(town) {
   try {
