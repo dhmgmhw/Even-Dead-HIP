@@ -22,12 +22,12 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": false,
+      "supportsTablet": true,
       "bundleIdentifier": "com.ybmb.evendeadhip",
       "buildNumber": "1.0.0",
       "config": {
         "googleSignIn": {
-          "AppAuth.OAuthRedirect": "161728779966-berb0fukqq2aidubgq4v5o04h56b9hvr.apps.googleusercontent.com"
+          "reservedClientId": "161728779966-berb0fukqq2aidubgq4v5o04h56b9hvr.apps.googleusercontent.com"
           
         }
       }

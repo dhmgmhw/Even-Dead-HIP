@@ -48,7 +48,6 @@ export async function login(email, password, navigation) {
   }
 }
 
-
 export async function signdetail(town) {
   try {
     const token = await AsyncStorage.getItem("session")
@@ -119,5 +118,37 @@ export async function signOut(navigation) {
   } catch (err) {
     Alert.alert("로그아웃 오류가 발생했습니다")
     console.log(err)
+  }
+}
+
+export async function register(
+  username,
+  password,
+  email,
+  image,
+  town,
+  comment,
+  navigation
+) {
+  try {
+    const result = await axios({
+      method: "post",
+      url: host + "/api/Signup",
+      data: {
+        username: username,
+        password: password,
+        email: email,
+        image: image,
+        town: town,
+        comment: comment,
+      },
+    })
+    console.log(result.data)
+    await AsyncStorage.setItem("session", result.data.token)
+    await AsyncStorage.setItem("email", result.data.email)
+    navigation.push("SignInPage")
+  } catch (err) {
+    console.log(err)
+    Alert.alert("회원가입 할 수 없습니다.")
   }
 }

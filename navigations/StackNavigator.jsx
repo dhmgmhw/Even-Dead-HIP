@@ -3,7 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack"
 
 import TabNavigator from "./TabNavigator"
 import SignInPage from "../pages/login/SignInPage"
-import SignPlusPage from "../pages/login/SignPlusPage"
+import SignUpPage from "../pages/login/SignUpPage"
 import PostDetailPage from "../pages/home/PostDetailPage"
 import PostFixPage from "../pages/home/PostFixPage"
 import ChatPage from "../pages/chat/ChatPage"
@@ -29,7 +29,7 @@ const StackNavigator = () => {
         component={SignInPage}
         options={{ gestureEnabled: false }}
       />
-      <Stack.Screen name="SignPlusPage" component={SignPlusPage} />
+      <Stack.Screen name="SignUpPage" component={SignUpPage} />
       <Stack.Screen
         name="TabNavigator"
         component={TabNavigator}

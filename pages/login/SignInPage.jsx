@@ -9,14 +9,13 @@ import {
   Dimensions,
   TextInput,
   Alert,
-  Container,
-  Content,
   Button,
 } from "react-native"
 import { Overlay } from "react-native-elements"
-import { Form } from "native-base"
 
 import ItemInput from "../../components/Login/ItemInput"
+
+import { Form } from "native-base"
 
 import * as Google from "expo-google-app-auth"
 import { FontAwesome } from "@expo/vector-icons"
@@ -39,20 +38,8 @@ export default function SignInPage({ navigation }) {
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
 
+  const [emailError, setEmailError] = useState("")
   const [passwordError, setPasswordError] = useState("")
-  const toggleOverlay = () => {
-    setVisible(!visible)
-  }
-
-  // const checkEmail = (email) => {
-  //   let reg_email =
-  //     /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
-  //   if (!reg_email.test(email)) {
-  //     return false;
-  //   } else {
-  //     return true;
-  //   }
-  // };
 
   useEffect(() => {
     navigation.addListener("beforeRemove", e => {
@@ -68,33 +55,7 @@ export default function SignInPage({ navigation }) {
         }
       })
     })
-    // ready()
   }, [])
-
-  const setidFunc = itemInputid => {
-    setusername(itemInputid)
-  }
-  const setPasswordFunc = itemInputPassword => {
-    setPassword(itemInputPassword)
-  }
-
-  const doSignIn = () => {
-    if (username == "") {
-      setEmailError("이메일을 입력해주세요")
-    } else {
-      setEmailError("")
-    }
-
-    if (password == "") {
-      setPasswordError("비밀번호를 입력해주세요")
-    } else {
-      setPasswordError("")
-    }
-  }
-
-  const goSignUp = () => {
-    // navigation.navigate("SignUpPage")
-  }
 
   _onAuthGoogle = async () => {
     const { type, accessToken, user } = await Google.logInAsync({
@@ -104,28 +65,25 @@ export default function SignInPage({ navigation }) {
         "747037265612-5o4lk93m2n098dhirk4gshnqlugi86nv.apps.googleusercontent.com",
       iosStandaloneAppClientId:
         "161728779966-berb0fukqq2aidubgq4v5o04h56b9hvr.apps.googleusercontent.com",
-
       androidStandaloneAppClientId:
         "446184458188-320sh9t5aja02fkp6mnc980q1hvr4o3t.apps.googleusercontent.com",
       iosClientId:
         "161728779966-berb0fukqq2aidubgq4v5o04h56b9hvr.apps.googleusercontent.com",
-
+      expoClientId:
+        "161728779966-7ddu3obi2cnrplbtgtoqvc7pi6f7oage.apps.googleusercontent.com",
       scopes: ["profile", "email"],
+      behavior: "web",
+      redirectUrl: `${AppAuth.OAuthRedirect}:/oauth2redirect/google`,
     })
-    console.log(user)
-
     if (type === "success") {
-      let userInfoResponse = await fetch(
+      const response = await fetch(
         "https://www.googleapis.com/userinfo/v2/me",
         {
           headers: { Authorization: `Bearer ${accessToken}` },
         }
       )
-      // console.log('token in accessible', accessToken);
-      // const json_rep = await response.json()
-      // navigation.push('SignPlusPage');
-      console.log(userInfoResponse)
-      // setJsonObject(json_rep)
+      const json_rep = await response.json()
+      setJsonObject(json_rep)
     } else {
       console.log("cancel")
     }
@@ -136,218 +94,88 @@ export default function SignInPage({ navigation }) {
     // navigation.push('SignPlusPage');
   }
 
-  // const loglog = async () => {
-  //   if (name == '') {
-  //     Alert.alert('이름을 입력해주세요');
-  //     return;
-  //   }
-  //   if (email == '') {
-  //     Alert.alert('이메일을 입력해주세요');
-  //     return;
-  //   }
-  //   if (checkEmail(email) === false) {
-  //     Alert.alert('이메일을 올바르게 입력해주세요');
-  //     return;
-  //   }
-  //   await login(
-  //     name,
-  //     email,
-  //     'https://sanggubk2.s3.ap-northeast-2.amazonaws.com/1cc47651-6e3b-481d-ba0e-cc2604efce9e.jpg',
-  //     navigation
-  //   );
-  //   setName('');
-  //   setEmail('');
-  //   setVisible(false);
-  // };
-
-  const loglog = async () => {
+  const doSignIn = () => {
     if (email == "") {
-      Alert.alert("이메일을 입력해주세요")
-      return
+      setEmailError("이메일을 입력해주세요")
+    } else {
+      setEmailError("")
     }
+
     if (password == "") {
-      Alert.alert("비밀번호를 입력해주세요")
-      return
+      setPasswordError("비밀번호를 입력해주세요")
+    } else {
+      setPasswordError("")
     }
-    await login(email, password, navigation)
-    setEmail("")
-    setPassword("")
-    setVisible(false)
+    login(email, password, navigation)
+  }
+  const setidFunc = itemInputid => {
+    setusername(itemInputid)
+  }
+  const setPasswordFunc = itemInputPassword => {
+    setPassword(itemInputPassword)
+  }
+
+  const goSignUp = () => {
+    navigation.navigate("SignUpPage")
   }
 
   return ready ? (
     <ActivityIndicator
-      style={{ position: "absolute", alignSelf: "center", top: "50%" }}
+      style={{ position: "absolute", alignSelf: "center", top: "10%" }}
       size="large"
       color="grey"
     />
   ) : (
-    <Container style={styles.container}>
-      <Content contentContainerStyle={styles.content} scrollEnabled={false}>
-        <Text style={styles.title}></Text>
+    <ScrollView scrollEnabled={false} contentContainerStyle={styles.container}>
+      <StatusBar style="auto" />
+      <Image
+        style={{ height: 50, width: 80, margin: 30, marginTop: 100 }}
+        resizeMode="contain"
+        source={require("../../assets/mainlogo.png")}
+      />
+      <Text style={[styles.loginText, { marginBottom: 50 }]}>
+        같이하는 가치나눔
+      </Text>
+      <View style={styles.loginbox}>
         <Form style={styles.form}>
           <ItemInput
-            title={"아이디"}
+            style={styles.idform}
+            title={"아이디를 입력해주세요"}
             type={"username"}
             setFunc={setidFunc}
             error={emailError}
           />
           <ItemInput
-            title={"비밀번호"}
+            style={styles.pwform}
+            title={"비밀번호를 입력해주세요"}
             type={"password"}
             setFunc={setPasswordFunc}
             error={passwordError}
           />
         </Form>
-
-        <Button full style={styles.emailSignIn} onPress={doSignIn}>
-          <Text style={{ color: "#333", fontsize: 8 }}>ID 로그인</Text>
-        </Button>
-        <Button full style={styles.emailSignUp} onPress={goSignUp}>
-          <Text style={{ color: "#333", fontsize: 8 }}>회원가입</Text>
-        </Button>
-      </Content>
-      <ScrollView
-        scrollEnabled={false}
-        contentContainerStyle={styles.container}>
-        <StatusBar style="auto" />
-        <Image
-          style={{ height: 50, width: 80, margin: 30, marginTop: 100 }}
-          resizeMode="contain"
-          source={require("../../assets/mainlogo.png")}
-        />
-        <Text style={[styles.loginText, { marginBottom: 200 }]}>
-          같이하는 가치나눔
+      </View>
+      <TouchableOpacity full style={styles.emailSignIn} onPress={doSignIn}>
+        <Text style={{ color: "#FFFFFF", fontsize: 8, alignSelf: "center" }}>
+          로그인
         </Text>
-
-        {/* <View
+      </TouchableOpacity>
+      <View
         style={{
-          width: 300,
           flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: 50,
         }}>
-        <View
-          style={{ height: 2, width: 50, backgroundColor: "#4CB73B" }}></View>
-        <Text style={styles.loginText}>간편한 로그인</Text>
-        <View
-          style={{ height: 2, width: 50, backgroundColor: "#4CB73B" }}></View>
-      </View> */}
-        {/* <TouchableOpacity
-        onPress={_onAuthGoogle}
-        style={[styles.button, { backgroundColor: "#4285F4" }]}>
-        <FontAwesome name="google" size={17} color="#ffffff" />
-        <Text style={styles.text}>구글로 시작하기</Text>
-      </TouchableOpacity> */}
-
-        {/* {<TouchableOpacity
-        onPress={toggleOverlay}
-        style={[styles.button, { backgroundColor: "green" }]}>
-        <FontAwesome
-          name="envelope-open-o"
-          size={17}
-          color="#ffffff"
-          style={{ alignSelf: "center" }}
-        />
-        <Text style={styles.text}>이메일로 시작하기</Text>
-      </TouchableOpacity> */}
-        <View>
-          <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
-            <View
-              style={{
-                width: diviceWidth * 0.8,
-                height: diviceHeight / 2,
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-              }}>
-              <Image
-                style={{ height: 50, width: 80, marginBottom: 30 }}
-                resizeMode="contain"
-                source={require("../../assets/mainlogo.png")}
-              />
-              <Text
-                style={[
-                  styles.text,
-                  { color: "black", fontSize: 18, marginBottom: 30 },
-                ]}>
-                이메일로 시작하기
-              </Text>
-              <TextInput
-                style={{
-                  borderWidth: 1,
-                  borderColor: "grey",
-                  width: "70%",
-                  height: 30,
-                  paddingHorizontal: 20,
-                  borderRadius: 5,
-                }}
-                onChangeText={setEmail}
-                value={email}
-                placeholder="email"
-                placeholderTextColor={"grey"}
-              />
-              <TextInput
-                style={{
-                  borderWidth: 1,
-                  borderColor: "grey",
-                  width: "70%",
-                  height: 30,
-                  paddingHorizontal: 20,
-                  borderRadius: 5,
-                  marginTop: 10,
-                  marginBottom: 10,
-                }}
-                onChangeText={setPassword}
-                value={password}
-                type={"password"}
-                placeholder="비밀번호"
-                placeholderTextColor={"grey"}
-              />
-              <Text
-                // style={[
-                //   styles.text,
-                //   {
-                //     fontFamily: 'SansRegular',
-                //     fontSize: 12,
-                //     color: 'black',
-                //     marginBottom: 10,
-                //   }}
-                onChangeText={setEmail}
-                value={email}
-                placeholder="이메일"
-                placeholderTextColor={"grey"}
-              />
-              <Text
-                style={[
-                  styles.text,
-                  {
-                    fontFamily: "SansRegular",
-                    fontSize: 12,
-                    color: "black",
-                    marginBottom: 10,
-                  },
-                ]}>
-                이메일을 정확히 입력해주세요!
-              </Text>
-
-              <TouchableOpacity
-                onPress={loglog}
-                style={[styles.button, { backgroundColor: "green" }]}>
-                <FontAwesome
-                  name="send"
-                  size={17}
-                  color="#ffffff"
-                  style={{ alignSelf: "center" }}
-                />
-                <Text style={styles.text}>이메일로 시작하기</Text>
-              </TouchableOpacity>
-            </View>
-          </Overlay>
-        </View>
-      </ScrollView>
-    </Container>
+        <TouchableOpacity full style={styles.e}>
+          <Text style={{ color: "#333", fontsize: 8 }}>ID찾기 |</Text>
+        </TouchableOpacity>
+        <TouchableOpacity full style={styles.e}>
+          <Text style={{ color: "#333", fontsize: 8 }}> 비밀번호 찾기</Text>
+        </TouchableOpacity>
+      </View>
+      <TouchableOpacity full style={styles.emailSignUp} onPress={goSignUp}>
+        <Text style={{ color: "#4CB73B", fontsize: 8, alignSelf: "center" }}>
+          회원가입
+        </Text>
+      </TouchableOpacity>
+    </ScrollView>
   )
 }
 
@@ -393,14 +221,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 25,
   },
-  image: {
-    marginTop: 15,
-    width: 150,
-    height: 150,
-    borderColor: "rgba(0,0,0,0.2)",
-    borderWidth: 3,
-    borderRadius: 150,
-  },
+
   button: {
     width: 300,
     height: 50,
@@ -425,5 +246,45 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 20,
     flexDirection: "row",
+  },
+  form: {
+    width: 250,
+    borderRadius: 10,
+    paddingBottom: 20,
+    paddingRight: 20,
+    paddingLeft: 20,
+    marginTop: 10,
+  },
+  idform: {
+    backgroundColor: "#EEF5ED",
+  },
+  pwform: {
+    backgroundColor: "#EEF5ED",
+  },
+
+  emailSignIn: {
+    alignSelf: "center",
+    width: 250,
+    height: 30,
+
+    marginTop: 5,
+    marginBottom: 5,
+
+    borderRadius: 1,
+    backgroundColor: "#4CB73B",
+  },
+  emailSignUp: {
+    alignSelf: "center",
+    width: 250,
+    height: 30,
+    marginTop: 15,
+    borderRadius: 2,
+    borderColor: "#4CB73B",
+    borderWidth: 1,
+
+    // backgroundColor: "#E5E5E5",
+  },
+  loginbox: {
+    // marginBottom: 250,
   },
 })
