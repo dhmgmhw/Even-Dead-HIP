@@ -98,7 +98,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#EEF5ED',
+    borderBottomWidth: 3,
+    borderColor: '#e5e5e5',
+    backgroundColor: 'white',
   },
   descBox: {
     marginLeft: 20,
