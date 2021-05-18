@@ -9,8 +9,14 @@ import {
   Dimensions,
   TextInput,
   Alert,
+  Container,
+  Content,
+  Button,
 } from "react-native"
 import { Overlay } from "react-native-elements"
+import { Form } from "native-base"
+
+import ItemInput from "../../components/Login/ItemInput"
 
 import * as Google from "expo-google-app-auth"
 import { FontAwesome } from "@expo/vector-icons"
@@ -32,7 +38,9 @@ export default function SignInPage({ navigation }) {
   const [visible, setVisible] = useState(false)
   const [name, setName] = useState()
   const [email, setEmail] = useState()
+  const [emailError, setEmailError] = useState("")
 
+  const [passwordError, setPasswordError] = useState("")
   const toggleOverlay = () => {
     setVisible(!visible)
   }
@@ -63,6 +71,31 @@ export default function SignInPage({ navigation }) {
     })
     // ready()
   }, [])
+
+  const setidFunc = itemInputid => {
+    setusername(itemInputid)
+  }
+  const setPasswordFunc = itemInputPassword => {
+    setPassword(itemInputPassword)
+  }
+
+  const doSignIn = () => {
+    if (username == "") {
+      setEmailError("이메일을 입력해주세요")
+    } else {
+      setEmailError("")
+    }
+
+    if (password == "") {
+      setPasswordError("비밀번호를 입력해주세요")
+    } else {
+      setPasswordError("")
+    }
+  }
+
+  const goSignUp = () => {
+    // navigation.navigate("SignUpPage")
+  }
 
   _onAuthGoogle = async () => {
     const { type, accessToken, user } = await Google.logInAsync({
@@ -98,7 +131,7 @@ export default function SignInPage({ navigation }) {
     }
     await login(user.name, user.email, user.photoUrl, navigation)
     await AsyncStorage.setItem("accessToken", accessToken)
-    console.log(accessToken)
+    // console.log(accessToken)
     navigation.push("SignPlusPage")
   }
 
@@ -133,17 +166,45 @@ export default function SignInPage({ navigation }) {
       color="grey"
     />
   ) : (
-    <ScrollView scrollEnabled={false} contentContainerStyle={styles.container}>
-      <StatusBar style="auto" />
-      <Image
-        style={{ height: 50, width: 80, margin: 30, marginTop: 100 }}
-        resizeMode="contain"
-        source={require("../../assets/mainlogo.png")}
-      />
-      <Text style={[styles.loginText, { marginBottom: 200 }]}>
-        같이하는 가치나눔
-      </Text>
-      <View
+    <Container style={styles.container}>
+      <Content contentContainerStyle={styles.content} scrollEnabled={false}>
+        <Text style={styles.title}></Text>
+        <Form style={styles.form}>
+          <ItemInput
+            title={"아이디"}
+            type={"username"}
+            setFunc={setidFunc}
+            error={emailError}
+          />
+          <ItemInput
+            title={"비밀번호"}
+            type={"password"}
+            setFunc={setPasswordFunc}
+            error={passwordError}
+          />
+        </Form>
+
+        <Button full style={styles.emailSignIn} onPress={doSignIn}>
+          <Text style={{ color: "#333", fontsize: 8 }}>ID 로그인</Text>
+        </Button>
+        <Button full style={styles.emailSignUp} onPress={goSignUp}>
+          <Text style={{ color: "#333", fontsize: 8 }}>회원가입</Text>
+        </Button>
+      </Content>
+      <ScrollView
+        scrollEnabled={false}
+        contentContainerStyle={styles.container}>
+        <StatusBar style="auto" />
+        <Image
+          style={{ height: 50, width: 80, margin: 30, marginTop: 100 }}
+          resizeMode="contain"
+          source={require("../../assets/mainlogo.png")}
+        />
+        <Text style={[styles.loginText, { marginBottom: 200 }]}>
+          같이하는 가치나눔
+        </Text>
+
+        {/* <View
         style={{
           width: 300,
           flexDirection: "row",
@@ -156,14 +217,14 @@ export default function SignInPage({ navigation }) {
         <Text style={styles.loginText}>간편한 로그인</Text>
         <View
           style={{ height: 2, width: 50, backgroundColor: "#4CB73B" }}></View>
-      </View>
-      {/* <TouchableOpacity
+      </View> */}
+        {/* <TouchableOpacity
         onPress={_onAuthGoogle}
         style={[styles.button, { backgroundColor: "#4285F4" }]}>
         <FontAwesome name="google" size={17} color="#ffffff" />
         <Text style={styles.text}>구글로 시작하기</Text>
       </TouchableOpacity> */}
-      <TouchableOpacity
+        {/* <TouchableOpacity
         onPress={toggleOverlay}
         style={[styles.button, { backgroundColor: "green" }]}>
         <FontAwesome
@@ -173,87 +234,88 @@ export default function SignInPage({ navigation }) {
           style={{ alignSelf: "center" }}
         />
         <Text style={styles.text}>이메일로 시작하기</Text>
-      </TouchableOpacity>
-      <View>
-        <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
-          <View
-            style={{
-              width: diviceWidth * 0.8,
-              height: diviceHeight / 2,
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}>
-            <Image
-              style={{ height: 50, width: 80, marginBottom: 30 }}
-              resizeMode="contain"
-              source={require("../../assets/mainlogo.png")}
-            />
-            <Text
-              style={[
-                styles.text,
-                { color: "black", fontSize: 18, marginBottom: 30 },
-              ]}>
-              이메일로 시작하기
-            </Text>
-            <TextInput
+      </TouchableOpacity> */}
+        <View>
+          <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
+            <View
               style={{
-                borderWidth: 1,
-                borderColor: "grey",
-                width: "70%",
-                height: 30,
-                paddingHorizontal: 20,
-                borderRadius: 5,
-              }}
-              onChangeText={setName}
-              value={name}
-              placeholder="이름"
-              placeholderTextColor={"grey"}
-            />
-            <TextInput
-              style={{
-                borderWidth: 1,
-                borderColor: "grey",
-                width: "70%",
-                height: 30,
-                paddingHorizontal: 20,
-                borderRadius: 5,
-                marginTop: 10,
-                marginBottom: 10,
-              }}
-              onChangeText={setEmail}
-              value={email}
-              placeholder="이메일"
-              placeholderTextColor={"grey"}
-            />
-            <Text
-              style={[
-                styles.text,
-                {
-                  fontFamily: "SansRegular",
-                  fontSize: 12,
-                  color: "black",
-                  marginBottom: 10,
-                },
-              ]}>
-              이메일을 정확히 입력해주세요!
-            </Text>
-
-            <TouchableOpacity
-              onPress={loglog}
-              style={[styles.button, { backgroundColor: "green" }]}>
-              <FontAwesome
-                name="send"
-                size={17}
-                color="#ffffff"
-                style={{ alignSelf: "center" }}
+                width: diviceWidth * 0.8,
+                height: diviceHeight / 2,
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}>
+              <Image
+                style={{ height: 50, width: 80, marginBottom: 30 }}
+                resizeMode="contain"
+                source={require("../../assets/mainlogo.png")}
               />
-              <Text style={styles.text}>이메일로 시작하기</Text>
-            </TouchableOpacity>
-          </View>
-        </Overlay>
-      </View>
-    </ScrollView>
+              <Text
+                style={[
+                  styles.text,
+                  { color: "black", fontSize: 18, marginBottom: 30 },
+                ]}>
+                이메일로 시작하기
+              </Text>
+              <TextInput
+                style={{
+                  borderWidth: 1,
+                  borderColor: "grey",
+                  width: "70%",
+                  height: 30,
+                  paddingHorizontal: 20,
+                  borderRadius: 5,
+                }}
+                onChangeText={setName}
+                value={name}
+                placeholder="이름"
+                placeholderTextColor={"grey"}
+              />
+              <TextInput
+                style={{
+                  borderWidth: 1,
+                  borderColor: "grey",
+                  width: "70%",
+                  height: 30,
+                  paddingHorizontal: 20,
+                  borderRadius: 5,
+                  marginTop: 10,
+                  marginBottom: 10,
+                }}
+                onChangeText={setEmail}
+                value={email}
+                placeholder="이메일"
+                placeholderTextColor={"grey"}
+              />
+              <Text
+                style={[
+                  styles.text,
+                  {
+                    fontFamily: "SansRegular",
+                    fontSize: 12,
+                    color: "black",
+                    marginBottom: 10,
+                  },
+                ]}>
+                이메일을 정확히 입력해주세요!
+              </Text>
+
+              <TouchableOpacity
+                onPress={loglog}
+                style={[styles.button, { backgroundColor: "green" }]}>
+                <FontAwesome
+                  name="send"
+                  size={17}
+                  color="#ffffff"
+                  style={{ alignSelf: "center" }}
+                />
+                <Text style={styles.text}>이메일로 시작하기</Text>
+              </TouchableOpacity>
+            </View>
+          </Overlay>
+        </View>
+      </ScrollView>
+    </Container>
   )
 }
 

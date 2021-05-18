@@ -59,6 +59,7 @@
     "react-native-web": "~0.13.12",
     "react-stomp": "^5.1.0",
     "sockjs-client": "^1.5.1",
+    "text-encoding": "^0.7.0",
     "websocket": "^1.0.34"
   },
   "devDependencies": {
