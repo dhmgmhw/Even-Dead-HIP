@@ -6,8 +6,12 @@ import {
   TouchableOpacity,
   View,
   ActivityIndicator,
+  Dimensions,
+  TextInput,
+  Alert,
 } from "react-native"
-import * as Facebook from "expo-facebook"
+import { Overlay } from "react-native-elements"
+
 import * as Google from "expo-google-app-auth"
 import { FontAwesome } from "@expo/vector-icons"
 import AsyncStorage from "@react-native-async-storage/async-storage"
@@ -17,11 +21,31 @@ import { login } from "../../config/BackData"
 import { StatusBar } from "expo-status-bar"
 import { ScrollView } from "react-native-gesture-handler"
 
+const diviceWidth = Dimensions.get("window").width
+const diviceHeight = Dimensions.get("window").height
+
 const logo = require("../../assets/mainlogo.png")
 
 export default function SignInPage({ navigation }) {
-  const [jsonObject, setJsonObject] = useState({})
   const [ready, setReady] = useState(true)
+
+  const [visible, setVisible] = useState(false)
+  const [name, setName] = useState()
+  const [email, setEmail] = useState()
+
+  const toggleOverlay = () => {
+    setVisible(!visible)
+  }
+
+  const checkEmail = email => {
+    let reg_email =
+      /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/
+    if (!reg_email.test(email)) {
+      return false
+    } else {
+      return true
+    }
+  }
 
   useEffect(() => {
     navigation.addListener("beforeRemove", e => {
@@ -79,16 +103,28 @@ export default function SignInPage({ navigation }) {
   }
 
   const loglog = async () => {
+    if (name == "") {
+      Alert.alert("이름을 입력해주세요")
+      return
+    }
+    if (email == "") {
+      Alert.alert("이메일을 입력해주세요")
+      return
+    }
+    if (checkEmail(email) === false) {
+      Alert.alert("이메일을 올바르게 입력해주세요")
+      return
+    }
     await login(
-      "문형원",
-      "dhmgmhw@naver.com",
+      name,
+      email,
       "https://sanggubk2.s3.ap-northeast-2.amazonaws.com/1cc47651-6e3b-481d-ba0e-cc2604efce9e.jpg",
       navigation
     )
+    setName("")
+    setEmail("")
+    setVisible(false)
   }
-
-  // 천재승
-  // chunzasang@gmail.com
 
   return ready ? (
     <ActivityIndicator
@@ -98,6 +134,7 @@ export default function SignInPage({ navigation }) {
     />
   ) : (
     <ScrollView scrollEnabled={false} contentContainerStyle={styles.container}>
+      <StatusBar style="auto" />
       <Image
         style={{ height: 50, width: 80, margin: 30, marginTop: 100 }}
         resizeMode="contain"
@@ -106,7 +143,6 @@ export default function SignInPage({ navigation }) {
       <Text style={[styles.loginText, { marginBottom: 200 }]}>
         같이하는 가치나눔
       </Text>
-      <StatusBar style="auto" />
       <View
         style={{
           width: 300,
@@ -117,29 +153,106 @@ export default function SignInPage({ navigation }) {
         }}>
         <View
           style={{ height: 2, width: 50, backgroundColor: "#4CB73B" }}></View>
-        <Text style={styles.loginText}>간편한 SNS 회원가입</Text>
+        <Text style={styles.loginText}>간편한 로그인</Text>
         <View
           style={{ height: 2, width: 50, backgroundColor: "#4CB73B" }}></View>
       </View>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={_onAuthGoogle}
         style={[styles.button, { backgroundColor: "#4285F4" }]}>
         <FontAwesome name="google" size={17} color="#ffffff" />
         <Text style={styles.text}>구글로 시작하기</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <TouchableOpacity
-        onPress={loglog}
-        style={[styles.button, { backgroundColor: "#3b5998" }]}>
+        onPress={toggleOverlay}
+        style={[styles.button, { backgroundColor: "green" }]}>
         <FontAwesome
-          name="male"
+          name="envelope-open-o"
           size={17}
-          ㅠ
           color="#ffffff"
           style={{ alignSelf: "center" }}
         />
-        <Text style={styles.text}>임다희로 시작하기</Text>
-        {/* <Text style={styles.text}>천재승으로 시작하기</Text> */}
+        <Text style={styles.text}>이메일로 시작하기</Text>
       </TouchableOpacity>
+      <View>
+        <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
+          <View
+            style={{
+              width: diviceWidth * 0.8,
+              height: diviceHeight / 2,
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}>
+            <Image
+              style={{ height: 50, width: 80, marginBottom: 30 }}
+              resizeMode="contain"
+              source={require("../../assets/mainlogo.png")}
+            />
+            <Text
+              style={[
+                styles.text,
+                { color: "black", fontSize: 18, marginBottom: 30 },
+              ]}>
+              이메일로 시작하기
+            </Text>
+            <TextInput
+              style={{
+                borderWidth: 1,
+                borderColor: "grey",
+                width: "70%",
+                height: 30,
+                paddingHorizontal: 20,
+                borderRadius: 5,
+              }}
+              onChangeText={setName}
+              value={name}
+              placeholder="이름"
+              placeholderTextColor={"grey"}
+            />
+            <TextInput
+              style={{
+                borderWidth: 1,
+                borderColor: "grey",
+                width: "70%",
+                height: 30,
+                paddingHorizontal: 20,
+                borderRadius: 5,
+                marginTop: 10,
+                marginBottom: 10,
+              }}
+              onChangeText={setEmail}
+              value={email}
+              placeholder="이메일"
+              placeholderTextColor={"grey"}
+            />
+            <Text
+              style={[
+                styles.text,
+                {
+                  fontFamily: "SansRegular",
+                  fontSize: 12,
+                  color: "black",
+                  marginBottom: 10,
+                },
+              ]}>
+              이메일을 정확히 입력해주세요!
+            </Text>
+
+            <TouchableOpacity
+              onPress={loglog}
+              style={[styles.button, { backgroundColor: "green" }]}>
+              <FontAwesome
+                name="send"
+                size={17}
+                color="#ffffff"
+                style={{ alignSelf: "center" }}
+              />
+              <Text style={styles.text}>이메일로 시작하기</Text>
+            </TouchableOpacity>
+          </View>
+        </Overlay>
+      </View>
     </ScrollView>
   )
 }

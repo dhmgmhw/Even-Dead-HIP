@@ -12,6 +12,7 @@ import {
   TouchableWithoutFeedback,
   Alert,
   KeyboardAvoidingView,
+  ActivityIndicator,
 } from 'react-native';
 import { Overlay } from 'react-native-elements';
 import { Item } from 'native-base';

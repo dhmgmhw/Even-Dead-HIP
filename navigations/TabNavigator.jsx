@@ -18,13 +18,13 @@ const TabNavigator = () => {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => {
           let iconName = Platform.OS === 'ios' ? 'ios-' : 'md-';
-          if (route.name === 'HomeMain') {
+          if (route.name === '홈') {
             iconName += 'home';
-          } else if (route.name === 'SearchMain') {
+          } else if (route.name === '검색') {
             iconName += 'search-outline';
-          } else if (route.name === 'ChatMain') {
+          } else if (route.name === '채팅') {
             iconName += 'chatbubble-outline';
-          } else if (route.name === 'MyPageMain') {
+          } else if (route.name === 'MY') {
             iconName += 'person-outline';
           }
           return (
@@ -37,27 +37,31 @@ const TabNavigator = () => {
         },
       })}
       tabBarOptions={{
-        showLabel: false,
+        activeTintColor: '#438732',
+        inactiveTintColor: 'lightgrey',
         style: {
           backgroundColor: '#fff',
-          borderTopColor: '#eee',
           height: Platform.OS === 'ios' ? 85 : 60,
-          fontSize: 10,
+          fontSize: 11,
+          borderTopWidth: 1,
+          borderColor: 'black',
         },
       }}>
-      <Tabs.Screen name='HomeMain' component={HomeMain} />
-      <Tabs.Screen name='SearchMain' component={SearchMain} />
+      <Tabs.Screen name='홈' component={HomeMain} />
+      <Tabs.Screen name='검색' component={SearchMain} />
       <Tabs.Screen
-        name='ChatMain'
-        // options={{
-        //   tabBarBadge: '0',
-        //   tabBarBadgeStyle: {
-        //     backgroundColor: 'blue',
-        //   },
-        // }}
+        name='채팅'
+        options={{
+          tabBarBadge: 1,
+          tabBarBadgeStyle: {
+            backgroundColor: '#64BB35',
+            color: 'white',
+            fontSize: 11,
+          },
+        }}
         component={ChatMain}
       />
-      <Tabs.Screen name='MyPageMain' component={MyPageMain} />
+      <Tabs.Screen name='MY' component={MyPageMain} />
     </Tabs.Navigator>
   );
 };

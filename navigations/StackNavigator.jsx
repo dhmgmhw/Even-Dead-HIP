@@ -14,6 +14,7 @@ import CatePage from "../pages/search/CatePage"
 import TownChangePage from "../pages/home/TownChangePage"
 import TradeSelectPage from "../pages/home/TradeSelectPage"
 import TradeConfirmPage from "../pages/home/TradeConfirmPage"
+import ChatRoom from "../pages/chat/ChatRoom"
 
 const Stack = createStackNavigator()
 
@@ -44,6 +45,7 @@ const StackNavigator = () => {
       <Stack.Screen name="TownChangePage" component={TownChangePage} />
       <Stack.Screen name="TradeSelectPage" component={TradeSelectPage} />
       <Stack.Screen name="TradeConfirmPage" component={TradeConfirmPage} />
+      <Stack.Screen name="ChatRoom" component={ChatRoom} />
     </Stack.Navigator>
   )
 }

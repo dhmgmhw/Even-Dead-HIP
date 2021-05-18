@@ -16,7 +16,6 @@ import * as ImagePicker from "expo-image-picker"
 
 import { Feather } from "@expo/vector-icons"
 import { ProgressBar, Colors } from "react-native-paper"
-import AsyncStorage from "@react-native-async-storage/async-storage"
 
 import { uploadImg } from "../../config/PostingApi"
 
@@ -54,7 +53,7 @@ export default function MyInfoTab({ navigation }) {
     if (Platform.OS !== "web") {
       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
       if (status !== "granted") {
-        alert("게시글을 업로드하려면 사진첩 권한이 필요합니다.")
+        alert("프로필을 수정하려면 사진첩 접근 권한이 필요합니다.")
       }
     }
   }
@@ -273,6 +272,7 @@ export default function MyInfoTab({ navigation }) {
           color="black"
         />
       </Pressable>
+      <View style={styles.border}></View>
       <View style={styles.border}></View>
       <Pressable style={styles.deal} onPress={logout}>
         <Text style={[styles.downcompo, { color: "red" }]}>로그아웃</Text>
