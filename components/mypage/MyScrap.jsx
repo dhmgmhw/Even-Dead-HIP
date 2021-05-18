@@ -36,7 +36,7 @@ export default function MyScrap({ navigation }) {
     <ScrollView style={styles.container}>
       {posts ? (
         <>
-          {posts.map((post, i) => {
+          {posts.reverse().map((post, i) => {
             return (
               <Pressable
                 onPress={() => {

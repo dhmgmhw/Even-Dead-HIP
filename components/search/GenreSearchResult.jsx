@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   cardTitleBox: {
-    width: diviceWidth * 0.7,
+    maxWidth: diviceWidth * 0.6,
     flexDirection: 'column',
     justifyContent: 'space-between',
     marginLeft: 10,

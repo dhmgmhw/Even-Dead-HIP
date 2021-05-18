@@ -42,7 +42,7 @@ export default function MyLibraryTab({ navigation }) {
       </View>
       {loading ? null : (
         <>
-          {myPosts.map((post, i) => {
+          {myPosts.reverse().map((post, i) => {
             return (
               <MyBookComponent navigation={navigation} key={i} post={post} />
             );
