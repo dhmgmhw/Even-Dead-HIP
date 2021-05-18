@@ -32,12 +32,12 @@
       }
     },
     "android": {
-      "versionCode": 1,
-      "package": "com.conner_kim.evendeadhip",
+      "versionCode": 2,
+      "package": "com.conner_kim.evendeadhip1",
       "config": {
         "googleSignIn": {
-          "apiKey": "161728779966-9pjjn580gfj749pq88j8f9hnpmhpa4nm.apps.googleusercontent.com",
-          "certificateHash": "F9:FB:EA:7A:F0:F4:23:43:52:50:C5:91:C6:67:F9:41:78:D2:96:A8"
+          "apiKey": "AIzaSyAr--NAfai5EjJlIZYDm6dVs92HeDqyup0",
+          "certificateHash": "CD:7E:6C:60:AD:5F:9F:F6:C4:1D:49:1D:D4:30:9F:36:EF:2D:95:90"
         }
       }
     },
