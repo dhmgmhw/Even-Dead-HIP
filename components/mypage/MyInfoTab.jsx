@@ -120,6 +120,46 @@ export default function MyInfoTab({ navigation }) {
     setImageUri(imageData.uri);
   };
 
+  const levelSetter = (point) => {
+    if (0 <= point < 600) {
+      return '콩';
+    } else if (600 <= point < 1200) {
+      return '새싹';
+    } else if (1200 <= point < 1800) {
+      return '줄기';
+    } else if (1800 <= point < 2400) {
+      return '가지';
+    } else if (2400 <= point < 3000) {
+      return '어린나무';
+    } else if (3000 <= point < 3600) {
+      return '큰나무';
+    } else if (3600 <= point < 4200) {
+      return '꽃';
+    } else if (4200 <= point) {
+      return '오두막';
+    }
+  };
+
+  const levelImgSetter = (point) => {
+    if (0 <= point < 600) {
+      return require('../../assets/levels/Lev1.png');
+    } else if (600 <= point < 1200) {
+      return require('../../assets/levels/Lev2.png');
+    } else if (1200 <= point < 1800) {
+      return require('../../assets/levels/Lev3.png');
+    } else if (1800 <= point < 2400) {
+      return require('../../assets/levels/Lev4.png');
+    } else if (2400 <= point < 3000) {
+      return require('../../assets/levels/Lev5.png');
+    } else if (3000 <= point < 3600) {
+      return require('../../assets/levels/Lev6.png');
+    } else if (3600 <= point < 4200) {
+      return require('../../assets/levels/Lev7.png');
+    } else if (4200 <= point) {
+      return require('../../assets/levels/Lev8.png');
+    }
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.myprofile}>
@@ -255,12 +295,12 @@ export default function MyInfoTab({ navigation }) {
       </View>
       <View style={styles.mystatus}>
         <Text style={styles.title}>
-          콩나무 <Text style={styles.highlite}>새싹 단계</Text>
+          콩나무 <Text style={styles.highlite}>{levelSetter(point)} 단계</Text>
         </Text>
         <ProgressBar
           style={styles.seed}
           progress={point / 1000}
-          color={Colors.green800}
+          color={'#31B11C'}
         />
       </View>
       <Pressable style={styles.deal} onPress={goTownChange}>

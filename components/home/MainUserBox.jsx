@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,11 +9,54 @@ import {
 } from 'react-native';
 import { Button } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
+import { ProgressBar, Colors } from 'react-native-paper';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
 export default function MainUserBox({ navigation, myName, myImg, myPoint }) {
+  useEffect(() => {}, []);
+
+  const levelSetter = (point) => {
+    if (0 <= point < 600) {
+      return '콩';
+    } else if (600 <= point < 1200) {
+      return '새싹';
+    } else if (1200 <= point < 1800) {
+      return '줄기';
+    } else if (1800 <= point < 2400) {
+      return '가지';
+    } else if (2400 <= point < 3000) {
+      return '어린나무';
+    } else if (3000 <= point < 3600) {
+      return '큰나무';
+    } else if (3600 <= point < 4200) {
+      return '꽃';
+    } else if (4200 <= point) {
+      return '오두막';
+    }
+  };
+
+  const levelImgSetter = (point) => {
+    if (0 <= point < 600) {
+      return require('../../assets/levels/Lev1.png');
+    } else if (600 <= point < 1200) {
+      return require('../../assets/levels/Lev2.png');
+    } else if (1200 <= point < 1800) {
+      return require('../../assets/levels/Lev3.png');
+    } else if (1800 <= point < 2400) {
+      return require('../../assets/levels/Lev4.png');
+    } else if (2400 <= point < 3000) {
+      return require('../../assets/levels/Lev5.png');
+    } else if (3000 <= point < 3600) {
+      return require('../../assets/levels/Lev6.png');
+    } else if (3600 <= point < 4200) {
+      return require('../../assets/levels/Lev7.png');
+    } else if (4200 <= point) {
+      return require('../../assets/levels/Lev8.png');
+    }
+  };
+
   return (
     <View style={{ paddingBottom: 10, backgroundColor: '#64BB35' }}>
       <View style={styles.container}>
@@ -24,29 +67,68 @@ export default function MainUserBox({ navigation, myName, myImg, myPoint }) {
             }}>
             <Text style={styles.title}>{myName}님의</Text>
             <Text style={styles.title2}>
-              콩나무 <Text style={{ color: '#4CB73B' }}>새싹 단계</Text>
+              콩나무{' '}
+              <Text style={{ color: '#4CB73B' }}>
+                {levelSetter(myPoint)} 단계
+              </Text>
             </Text>
             <Text style={styles.town}>책을 교환하면 포인트를</Text>
             <Text style={styles.town}>얻을 수 있어요!</Text>
-            <Text
-              style={[
-                styles.town,
-                { marginTop: Platform.OS == 'ios' ? 5 : 0 },
-              ]}>
-              내 콩나무 포인트 : {myPoint} 점
-            </Text>
           </View>
         </View>
         <View
           style={{
-            borderRadius: 5,
+            width: 100,
+            height: 100,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 100,
+            backgroundColor: '#54B65E',
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 5,
+            },
+            shadowOpacity: 0.36,
+            shadowRadius: 6.68,
+            elevation: 11,
           }}>
-          <Image
-            style={styles.userImg}
-            resizeMode='contain'
-            source={{ uri: myImg }}
-          />
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: '#f4f4f4',
+              height: 80,
+              width: 80,
+              borderRadius: 100,
+              shadowColor: '#000',
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.36,
+              shadowRadius: 6.68,
+              elevation: 11,
+            }}>
+            <Image
+              style={styles.userImg}
+              resizeMode='contain'
+              source={levelImgSetter(myPoint)}
+            />
+          </View>
         </View>
+      </View>
+      <View
+        style={{
+          backgroundColor: 'white',
+          padding: 20,
+        }}>
+        <Text style={styles.title}></Text>
+        <ProgressBar
+          style={styles.seed}
+          progress={(myPoint / 10000) * 6}
+          color={'#31B11C'}
+        />
       </View>
       <View style={styles.decoyBox}>
         <Button
@@ -70,13 +152,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     zIndex: 1300,
   },
-
   userImg: {
-    width: 100,
-    height: 100,
+    width: 60,
+    height: 60,
     borderRadius: 100,
-    marginRight: 15,
-    borderWidth: 0.1,
+    padding: 10,
   },
   title: {
     fontFamily: 'SCDream6',
