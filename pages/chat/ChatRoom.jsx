@@ -1,33 +1,28 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { StyleSheet, Text, View, Dimensions, Keyboard } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import ChatHeader from '../../components/chat/ChatHeader';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-import { connectServer, sockConnect } from '../../config/SocketApi';
+import SockJS from 'sockjs-client';
+import SockJsClient from 'react-stomp';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
 const chats = [
   {
-    _id: 123124,
-    text: '자니..?',
+    _id: 1,
+    text: '돌림노래야이야',
     createdAt: new Date(),
     user: {
       _id: 2,
       name: '아이유',
       avatar:
-        'https://image.bugsm.co.kr/artist/images/1000/800491/80049126.jpg',
+        'https://newsimg.hankookilbo.com/cms/articlerelease/2021/04/01/57f00c7a-6fb6-49b1-905f-2438e4f7897a.jpg',
     },
   },
 ];
 
-// let sock = new SockJS('http://3.34.178.136/ws-stomp');
-// let ws = Stomp.over(sock);
-
-export default function ChatRoom({ navigation, route }) {
-  const user = route.params;
+export default function ChatRoom({ navigation }) {
   const [messages, setMessages] = useState(chats);
 
   // const sockConnect = async () => {

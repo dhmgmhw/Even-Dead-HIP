@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "510822611576",
+    "project_id": "ybmb--signin",
+    "storage_bucket": "ybmb--signin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:510822611576:android:009721f17949ec91768b8d",
+        "android_client_info": {
+          "package_name": "com.conner_kim.evendeadhip"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "510822611576-5c9eemmdepbvf2bcm0kh5n63g2kfaehq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.conner_kim.evendeadhip",
+            "certificate_hash": "0f9e0b268c88c74e39e902248484e8a2e9f74c48"
+          }
+        },
+        {
+          "client_id": "510822611576-21hl14ofe27c9ch1r6u5qec9k14r4vak.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXsKKrWSyYJ5Grn6iwFI9gqrCQq62wdh4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "510822611576-21hl14ofe27c9ch1r6u5qec9k14r4vak.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "510822611576-hkthr3vke8b23lj1ud9g7kat5324s7io.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ybmb.evendeadhip"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

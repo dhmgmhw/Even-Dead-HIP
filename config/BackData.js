@@ -24,7 +24,6 @@ export async function login(email, password, navigation) {
   }
 }
 
-
 export async function signdetail(town) {
   try {
     const token = await AsyncStorage.getItem("session")
@@ -74,8 +73,8 @@ export async function changeUserProfile(username, image) {
         token: token,
       },
       data: {
-        username: username,
         image: image,
+        username: username,
       },
     })
     console.log(result.data)
@@ -87,14 +86,45 @@ export async function changeUserProfile(username, image) {
   }
 }
 
-
 export async function signOut(navigation) {
   try {
-    await AsyncStorage.clear();
-    Alert.alert("로그아웃합니다");
-    navigation.push("SignInPage");
+    await AsyncStorage.clear()
+    Alert.alert("로그아웃합니다")
+    navigation.push("SignInPage")
   } catch (err) {
-    Alert.alert('로그아웃 오류가 발생했습니다');
+    Alert.alert("로그아웃 오류가 발생했습니다")
     console.log(err)
+  }
+}
+
+export async function register(
+  username,
+  password,
+  email,
+  image,
+  town,
+  comment,
+  navigation
+) {
+  try {
+    const result = await axios({
+      method: "post",
+      url: host + "/api/Signup",
+      data: {
+        username: username,
+        password: password,
+        email: email,
+        image: image,
+        town: town,
+        comment: comment,
+      },
+    })
+    console.log(result.data)
+    await AsyncStorage.setItem("session", result.data.token)
+    await AsyncStorage.setItem("email", result.data.email)
+    navigation.push("SignInPage")
+  } catch (err) {
+    console.log(err)
+    Alert.alert("회원가입 할 수 없습니다.")
   }
 }

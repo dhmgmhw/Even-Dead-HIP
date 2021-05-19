@@ -1,9 +1,13 @@
 {
   "expo": {
     "name": "책과 콩나무",
-    "slug": "evendeadhip",
-    "scheme": "evendeadhip",
+    "slug": "ybmb",
+    "scheme": "ybmb",
     "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -18,7 +22,7 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": false,
+      "supportsTablet": true,
       "bundleIdentifier": "com.ybmb.evendeadhip",
       "buildNumber": "1.0.0",
       "config": {
@@ -28,8 +32,8 @@
       }
     },
     "android": {
-      "versionCode": 2,
-      "package": "com.conner_kim.evendeadhip",
+      "versionCode": 3,
+      "package": "com.conner_kim.ybmb",
       "permissions": [
         "CAMERA",
         "READ_EXTERNAL_STORAGE",
@@ -37,8 +41,8 @@
       ],
       "config": {
         "googleSignIn": {
-          "apiKey": "AIzaSyCFLiwsxyx59c9I8wrgEfVhxiCsGjpWwQw",
-          "certificateHash": "CD7E6C60AD5F9FF6C41D491DD4309F36EF2D9590"
+          "apiKey": "AIzaSyAr--NAfai5EjJlIZYDm6dVs92HeDqyup0",
+          "certificateHash": "68:6C:50:80:2B:F0:B4:23:DE:AB:1D:FF:33:1B:1C:1D:11:6F:F5:30"
         }
       }
     },
