@@ -107,9 +107,10 @@ export default function SignInPage({ navigation }) {
       setPasswordError("")
     }
     login(email, password, navigation)
+    navigation.navigate("TabNavigator")
   }
   const setidFunc = itemInputid => {
-    setusername(itemInputid)
+    setEmail(itemInputid)
   }
   const setPasswordFunc = itemInputPassword => {
     setPassword(itemInputPassword)

@@ -219,8 +219,8 @@ const styles = StyleSheet.create({
   box: {
     alignSelf: "center",
     width: 300,
-    height: 50,
-    marginTop: 15,
+    height: 45,
+    marginTop: 10,
     borderRadius: 10,
     borderColor: "#4CB73B",
     borderWidth: 2,
