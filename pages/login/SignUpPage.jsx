@@ -8,11 +8,14 @@ import {
   Button,
   Header,
   Left,
-  Icon,
   Body,
   View,
   Right,
 } from "native-base"
+import { Madoka } from "react-native-textinput-effects"
+
+import Icon from "react-native-feather1s"
+
 import ItemInput from "../../components/Login/ItemInput"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
@@ -99,7 +102,7 @@ export default function SignUpPage({ navigation }) {
             onPress={() => {
               navigation.goBack()
             }}>
-            <Icon name="arrow-left-l" style={{ color: "#434343" }} />
+            <Icon name="arrow-left-circle" style={{ color: "#434343" }} />
           </Button>
         </Left>
         <Text style={styles.signintext}>회원가입</Text>
@@ -117,46 +120,59 @@ export default function SignUpPage({ navigation }) {
           {/* <Text style={styles.highlite}>책과 콩나무</Text>SIGNUP */}
         </Text>
         <Form style={styles.form}>
-          <Text style={styles.highlite1}>닉네임</Text>
           <View style={styles.box}>
-            <ItemInput
-              style={styles.userbox}
-              title={"닉네임"}
-              type={"nickName"}
-              error={nickNameError}
-              setFunc={setNickName}
+            <Madoka
+              label={"닉네임"}
+              onChangeText={setNickName}
+              // this is used as active and passive border color
+              borderColor={"#F5F5F5"}
+              borderRadius={5}
+              inputPadding={16}
+              labelHeight={24}
+              labelStyle={{ color: "#828282" }}
+              inputStyle={{ color: "#828282" }}
             />
           </View>
-          <Text style={styles.highlite}>아이디</Text>
 
           <View style={styles.box}>
-            <ItemInput
-              title={"아이디"}
-              // title={'이메일'}
-              type={"username"}
-              error={usernameError}
-              setFunc={setusername}
+            <Madoka
+              label={"아이디"}
+              onChangeText={setusername}
+              // this is used as active and passive border color
+              borderColor={"#F5F5F5"}
+              borderRadius={5}
+              inputPadding={16}
+              labelHeight={24}
+              labelStyle={{ color: "#828282" }}
+              inputStyle={{ color: "#828282" }}
             />
           </View>
-          <Text style={styles.highlite}>비밀번호</Text>
 
           <View style={styles.box}>
-            <ItemInput
-              title={"비밀번호를 입력해주세요"}
-              // title={'비밀번호'}
-              type={"password"}
-              error={passwordError}
-              setFunc={setPassword}
+            <Madoka
+              label={"비밀번호"}
+              onChangeText={setPassword}
+              // this is used as active and passive border color
+              borderColor={"#F5F5F5"}
+              borderRadius={5}
+              inputPadding={16}
+              labelHeight={24}
+              labelStyle={{ color: "#828282" }}
+              inputStyle={{ color: "#828282" }}
             />
           </View>
-          <Text style={styles.highlite}>비밀번호 확인</Text>
 
           <View style={styles.box}>
-            <ItemInput
-              title={"비밀번호를 한번 더 입력해주세요"}
-              type={"confirmPassword"}
-              error={confirmPasswordError}
-              setFunc={setconfirmPassword}
+            <Madoka
+              label={"비밀번호확인"}
+              onChangeText={setconfirmPassword}
+              // this is used as active and passive border color
+              borderColor={"#F5F5F5"}
+              borderRadius={5}
+              inputPadding={16}
+              labelHeight={24}
+              labelStyle={{ color: "#828282" }}
+              inputStyle={{ color: "#828282" }}
             />
           </View>
         </Form>
@@ -220,7 +236,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     width: 300,
     height: 45,
-    marginTop: 10,
+    marginTop: 35,
     borderRadius: 10,
     borderColor: "#4CB73B",
     borderWidth: 2,
