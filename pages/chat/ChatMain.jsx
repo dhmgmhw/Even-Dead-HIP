@@ -9,28 +9,64 @@ import {
 } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
-import { Ionicons } from '@expo/vector-icons';
 import ChatRoomComponent from '../../components/chat/ChatRoomComponent';
+import { getUserProfile } from '../../config/BackData';
+import { getMyRoom } from '../../config/SocketApi';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
 export default function ChatMain({ navigation }) {
+  const [profile, setProfile] = useState('');
+  const [chatRooms, setChatRooms] = useState([]);
+
+  const loadMyProfile = async () => {
+    const result = await getUserProfile();
+    setProfile(result.results);
+  };
+
+  const loadChatRoom = async () => {
+    const result = await getMyRoom();
+    setChatRooms(result);
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      loadMyProfile();
+      loadChatRoom();
+    });
+    return unsubscribe;
+  }, [navigation]);
+
   return (
     <>
       <View style={styles.statusAvoid}></View>
-      <View style={styles.mainHeader}>
+      <Pressable style={styles.mainHeader}>
         <View style={styles.headerLComp}></View>
         <View style={styles.headerCComp}>
           <Text style={styles.headerCText}>채팅</Text>
         </View>
         <View style={styles.headerRComp}></View>
-      </View>
+      </Pressable>
       <ScrollView
         style={styles.container}
         contentContainerStyle={{ marginTop: 20 }}>
-        <ChatRoomComponent navigation={navigation} />
+        {chatRooms ? (
+          <>
+            {chatRooms.map((chatRoom, i) => {
+              return (
+                <ChatRoomComponent
+                  key={i}
+                  navigation={navigation}
+                  profile={profile}
+                  chatRoom={chatRoom}
+                />
+              );
+            })}
+          </>
+        ) : null}
       </ScrollView>
     </>
   );

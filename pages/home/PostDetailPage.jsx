@@ -23,6 +23,7 @@ import Swiper from 'react-native-swiper-hooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ImageBlurLoading from 'react-native-image-blur-loading';
 import * as Linking from 'expo-linking';
+import SockJS from 'sockjs-client';
 
 import CommentBubbleComponent from '../../components/home/CommentBubbleComponent';
 import { deletePost, postComment, postDetail } from '../../config/PostingApi';
@@ -30,6 +31,7 @@ import { Grid } from 'native-base';
 import { Alert } from 'react-native';
 import { getUserProfile } from '../../config/BackData';
 import { delScrapBook, postScrapBook } from '../../config/MyPageApi';
+import { makingChatRoom } from '../../config/SocketApi';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
@@ -37,6 +39,7 @@ const diviceHeight = Dimensions.get('window').height;
 export default function PostDetailPage({ navigation, route }) {
   const detailData = route.params;
 
+  const [myInfo, setMyInfo] = useState();
   const [myEmail, setMyEmail] = useState();
   const [scrapList, setScrapList] = useState([]);
 
@@ -88,13 +91,19 @@ export default function PostDetailPage({ navigation, route }) {
     setBubbles(res.comments);
     setData(res);
     setReady(false);
-    console.log(detailData);
+    // console.log(detailData);
   };
 
   const userCheck = async () => {
     const myInfo = await getUserProfile();
     setScrapList(myInfo.results.scrapList);
     setMyEmail(myInfo.results.email);
+    setMyInfo(myInfo.results);
+  };
+
+  const makeChat = async () => {
+    const roomInfo = await makingChatRoom(myEmail, detailData.user.email);
+    navigation.push('ChatPage', [myInfo, roomInfo]);
   };
 
   const share = () => {
@@ -112,7 +121,7 @@ export default function PostDetailPage({ navigation, route }) {
       download();
       userCheck();
       setTooltipControl(true);
-      console.log(detailData.image);
+      // console.log(detailData.image);
     });
     return unsubscribe;
   }, [navigation]);
@@ -395,17 +404,22 @@ export default function PostDetailPage({ navigation, route }) {
               </View>
             </View>
           </ScrollView>
-
-          {data.townBook.finish === 1 ? (
+          {detailData.user.email == myEmail ? null : (
             <Pressable
-              style={styles.chatBox}
-              // onPress={() => {
-              //   navigation.navigate('ChatPage');
-              // }}
-            >
-              <Text style={styles.chatBtnText}>가치교환완료</Text>
+              style={
+                data.townBook.finish === 1
+                  ? styles.chatBox
+                  : [styles.chatBox, { backgroundColor: '#4CB73B' }]
+              }
+              onPress={() => {
+                {
+                  data.townBook.finish === 1 ? null : makeChat();
+                }
+              }}>
+              <Text style={styles.chatBtnText}>가치 교환하기</Text>
             </Pressable>
-          ) : null}
+          )}
+
           {onPageLoader ? (
             <ActivityIndicator
               style={{
@@ -536,7 +550,7 @@ const styles = StyleSheet.create({
   commentInputBox: {
     height: 50,
     flexDirection: 'row',
-    backgroundColor: '#438732',
+    backgroundColor: '#4CB73B',
     alignItems: 'center',
     justifyContent: 'space-between',
     borderRadius: 10,

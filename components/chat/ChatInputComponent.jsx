@@ -4,21 +4,42 @@ import {
   Dimensions,
   TextInput,
   View,
-  Image,
+  Keyboard,
   Pressable,
   Platform,
+  Text,
 } from 'react-native';
-
-import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
-export default function ChatInputComponent() {
+import Stomp from 'stompjs';
+import SockJS from 'sockjs-client';
+
+let sock = new SockJS('http://3.34.178.136/ws-stomp');
+let ws = Stomp.over(sock);
+
+export default function ChatInputComponent({ roomId, myInfo }) {
   const [text, setText] = useState('');
 
-  const leaveMessage = async () => {
-    await console.log('Hey');
+  const onSend = async () => {
+    const token = await AsyncStorage.getItem('session');
+    ws.send(
+      '/pub/api/chat/message',
+      {
+        token: token,
+      },
+      JSON.stringify({
+        type: 'TALK',
+        roomId: roomId,
+        message: text,
+        userName: myInfo.username,
+        userProfile: myInfo.image,
+      })
+    );
+    Keyboard.dismiss();
+    setText('');
   };
 
   return (
@@ -42,12 +63,15 @@ export default function ChatInputComponent() {
             placeholder='메시지를 입력하세요'
           />
         </View>
-        <Pressable onPress={leaveMessage}>
-          <Image
-            style={{ height: 35, width: 40, padding: 5 }}
-            resizeMode='contain'
-            source={require('../../assets/mainlogo.png')}
-          />
+        <Pressable onPress={text == '' ? null : onSend}>
+          <Text
+            style={{
+              padding: 5,
+              fontFamily: 'SansBold',
+              color: text == '' ? 'lightgrey' : 'green',
+            }}>
+            Send
+          </Text>
         </Pressable>
       </View>
     </View>

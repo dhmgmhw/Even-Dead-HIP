@@ -9,11 +9,12 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-export default function ChatRoomComponent({ navigation }) {
+export default function ChatRoomComponent({ navigation, profile, chatRoom }) {
   return (
     <Pressable
       onPress={() => {
-        navigation.push('ChatRoom');
+        // navigation.push('ChatRoom', profile);
+        navigation.push('ChatPage', [profile, chatRoom]);
       }}
       style={styles.chatBox}>
       <View style={styles.userBox}>
@@ -31,8 +32,8 @@ export default function ChatRoomComponent({ navigation }) {
         />
       </View>
       <View style={styles.descBox}>
-        <Text style={styles.userName}>아이유</Text>
-        <Text style={styles.chat}>자니..?</Text>
+        <Text style={styles.userName}>{chatRoom.id}</Text>
+        <Text style={styles.chat}>{chatRoom.roomId}</Text>
       </View>
       <Image
         style={styles.bookBox}

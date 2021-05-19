@@ -30,7 +30,7 @@ export default function CommentBubbleComponent({ post, download }) {
 
   useEffect(() => {
     checkEmail();
-    console.log(post);
+    // console.log(post);
   }, []);
 
   const fixComment = async () => {

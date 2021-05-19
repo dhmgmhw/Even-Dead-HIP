@@ -12,7 +12,6 @@ export default function MyLibraryTab({ navigation }) {
   const [loading, setLoading] = useState(true);
 
   const download = async () => {
-    console.log('ha');
     const response = await getMyPost();
     if (response.length > 0) {
       setMyPosts(response);
