@@ -155,7 +155,13 @@ export default function SignInPage({ navigation }) {
         </Form>
       </View>
       <TouchableOpacity full style={styles.emailSignIn} onPress={doSignIn}>
-        <Text style={{ color: "#FFFFFF", fontsize: 8, alignSelf: "center" }}>
+        <Text
+          style={{
+            color: "#FFFFFF",
+            fontsize: 8,
+            alignSelf: "center",
+            marginTop: 5,
+          }}>
           로그인
         </Text>
       </TouchableOpacity>
@@ -171,7 +177,13 @@ export default function SignInPage({ navigation }) {
         </TouchableOpacity>
       </View>
       <TouchableOpacity full style={styles.emailSignUp} onPress={goSignUp}>
-        <Text style={{ color: "#4CB73B", fontsize: 8, alignSelf: "center" }}>
+        <Text
+          style={{
+            color: "#4CB73B",
+            fontsize: 8,
+            alignSelf: "center",
+            marginTop: 5,
+          }}>
           회원가입
         </Text>
       </TouchableOpacity>
@@ -265,20 +277,20 @@ const styles = StyleSheet.create({
   emailSignIn: {
     alignSelf: "center",
     width: 250,
-    height: 30,
+    height: 40,
 
     marginTop: 5,
     marginBottom: 5,
 
-    borderRadius: 1,
+    borderRadius: 5,
     backgroundColor: "#4CB73B",
   },
   emailSignUp: {
     alignSelf: "center",
     width: 250,
-    height: 30,
+    height: 40,
     marginTop: 15,
-    borderRadius: 2,
+    borderRadius: 5,
     borderColor: "#4CB73B",
     borderWidth: 1,
 
