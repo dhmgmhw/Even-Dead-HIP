@@ -18,13 +18,12 @@ import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { getPostedBook } from '../../config/MainPageApi';
 import { getUserProfile } from '../../config/BackData';
 import { Pressable } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
 export default function HomeMain({ navigation }) {
-  const carouselRef = useRef(null);
-
   const [currentPage, setCurrentPage] = useState(1);
   const [bannerPosts, setBannerPosts] = useState([]);
 
