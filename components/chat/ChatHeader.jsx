@@ -14,7 +14,7 @@ import { getStatusBarHeight } from 'react-native-status-bar-height';
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
-export default function ChatHeader({ navigation }) {
+export default function ChatHeader({ navigation, roomInfo, myInfo }) {
   return (
     <>
       <View style={styles.statusAvoid}></View>
@@ -30,13 +30,17 @@ export default function ChatHeader({ navigation }) {
           />
         </View>
         <View style={styles.headerCComp}>
-          <Text style={styles.headerCText}>아이유</Text>
+          <Text numberOfLines={2} style={styles.headerCText}>
+            {myInfo.username == roomInfo.user[0].username
+              ? roomInfo.user[1].username
+              : roomInfo.user[0].username}
+          </Text>
         </View>
         <View style={styles.headerRComp}></View>
       </View>
       <Pressable
         onPress={() => {
-          console.log('에헤이');
+          console.log(myInfo.username == roomInfo.user[0].username);
         }}
         style={styles.chatInfoBox}>
         <Image
@@ -44,12 +48,12 @@ export default function ChatHeader({ navigation }) {
           resizeMode='cover'
           PlaceholderContent={<ActivityIndicator />}
           source={{
-            uri: 'http://image.newsis.com/2021/01/15/NISI20210115_0000674160_web.jpg',
+            uri: roomInfo.image,
           }}
         />
         <View style={styles.descBox}>
           <Text numberOfLines={3} style={styles.descText}>
-            아이유 싱글앨범 "Celebrity"
+            {roomInfo.roomName}
           </Text>
         </View>
       </Pressable>
