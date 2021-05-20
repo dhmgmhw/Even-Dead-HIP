@@ -1943,7 +1943,7 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.3.tgz#2ab0d5da2e5815f94b0b9d4b95d1e5f243ab2ca7"
   integrity sha512-KfRL3PuHmqQLOG+2tGpRO26Ctg+Cq1E01D2DMriKEATHgWLfeNDmq9e29Q9WIky0dQ3NPkd1mzYH8Lm936Z9qw==
 
-"@types/react-native-vector-icons@^6.4.6":
+"@types/react-native-vector-icons@^6.4.5", "@types/react-native-vector-icons@^6.4.6":
   version "6.4.6"
   resolved "https://registry.yarnpkg.com/@types/react-native-vector-icons/-/react-native-vector-icons-6.4.6.tgz#848e3b14572def56212cafbf5cb1254b445bfb41"
   integrity sha512-lAyxNfMd5L1xZvXWsGcJmNegDf61TAp40uL6ashNNWj9W3IrDJO59L9+9inh0Y2MsEZpLTdxzVU8Unb4/0FQng==
@@ -6455,6 +6455,13 @@ react-native-elements@^3.4.1:
     react-native-ratings "^7.3.0"
     react-native-size-matters "^0.3.1"
 
+react-native-feather1s@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/react-native-feather1s/-/react-native-feather1s-0.2.3.tgz#1fe18e69d5b719e84464c194414d8128f057927b"
+  integrity sha512-MFdfurGW1aGzMGOM1iuKHViXFrfAcvjWfgBbXBigMp2SGiTGFv51hdkN8UHwUaQcLZsUeaoDBP78yQCiRlRAZA==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-native-gesture-handler@~1.10.2:
   version "1.10.3"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.10.3.tgz#942bbf2963bbf49fa79593600ee9d7b5dab3cfc0"
@@ -6600,6 +6607,13 @@ react-native-swiper-hooks@^1.3.8:
   version "1.3.8"
   resolved "https://registry.yarnpkg.com/react-native-swiper-hooks/-/react-native-swiper-hooks-1.3.8.tgz#c4a1353ac780eabb1e23775b87cf703307484b93"
   integrity sha512-EKRLv5DQ40P3kgo3IbEt/IloTxQLfathn7rIOXUafdedaEVqzFzhJQDZuEL57oc+ZwoZ1vPtpXftB2GLGwQH6w==
+
+react-native-textinput-effects@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/react-native-textinput-effects/-/react-native-textinput-effects-0.6.1.tgz#d639acf50f60cc18242c3de4dd966cc06121d317"
+  integrity sha512-L4VCspAvxr6ug1OperVFnairQmSKes4dzRiHRzIOIJ7sJPDEpV3uSuvE5RiuNad6/SaPTLgfsjZSw4t7FWltRg==
+  dependencies:
+    "@types/react-native-vector-icons" "^6.4.5"
 
 react-native-typing-animation@^0.1.7:
   version "0.1.7"
