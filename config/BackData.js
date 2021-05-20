@@ -2,7 +2,10 @@ import { Alert } from "react-native"
 import axios from "axios"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
-const host = "http://13.124.182.223"
+// const host = "http://13.124.182.223"
+// const host = 'http://3.34.178.136'
+const host = 'http://3.37.61.239'
+
 
 export async function register(
   username,
@@ -18,6 +21,7 @@ export async function register(
         username: username,
         password: password,
         email: email,
+        image: 'https://sanggubk2.s3.ap-northeast-2.amazonaws.com/e50d9568-9e45-4dec-9c3b-68fde0b333f7.jpg'
       },
     })
     console.log(result.data)
@@ -63,7 +67,7 @@ export async function signdetail(town) {
         town: town,
       },
     })
-    console.log(result)
+    console.log(result.data)
   } catch (err) {
     console.log(err)
     Alert.alert("동네를 설정할 수 없어요:(")
@@ -113,13 +117,8 @@ export async function changeUserProfile(username, image) {
 }
 
 export async function signOut(navigation) {
-  try {
-    await AsyncStorage.clear()
-    Alert.alert("로그아웃합니다")
-    navigation.push("SignInPage")
-  } catch (err) {
-    Alert.alert("로그아웃 오류가 발생했습니다")
-    console.log(err)
-  }
+  await AsyncStorage.clear()
+  Alert.alert("로그아웃합니다")
+  navigation.push("SignInPage")
 }
 
