@@ -2,7 +2,33 @@ import { Alert } from "react-native"
 import axios from "axios"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
-const host = "http://3.34.178.136"
+const host = "http://13.124.182.223"
+
+export async function register(
+  username,
+  email,
+  password,
+  navigation
+) {
+  try {
+    const result = await axios({
+      method: "post",
+      url: host + "/api/signup",
+      data: {
+        username: username,
+        password: password,
+        email: email,
+      },
+    })
+    console.log(result.data)
+    navigation.pop()
+    Alert.alert("회원가입이 완료되었습니다.")
+  } catch (err) {
+    console.log(err)
+    Alert.alert("회원가입 할 수 없습니다.")
+  }
+}
+
 
 export async function login(email, password, navigation) {
   try {
@@ -37,10 +63,10 @@ export async function signdetail(town) {
         town: town,
       },
     })
-    console.log("로그인완료")
+    console.log(result)
   } catch (err) {
     console.log(err)
-    Alert.alert("정확히 입력해 주세요.")
+    Alert.alert("동네를 설정할 수 없어요:(")
   }
 }
 
@@ -97,34 +123,3 @@ export async function signOut(navigation) {
   }
 }
 
-export async function register(
-  username,
-  password,
-  email,
-  image,
-  town,
-  comment,
-  navigation
-) {
-  try {
-    const result = await axios({
-      method: "post",
-      url: host + "/api/Signup",
-      data: {
-        username: username,
-        password: password,
-        email: email,
-        image: image,
-        town: town,
-        comment: comment,
-      },
-    })
-    console.log(result.data)
-    await AsyncStorage.setItem("session", result.data.token)
-    await AsyncStorage.setItem("email", result.data.email)
-    navigation.push("SignInPage")
-  } catch (err) {
-    console.log(err)
-    Alert.alert("회원가입 할 수 없습니다.")
-  }
-}
