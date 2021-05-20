@@ -15,7 +15,16 @@ const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
 export default function MainUserBox({ navigation, myName, myImg, myPoint }) {
-  useEffect(() => {}, []);
+  useEffect(() => {
+    console.log(progressSetter(myPoint));
+  }, []);
+
+  const progressSetter = (data) => {
+    while (1 <= data / 100 / 6) {
+      data / 100 / 6 - 1;
+    }
+    return data / 100 / 6;
+  };
 
   const levelSetter = (point) => {
     if (0 <= point < 600) {
@@ -126,7 +135,7 @@ export default function MainUserBox({ navigation, myName, myImg, myPoint }) {
         <Text style={styles.title}></Text>
         <ProgressBar
           style={styles.seed}
-          progress={(myPoint / 10000) * 6}
+          progress={progressSetter(myPoint)}
           color={'#31B11C'}
         />
       </View>

@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
-  TouchableHighlight,
   Pressable,
   TextInput,
 } from 'react-native';
@@ -161,6 +160,13 @@ export default function MyInfoTab({ navigation }) {
     }
   };
 
+  const progressSetter = (data) => {
+    while (1 <= data / 100 / 6) {
+      data / 100 / 6 - 1;
+    }
+    return data / 100 / 6;
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.myprofile}>
@@ -257,7 +263,7 @@ export default function MyInfoTab({ navigation }) {
         </Text>
         <ProgressBar
           style={styles.seed}
-          progress={point / 1000}
+          progress={progressSetter(point)}
           color={'#31B11C'}
         />
       </View>
