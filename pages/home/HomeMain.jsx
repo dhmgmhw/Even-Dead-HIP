@@ -8,6 +8,8 @@ import {
   FlatList,
   Image,
   RefreshControl,
+  SafeAreaView,
+  Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -46,7 +48,8 @@ export default function HomeMain({ navigation }) {
     setRefreshing(true);
     console.log('새로고침');
     wait(1000).then(() => {
-      download();
+      // download();
+      bannerLoad();
       userCheck();
       setRefreshing(false);
     });
@@ -82,194 +85,200 @@ export default function HomeMain({ navigation }) {
   }, [navigation]);
 
   return (
-    <>
-      <View style={styles.statusAvoid}></View>
-      <View style={styles.mainHeader}>
-        <View style={styles.headerLComp}>
-          <Image
-            style={{ height: 25, width: 40 }}
-            resizeMode='contain'
-            source={require('../../assets/mainlogo.png')}
-          />
-        </View>
-        <View style={styles.headerCComp}></View>
-        <View style={styles.headerRComp}></View>
-      </View>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <ScrollView
         style={{ backgroundColor: 'white' }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }>
-        <MainUserBox
-          navigation={navigation}
-          myName={myName}
-          myImg={myImg}
-          myPoint={myPoint}
-        />
-        <View
-          style={{
-            shadowColor: '#000',
-            shadowOffset: {
-              width: 1,
-              height: 10,
-            },
-            shadowOpacity: 0.3,
-            shadowRadius: 4,
-            zIndex: 99,
-            backgroundColor: '#64BB35',
-          }}>
-          <View style={styles.mainTitleBox}>
-            <View>
-              <Text style={styles.mainTitleDesc}>
-                좋은 책을 좋은 이웃과 함께
-              </Text>
-              <Text style={styles.mainTitleText}>우리 동네 책장</Text>
+        }></ScrollView>
+      <FlatList
+        data={posts}
+        renderItem={(post) => {
+          return (
+            <GenreComponent
+              key={post.id}
+              navigation={navigation}
+              post={post.item}
+              scrapList={scrapList}
+              userCheck={userCheck}
+              myEmail={myEmail}
+            />
+          );
+        }}
+        keyExtractor={(item) => String(item.id)}
+        onEndReachedThreshold={0.5}
+        ListHeaderComponent={() => {
+          return (
+            <>
+              <View style={styles.statusAvoid}></View>
+              <View style={styles.mainHeader}>
+                <View style={styles.headerLComp}>
+                  <Image
+                    style={{ height: 25, width: 40 }}
+                    resizeMode='contain'
+                    source={require('../../assets/mainlogo.png')}
+                  />
+                </View>
+                <View style={styles.headerCComp}></View>
+                <View style={styles.headerRComp}></View>
+              </View>
+              <MainUserBox
+                navigation={navigation}
+                myName={myName}
+                myImg={myImg}
+                myPoint={myPoint}
+              />
               <View
                 style={{
-                  height: 20,
-                  backgroundColor: '#31B11C',
-                  position: 'relative',
-                  bottom: 20,
-                  zIndex: 2,
-                }}></View>
-              <View>
-                <Text style={styles.mainTitleDesc2}>
-                  지역에서 관심있는 책을 교환하며
-                </Text>
-                <Text style={styles.mainTitleDesc2}>
-                  내 안의 가치를 같이 키워보세요
-                </Text>
+                  shadowColor: '#000',
+                  shadowOffset: {
+                    width: 1,
+                    height: 10,
+                  },
+                  shadowOpacity: 0.3,
+                  shadowRadius: 4,
+                  zIndex: 99,
+                  backgroundColor: '#64BB35',
+                }}>
+                <View style={styles.mainTitleBox}>
+                  <View>
+                    <Text style={styles.mainTitleDesc}>
+                      좋은 책을 좋은 이웃과 함께
+                    </Text>
+                    <Text style={styles.mainTitleText}>우리 동네 책장</Text>
+                    <View
+                      style={{
+                        height: 20,
+                        backgroundColor: '#31B11C',
+                        position: 'relative',
+                        bottom: 20,
+                        zIndex: 2,
+                      }}></View>
+                    <View>
+                      <Text style={styles.mainTitleDesc2}>
+                        지역에서 관심있는 책을 교환하며
+                      </Text>
+                      <Text style={styles.mainTitleDesc2}>
+                        내 안의 가치를 같이 키워보세요
+                      </Text>
+                    </View>
+                    <Pressable
+                      style={styles.townChangeBtn}
+                      onPress={() => {
+                        navigation.navigate('TownChangePage');
+                      }}>
+                      <Text style={styles.myTownText}>{myTown}</Text>
+                      <Ionicons
+                        name={'chevron-down'}
+                        size={25}
+                        style={{ color: 'white' }}
+                      />
+                    </Pressable>
+                  </View>
+                </View>
+                {bannerPosts ? (
+                  <ScrollView
+                    showsHorizontalScrollIndicator={false}
+                    horizontal={true}
+                    contentContainerStyle={{
+                      height: 200,
+                    }}>
+                    {bannerPosts.map((banner, i) => {
+                      return (
+                        <Pressable
+                          key={i}
+                          style={{
+                            shadowColor: '#000',
+                            shadowOffset: {
+                              width: 0,
+                              height: 2,
+                            },
+                            shadowOpacity: 0.25,
+                            shadowRadius: 3.84,
+                            elevation: 5,
+                          }}
+                          onPress={() => {
+                            navigation.navigate('PostDetailPage', banner);
+                          }}>
+                          <Image
+                            style={{
+                              height: 190,
+                              width: 125,
+                              marginLeft: 20,
+                              borderRadius: 10,
+                              backgroundColor: '#e5e5e5',
+                            }}
+                            resizeMode='cover'
+                            source={
+                              banner.image
+                                ? { uri: banner.image }
+                                : require('../../assets/splash.png')
+                            }
+                          />
+                        </Pressable>
+                      );
+                    })}
+                  </ScrollView>
+                ) : null}
+                <View style={styles.mainTitleDescBox}>
+                  <Text style={styles.mainTitleDesc3}>
+                    다양한 분야의 책도 만나고
+                  </Text>
+                  <Text style={styles.mainTitleDesc3}>동네 이웃도 만나고</Text>
+                  <Text style={styles.mainTitleDesc4}>같이하는 가치나눔</Text>
+                  <Ionicons
+                    name={'chevron-down'}
+                    size={25}
+                    style={{ color: 'white', top: 15 }}
+                  />
+                  <Ionicons
+                    name={'chevron-down'}
+                    size={25}
+                    style={{ color: 'lightgrey' }}
+                  />
+                  <Ionicons
+                    name={'chevron-down'}
+                    size={25}
+                    style={{ color: 'grey', bottom: 15 }}
+                  />
+                </View>
               </View>
               <Pressable
-                style={styles.townChangeBtn}
+                style={styles.townChangeSubBtn}
                 onPress={() => {
                   navigation.navigate('TownChangePage');
                 }}>
-                <Text style={styles.myTownText}>{myTown}</Text>
+                <Text style={[styles.myTownText, { color: '#31B11C' }]}>
+                  {myTown}
+                </Text>
                 <Ionicons
                   name={'chevron-down'}
                   size={25}
-                  style={{ color: 'white' }}
+                  style={{ color: '#31B11C' }}
                 />
               </Pressable>
-            </View>
-          </View>
-          {bannerPosts ? (
-            <ScrollView
-              showsHorizontalScrollIndicator={false}
-              horizontal={true}
-              contentContainerStyle={{
-                height: 200,
-              }}>
-              {bannerPosts.map((banner, i) => {
-                return (
-                  <Pressable
-                    key={i}
-                    style={{
-                      shadowColor: '#000',
-                      shadowOffset: {
-                        width: 0,
-                        height: 2,
-                      },
-                      shadowOpacity: 0.25,
-                      shadowRadius: 3.84,
-                      elevation: 5,
-                    }}
-                    onPress={() => {
-                      navigation.navigate('PostDetailPage', banner);
-                    }}>
-                    <Image
-                      style={{
-                        height: 190,
-                        width: 125,
-                        marginLeft: 20,
-                        borderRadius: 10,
-                        backgroundColor: '#e5e5e5',
-                      }}
-                      resizeMode='cover'
-                      source={{ uri: banner.image }}
-                    />
-                  </Pressable>
-                );
-              })}
-            </ScrollView>
-          ) : null}
-          <View style={styles.mainTitleDescBox}>
-            <Text style={styles.mainTitleDesc3}>다양한 분야의 책도 만나고</Text>
-            <Text style={styles.mainTitleDesc3}>동네 이웃도 만나고</Text>
-            <Text style={styles.mainTitleDesc4}>같이하는 가치나눔</Text>
-            <Ionicons
-              name={'chevron-down'}
-              size={25}
-              style={{ color: 'white', top: 15 }}
-            />
-            <Ionicons
-              name={'chevron-down'}
-              size={25}
-              style={{ color: 'lightgrey' }}
-            />
-            <Ionicons
-              name={'chevron-down'}
-              size={25}
-              style={{ color: 'grey', bottom: 15 }}
-            />
-          </View>
-        </View>
-        <View>
-          <Pressable
-            style={styles.townChangeSubBtn}
-            onPress={() => {
-              navigation.navigate('TownChangePage');
-            }}>
-            <Text style={[styles.myTownText, { color: '#31B11C' }]}>
-              {myTown}
-            </Text>
-            <Ionicons
-              name={'chevron-down'}
-              size={25}
-              style={{ color: '#31B11C' }}
-            />
-          </Pressable>
-          <View style={styles.subTitleBox}>
-            <Text style={{ fontSize: 16, fontFamily: 'SansMedium' }}>
-              새로 등록된 도서
-            </Text>
-          </View>
-          {posts ? (
-            <View>
-              <FlatList
-                data={posts}
-                renderItem={(post) => {
-                  return (
-                    <GenreComponent
-                      key={post.id}
-                      navigation={navigation}
-                      post={post.item}
-                      scrapList={scrapList}
-                      userCheck={userCheck}
-                      myEmail={myEmail}
-                    />
-                  );
-                }}
-                keyExtractor={(item) => String(item.id)}
-                onEndReachedThreshold={0.1}
-                onEndReached={async () => {
-                  let nextPosts = await getPostedBook(currentPage + 1);
-                  if (nextPosts != undefined) {
-                    setCurrentPage(currentPage + 1);
-                    let allPosts = [...posts, ...nextPosts];
-                    setPosts(allPosts);
-                  } else {
-                    console.log('불러올 정보가 없어요');
-                  }
-                }}
-              />
-            </View>
-          ) : null}
-        </View>
-      </ScrollView>
-    </>
+              <View style={styles.subTitleBox}>
+                <Text style={{ fontSize: 16, fontFamily: 'SansMedium' }}>
+                  새로 등록된 도서
+                </Text>
+              </View>
+            </>
+          );
+        }}
+        onEndReached={async () => {
+          console.log('Closer to the edge...');
+          let nextPosts = await getPostedBook(currentPage + 1);
+          if (nextPosts != undefined) {
+            setCurrentPage(currentPage + 1);
+            let allPosts = [...posts, ...nextPosts];
+            setPosts(allPosts);
+          } else {
+            console.log('불러올 정보가 없어요');
+          }
+        }}
+      />
+    </SafeAreaView>
   );
 }
 
@@ -348,10 +357,6 @@ const styles = StyleSheet.create({
     height: 140,
     marginBottom: 20,
   },
-  statusAvoid: {
-    height: getStatusBarHeight(),
-    backgroundColor: 'white',
-  },
   mainHeader: {
     width: diviceWidth,
     flexDirection: 'row',
@@ -377,5 +382,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-end',
     paddingHorizontal: 20,
+  },
+  statusAvoid: {
+    height: Platform.OS == 'ios' ? 0 : getStatusBarHeight(),
+    backgroundColor: 'white',
   },
 });
