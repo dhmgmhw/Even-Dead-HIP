@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import Stomp from "stompjs";
 import SockJS from "sockjs-client";
 
-let sock = new SockJS('http://3.34.178.136/ws-stomp');
+let sock = new SockJS('http://13.124.182.223/ws-stomp');
 let ws = Stomp.over(sock);
 
 
@@ -13,7 +13,7 @@ export async function getMyRoom() {
     try {
         const response = await axios({
             method: 'get',
-            url: 'http://3.34.178.136/api/chat/rooms',
+            url: 'http://13.124.182.223/api/chat/rooms',
             headers: {
                 token: token,
             },
@@ -24,24 +24,12 @@ export async function getMyRoom() {
     }
 };
 
-export async function connectServer() {
-    const token = await AsyncStorage.getItem('session');
-    ws.connect(
-        {
-            token: token,
-        },
-        function (frame) {
-            console.log('소캣연결성공', frame);
-        }
-    );
-};
-
 export async function sockConnect() {
     const token = await AsyncStorage.getItem('session');
     try {
         const response = await axios({
             method: 'get',
-            url: 'http://3.34.178.136/ws-stomp',
+            url: 'http://13.124.182.223/ws-stomp',
             headers: {
                 token: token,
             },
@@ -53,46 +41,26 @@ export async function sockConnect() {
     }
 };
 
-export async function makingChatRoom(myEmail, youEmail) {
+export async function makingChatRoom(myEmail, youEmail, book) {
     const token = await AsyncStorage.getItem('session');
     try {
         const response = await axios({
             method: 'post',
-            url: 'http://3.34.178.136/api/chat/create',
+            url: 'http://13.124.182.223/api/chat/create',
             data: {
+                roomId: book.id + youEmail + myEmail,
+                roomName: book.title,
+                image: book.image,
                 chatUser: [myEmail, youEmail],
             },
             headers: {
                 token: token,
             },
         });
+        // console.log(response.data)
         return (response.data.results);
         // 여기에 방 정보가 담겨있어
     } catch (err) {
         console.log(err);
     }
 };
-
-export async function enterChatAndSub(roomId) {
-    const token = AsyncStorage.getItem('session');
-    try {
-        const response = await axios({
-            method: 'get',
-            url: 'http://3.34.178.136/api/chat/enter/' + roomId,
-            headers: {
-                token: token,
-            },
-        });
-        console.log(response.data);
-        ws.subscribe(
-            'http://3.34.178.136/sub/chat/room/' + roomId,
-            function (res) {
-                console.log(JSON.parse(res.body));
-            }
-        );
-    } catch (err) {
-        console.log(err);
-    }
-};
-
-
