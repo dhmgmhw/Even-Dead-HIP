@@ -51,14 +51,14 @@ const TabNavigator = () => {
       <Tabs.Screen name='검색' component={SearchMain} />
       <Tabs.Screen
         name='채팅'
-        options={{
-          tabBarBadge: 1,
-          tabBarBadgeStyle: {
-            backgroundColor: '#64BB35',
-            color: 'white',
-            fontSize: 11,
-          },
-        }}
+        // options={{
+        //   tabBarBadge: 1,
+        //   tabBarBadgeStyle: {
+        //     backgroundColor: '#64BB35',
+        //     color: 'white',
+        //     fontSize: 11,
+        //   },
+        // }}
         component={ChatMain}
       />
       <Tabs.Screen name='MY' component={MyPageMain} />
