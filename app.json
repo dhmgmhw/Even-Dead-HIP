@@ -33,7 +33,7 @@
     },
     "android": {
       "versionCode": 3,
-      "package": "com.conner_kim.ybmb",
+      "package": "com.dzeko.ybmb",
       "permissions": [
         "CAMERA",
         "READ_EXTERNAL_STORAGE",
