@@ -1,14 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 
-export default function MyChatComponent() {
+export default function MyChatComponent({ time, message }) {
   return (
     <View style={styles.myChatBox}>
+      <Text style={styles.time}>{time.split(' ')[1].substring(0, 5)}</Text>
       <View style={styles.textBox}>
-        <Text style={styles.text}>
-          나리는 꽃가루에 눈이 따끔해 (아야) 눈물이 고여도 꾹 참을래 내 마음
-          한켠 비밀스런 오르골에 넣어두고서 영원히 되감을 순간이니까
-        </Text>
+        <Text style={styles.text}>{message}</Text>
       </View>
     </View>
   );
@@ -34,5 +32,12 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderBottomRightRadius: 10,
     borderBottomLeftRadius: 10,
+  },
+  time: {
+    marginRight: 5,
+    fontSize: 10,
+    fontFamily: 'SansRegular',
+    alignSelf: 'flex-end',
+    color: 'grey',
   },
 });

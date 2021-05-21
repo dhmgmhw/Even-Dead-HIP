@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,12 +8,31 @@ import {
   Image,
   ActivityIndicator,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ChatRoomComponent({ navigation, profile, chatRoom }) {
+  const [chatUser, setChatUser] = useState('');
+  const [userImg, setUserImg] = useState('');
+
+  const compLoader = async () => {
+    if (profile.email == chatRoom.user[1].email) {
+      setChatUser(chatRoom.user[0].username);
+      setUserImg(chatRoom.user[0].image);
+    } else {
+      setChatUser(chatRoom.user[1].username);
+      setUserImg(chatRoom.user[1].image);
+    }
+  };
+
+  useEffect(() => {
+    compLoader();
+    // console.log(profile);
+  }, []);
+
   return (
     <Pressable
       onPress={() => {
-        // navigation.push('ChatRoom', profile);
+        // navigation.push('ChatRoom', [profile, chatRoom]);
         navigation.push('ChatPage', [profile, chatRoom]);
       }}
       style={styles.chatBox}>
@@ -27,21 +46,27 @@ export default function ChatRoomComponent({ navigation, profile, chatRoom }) {
           }}
           resizeMode='cover'
           source={{
-            uri: 'https://image.bugsm.co.kr/artist/images/1000/800491/80049126.jpg',
+            uri: userImg,
           }}
         />
       </View>
       <View style={styles.descBox}>
-        <Text style={styles.userName}>{chatRoom.id}</Text>
-        <Text style={styles.chat}>{chatRoom.roomId}</Text>
+        <Text numberOfLines={2} style={styles.userName}>
+          {chatRoom.roomName}
+        </Text>
+        <Text style={styles.chat}>{chatUser}</Text>
       </View>
       <Image
         style={styles.bookBox}
         resizeMode='cover'
         PlaceholderContent={<ActivityIndicator />}
-        source={{
-          uri: 'http://image.newsis.com/2021/01/15/NISI20210115_0000674160_web.jpg',
-        }}
+        source={
+          chatRoom.image
+            ? {
+                uri: chatRoom.image,
+              }
+            : require('../../assets/splash.png')
+        }
       />
     </Pressable>
   );
@@ -74,6 +99,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   userName: {
+    maxWidth: '90%',
     fontFamily: 'SansExtra',
     fontSize: 14,
     marginBottom: 10,

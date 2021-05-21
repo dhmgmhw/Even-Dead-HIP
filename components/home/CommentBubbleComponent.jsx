@@ -59,9 +59,13 @@ export default function CommentBubbleComponent({ post, download }) {
           <Image
             style={styles.userImg}
             resizeMode='cover'
-            source={{
-              uri: post.image,
-            }}
+            source={
+              post.image
+                ? {
+                    uri: post.image,
+                  }
+                : require('../../assets/userimg.png')
+            }
           />
         </View>
         <View style={styles.commentBox}>
