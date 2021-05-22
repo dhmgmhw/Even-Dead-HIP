@@ -32,8 +32,8 @@
       }
     },
     "android": {
-      "versionCode": 3,
-      "package": "com.dzeko.ybmb",
+      "versionCode": 1,
+      "package": "com.checknbook.ybmb",
       "permissions": [
         "CAMERA",
         "READ_EXTERNAL_STORAGE",
