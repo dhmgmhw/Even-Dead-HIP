@@ -29,6 +29,7 @@ export default function ChatMain({ navigation }) {
 
   const loadChatRoom = async () => {
     const result = await getMyRoom();
+    // console.log(result);
     setChatRooms(result);
   };
 
@@ -55,7 +56,7 @@ export default function ChatMain({ navigation }) {
         contentContainerStyle={{ marginTop: 20 }}>
         {chatRooms ? (
           <>
-            {chatRooms.map((chatRoom, i) => {
+            {chatRooms.reverse().map((chatRoom, i) => {
               return (
                 <ChatRoomComponent
                   key={i}
