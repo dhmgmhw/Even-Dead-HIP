@@ -10,6 +10,7 @@ import {
   Pressable,
   KeyboardAvoidingView,
   Keyboard,
+  Platform,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
@@ -36,7 +37,7 @@ export default function SignUpPage({ navigation }) {
 
   const checkPassword = (testCase) => {
     let checkPass =
-      /^(?=.*[a-zA-Z])(?=.*[\~\․\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\|\\\;\:\\'\"\<\>\,\.\?\/])(?=.*[0-9]).{6,12}$/;
+      /^(?=.*[a-zA-Z])(?=.*[\~\․\!\@\#\$\%\^\&\*\(\)\_\-\+\=\[\]\|\\\;\:\\'\"\<\>\,\.\?\/])(?=.*[0-9]).{6,18}$/;
     if (checkPass.test(testCase)) {
       return true;
     } else {
@@ -65,6 +66,12 @@ export default function SignUpPage({ navigation }) {
       Alert.alert('비밀번호 확인을 다시해주세요');
       return;
     }
+    if (checkPassword(password) == false) {
+      Alert.alert(
+        '비밀번호는 영문자, 특수문자, 숫자 포함 6~18자리로 작성해주세요'
+      );
+      return;
+    }
     await register(username, email, password, navigation);
   };
 
@@ -80,7 +87,8 @@ export default function SignUpPage({ navigation }) {
           alignItems: 'center',
           backgroundColor: 'white',
         }}>
-        <KeyboardAvoidingView behavior='position'>
+        <KeyboardAvoidingView
+          behavior={Platform.OS == 'ios' ? 'position' : 'padding'}>
           <Text style={styles.label}>닉네임</Text>
           <TextInput
             style={styles.input}
@@ -108,7 +116,7 @@ export default function SignUpPage({ navigation }) {
           />
           {checkPassword(password) ? null : (
             <Text style={styles.info}>
-              영문자, 특수문자, 숫자 포함 6~12자리
+              영문자, 특수문자, 숫자 포함 6~18자리
             </Text>
           )}
           <Text style={styles.label}>비밀번호 확인</Text>
@@ -121,7 +129,6 @@ export default function SignUpPage({ navigation }) {
             placeholderTextColor={'#828282'}
           />
         </KeyboardAvoidingView>
-
         <Pressable onPress={doSignUp} style={styles.btn}>
           <Text
             style={{ fontSize: 18, fontFamily: 'SansBold', color: 'white' }}>
@@ -134,43 +141,6 @@ export default function SignUpPage({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  statusAvoid: {
-    height: getStatusBarHeight(),
-    backgroundColor: 'white',
-  },
-  mainHeader: {
-    width: diviceWidth,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: 'white',
-    height: 45,
-    borderBottomWidth: 4,
-    borderColor: '#F3F3F3',
-  },
-  headerLComp: {
-    height: 45,
-    width: diviceWidth / 3,
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-  headerCComp: {
-    width: diviceWidth / 3,
-    height: 45,
-    justifyContent: 'center',
-  },
-  headerRComp: {
-    width: diviceWidth / 3,
-    height: 45,
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-    paddingHorizontal: 20,
-  },
-  headerCText: {
-    fontFamily: 'SansBold',
-    fontSize: 18,
-    textAlign: 'center',
-  },
   label: {
     fontFamily: 'SansBold',
     fontSize: 14,
