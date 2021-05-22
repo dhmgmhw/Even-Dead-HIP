@@ -39,7 +39,7 @@ export default function GenreComponent({
 
   useEffect(() => {
     // console.log(scrapList);
-    // console.log(post);
+    // console.log(post.finish == 0);
   }, []);
 
   return (
@@ -122,7 +122,11 @@ export default function GenreComponent({
                   <Image
                     style={styles.userImg}
                     resizeMode='cover'
-                    source={{ uri: post.user.image }}
+                    source={
+                      post.user.image
+                        ? { uri: post.user.image }
+                        : require('../../assets/userimg.png')
+                    }
                   />
                 </View>
                 <View style={styles.postedTextBox}>
@@ -184,13 +188,17 @@ export default function GenreComponent({
             <View>
               <Text
                 numberOfLines={2}
-                style={{ fontFamily: 'SCDream6', fontSize: 13 }}>
+                style={{
+                  fontFamily: 'SansMedium',
+                  fontSize: 14,
+                  maxWidth: '90%',
+                }}>
                 {post.title}
               </Text>
               <Text
                 numberOfLines={1}
                 style={{
-                  fontFamily: 'SCDream3',
+                  fontFamily: 'SansRegular',
                   fontSize: 13,
                   marginTop: 10,
                 }}>
@@ -199,7 +207,7 @@ export default function GenreComponent({
             </View>
             <Text
               numberOfLines={1}
-              style={{ fontFamily: 'SCDream3', fontSize: 12 }}>
+              style={{ fontFamily: 'SansRegular', fontSize: 12 }}>
               {post.town}
             </Text>
           </View>
@@ -224,6 +232,11 @@ export default function GenreComponent({
             />
           )}
         </>
+      )}
+      {post.finish == 0 ? null : (
+        <View style={styles.doneBox}>
+          <Text style={styles.done}>교환완료</Text>
+        </View>
       )}
     </Pressable>
   );
@@ -333,5 +346,22 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     alignSelf: 'flex-end',
     marginTop: 10,
+  },
+  doneBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 25,
+    width: 80,
+    borderRadius: 15,
+    backgroundColor: '#54B65E',
+    position: 'absolute',
+    alignSelf: 'flex-end',
+    top: 20,
+  },
+  done: {
+    fontFamily: 'SansMedium',
+    fontSize: 12,
+    color: 'white',
   },
 });
