@@ -10,6 +10,7 @@ import {
   Dimensions,
   Pressable,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -18,20 +19,27 @@ import { ProgressBar } from 'react-native-paper';
 
 import { uploadImg } from '../../config/PostingApi';
 
-import { getUserProfile, signOut } from '../../config/BackData';
+import { deleteAccount, getUserProfile, signOut } from '../../config/BackData';
 import { changeUserProfile } from '../../config/BackData';
 
 import { Overlay } from 'react-native-elements';
 import { Alert } from 'react-native';
 
 export default function MyInfoTab({ navigation }) {
+  const [isLoading, setIsLoading] = useState(false);
+
   const [profile, setprofile] = useState('');
 
   const [visible, setVisible] = useState(false);
+  const [delOpener, setDelOpener] = useState(false);
+
   const [name, setName] = useState(profile.username);
   const [imageUri, setImageUri] = useState(profile.image);
   const [nickName, setNickName] = useState(profile.username);
   const [point, setPoint] = useState(0);
+
+  const [level, setLevel] = useState('');
+  const [levelImg, setLevelImg] = useState('');
 
   useEffect(() => {
     getPermission();
@@ -63,16 +71,23 @@ export default function MyInfoTab({ navigation }) {
     signOut(navigation);
   };
 
+  const delAccount = () => {
+    console.log('회원탈퇴 시도');
+    deleteAccount(navigation);
+  };
+
   const download = async () => {
     const result = await getUserProfile();
-    console.log(result);
+    // console.log(result);
     setprofile(result.results);
     setNickName(result.results.username);
     setImageUri(result.results.image);
+    levelSetter(result.results.point);
     setPoint(result.results.point);
   };
 
   const upload = async () => {
+    setIsLoading(true);
     if (name == '') {
       Alert.alert('바꿀 닉네임을 작성해 주세요!');
       return;
@@ -94,6 +109,7 @@ export default function MyInfoTab({ navigation }) {
       let getUri = await uploadImg(formData);
       await changeUserProfile(name, getUri[0]);
       setVisible(false);
+      setIsLoading(false);
       download();
     }
   };
@@ -122,41 +138,29 @@ export default function MyInfoTab({ navigation }) {
 
   const levelSetter = (point) => {
     if (0 <= point < 600) {
-      return '콩';
+      setLevel('콩');
+      return;
     } else if (600 <= point < 1200) {
-      return '새싹';
+      setLevel('새싹');
+      return;
     } else if (1200 <= point < 1800) {
-      return '줄기';
+      setLevel('줄기');
+      return;
     } else if (1800 <= point < 2400) {
-      return '가지';
+      setLevel('가지');
+      return;
     } else if (2400 <= point < 3000) {
-      return '어린나무';
+      setLevel('어린나무');
+      return;
     } else if (3000 <= point < 3600) {
-      return '큰나무';
+      setLevel('큰나무');
+      return;
     } else if (3600 <= point < 4200) {
-      return '꽃';
+      setLevel('꽃');
+      return;
     } else if (4200 <= point) {
-      return '오두막';
-    }
-  };
-
-  const levelImgSetter = (point) => {
-    if (0 <= point < 600) {
-      return require('../../assets/levels/Lev1.png');
-    } else if (600 <= point < 1200) {
-      return require('../../assets/levels/Lev2.png');
-    } else if (1200 <= point < 1800) {
-      return require('../../assets/levels/Lev3.png');
-    } else if (1800 <= point < 2400) {
-      return require('../../assets/levels/Lev4.png');
-    } else if (2400 <= point < 3000) {
-      return require('../../assets/levels/Lev5.png');
-    } else if (3000 <= point < 3600) {
-      return require('../../assets/levels/Lev6.png');
-    } else if (3600 <= point < 4200) {
-      return require('../../assets/levels/Lev7.png');
-    } else if (4200 <= point) {
-      return require('../../assets/levels/Lev8.png');
+      setLevel('오두막');
+      return;
     }
   };
 
@@ -183,9 +187,11 @@ export default function MyInfoTab({ navigation }) {
                 <Image
                   style={styles.profileimg}
                   resizeMode='cover'
-                  source={{
-                    uri: profile.image,
-                  }}
+                  source={
+                    profile.image
+                      ? { uri: profile.image }
+                      : require('../../assets/userimg.png')
+                  }
                 />
               </View>
               <View
@@ -253,13 +259,24 @@ export default function MyInfoTab({ navigation }) {
                   placeholderTextColor={'grey'}
                 />
               </View>
+              {isLoading ? (
+                <ActivityIndicator
+                  style={{
+                    position: 'absolute',
+                    alignSelf: 'center',
+                    top: '50%',
+                  }}
+                  size='large'
+                  color='grey'
+                />
+              ) : null}
             </Overlay>
           </View>
         </View>
       </View>
       <View style={styles.mystatus}>
         <Text style={styles.title}>
-          콩나무 <Text style={styles.highlite}>{levelSetter(point)} 단계</Text>
+          콩나무 <Text style={styles.highlite}>{level} 단계</Text>
         </Text>
         <ProgressBar
           style={styles.seed}
@@ -277,7 +294,6 @@ export default function MyInfoTab({ navigation }) {
         />
       </Pressable>
       <View style={styles.border}></View>
-      <View style={styles.border}></View>
       <Pressable style={styles.deal} onPress={logout}>
         <Text style={[styles.downcompo, { color: 'red' }]}>로그아웃</Text>
         <Feather
@@ -288,6 +304,24 @@ export default function MyInfoTab({ navigation }) {
         />
       </Pressable>
       <View style={styles.border}></View>
+      {/* <Pressable
+        style={[styles.deal, { justifyContent: 'center', marginVertical: 20 }]}
+        onPress={() => {
+          delOpener();
+        }}>
+        <Text
+          style={[
+            styles.downcompo,
+            {
+              textAlign: 'center',
+              alignSelf: 'center',
+              fontFamily: 'SansRegular',
+              color: 'red',
+            },
+          ]}>
+          회원 탈퇴
+        </Text>
+      </Pressable> */}
     </ScrollView>
   );
 }
