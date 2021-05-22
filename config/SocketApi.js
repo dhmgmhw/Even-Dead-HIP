@@ -6,6 +6,7 @@ import SockJS from "sockjs-client";
 
 let sock = new SockJS('http://13.124.182.223/ws-stomp');
 let ws = Stomp.over(sock);
+// const host = 'http://13.124.182.223'
 
 
 export async function getMyRoom() {

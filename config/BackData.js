@@ -5,6 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 const host = "http://13.124.182.223"
 // const host = 'http://3.34.178.136'
 // const host = 'http://3.37.61.239'
+// const host = 'http://3.34.190.10'
 
 
 export async function register(
@@ -16,7 +17,7 @@ export async function register(
   try {
     const result = await axios({
       method: "post",
-      url: host + "/api/signup",
+      url: host + "/api/users/signup",
       data: {
         username: username,
         password: password,
@@ -38,19 +39,23 @@ export async function login(email, password, navigation) {
   try {
     const result = await axios({
       method: "post",
-      url: host + "/api/login",
+      url: host + "/api/users/login",
       data: {
         email: email,
         password: password,
       },
     })
     console.log(result.data)
-    await AsyncStorage.setItem("session", result.data.results.token)
-    await AsyncStorage.setItem("email", result.data.results.email)
-    navigation.push("SignPlusPage")
+    if (result.data.ok) {
+      await AsyncStorage.setItem("session", result.data.results.token)
+      await AsyncStorage.setItem("email", result.data.results.email)
+      navigation.push("SignPlusPage")
+    } else {
+      Alert.alert(result.data.msg)
+    }
   } catch (err) {
     console.log(err)
-    Alert.alert("로그인 할 수 없습니다.")
+    Alert.alert('로그인 할 수 없습니다')
   }
 }
 
@@ -59,7 +64,7 @@ export async function signdetail(town) {
     const token = await AsyncStorage.getItem("session")
     const result = await axios({
       method: "Put",
-      url: host + "/api/profile",
+      url: host + "/api/users/profile",
       headers: {
         token: token,
       },
@@ -79,7 +84,7 @@ export async function getUserProfile() {
     const token = await AsyncStorage.getItem("session")
     const result = await axios({
       method: "Get",
-      url: host + "/api/usercheck",
+      url: host + "/api/users/usercheck",
       headers: {
         token: token,
       },
@@ -98,7 +103,7 @@ export async function changeUserProfile(username, image) {
     const token = await AsyncStorage.getItem("session")
     const result = await axios({
       method: "put",
-      url: host + "/api/profile",
+      url: host + "/api/users/profile",
       headers: {
         token: token,
       },
@@ -122,3 +127,21 @@ export async function signOut(navigation) {
   navigation.push("SignInPage")
 }
 
+export async function deleteAccount(navigation) {
+  const token = await AsyncStorage.getItem("session")
+  try {
+    await axios({
+      method: "delete",
+      url: host + '/api/townbooks/' + id,
+      headers: {
+        token: token,
+      },
+    });
+    await AsyncStorage.clear()
+    alert('계정 삭제 완료')
+    navigation.push("SignInPage")
+  } catch (err) {
+    console.log(err)
+    alert('회원탈퇴 오류가 발생했습니다.')
+  }
+}
