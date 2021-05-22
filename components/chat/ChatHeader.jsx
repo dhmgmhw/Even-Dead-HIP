@@ -25,7 +25,7 @@ export default function ChatHeader({ navigation, roomInfo, myInfo }) {
               navigation.goBack();
             }}
             name={'chevron-back'}
-            size={27}
+            size={24}
             color={'black'}
           />
         </View>
@@ -36,7 +36,9 @@ export default function ChatHeader({ navigation, roomInfo, myInfo }) {
               : roomInfo.user[0].username}
           </Text>
         </View>
-        <View style={styles.headerRComp}></View>
+        <View style={styles.headerRComp}>
+          <Ionicons name={'ellipsis-vertical'} size={20} color={'black'} />
+        </View>
       </View>
       <Pressable
         onPress={() => {

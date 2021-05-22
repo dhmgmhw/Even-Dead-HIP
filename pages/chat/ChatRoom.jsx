@@ -4,14 +4,20 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import ChatHeader from '../../components/chat/ChatHeader';
 import SockJS from 'sockjs-client';
 import SockJsClient from 'react-stomp';
+import { sockConnect } from '../../config/SocketApi';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
+let sock = new SockJS('http://13.124.182.223/ws-stomp');
+let ws = Stomp.over(sock);
+
 const chats = [
   {
     _id: 1,
-    text: '돌림노래야이야',
+    text: '자니?',
     createdAt: new Date(),
     user: {
       _id: 2,
@@ -22,111 +28,73 @@ const chats = [
   },
 ];
 
-export default function ChatRoom({ navigation }) {
+export default function ChatRoom({ navigation, route }) {
+  const myInfo = route.params[0];
+  const roomInfo = route.params[1];
+
   const [messages, setMessages] = useState(chats);
 
-  // const sockConnect = async () => {
-  //   const token = await AsyncStorage.getItem('session');
-  //   try {
-  //     const response = await axios({
-  //       method: 'get',
-  //       url: 'http://3.34.178.136/ws-stomp',
-  //       headers: {
-  //         token: token,
-  //       },
-  //     });
-  //     console.log(response.data);
-  //     // Welcome to SockJS!
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+  const connecetToSub = async () => {
+    await sockConnect();
+    await connectServer();
+    await enterChat(roomInfo.roomId);
+  };
 
-  // const makingChatRoom = async (myEmail, youEmail) => {
-  //   const token = await AsyncStorage.getItem('session');
-  //   try {
-  //     const response = await axios({
-  //       method: 'post',
-  //       url: 'http://3.34.178.136/api/chat/create',
-  //       data: {
-  //         chatUser: [myEmail, youEmail],
-  //       },
-  //       headers: {
-  //         token: token,
-  //       },
-  //     });
-  //     console.log(response.data);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+  const connectServer = async () => {
+    const token = await AsyncStorage.getItem('session');
+    ws.connect(
+      {
+        token: token,
+      },
+      (frame) => {
+        // console.log(frame);
+        ws.subscribe(`/sub/chat/room/${roomInfo.roomId}`, (res) => {
+          const newChat = JSON.parse(res.body);
+          // console.log(JSON.parse(res.body));
+          let newChats = [...messages, ...newChat];
+          console.log(newChats);
+          // setMessages(newChats);
+        });
+      }
+    );
+  };
 
-  // const enterChatRoom = async (roomId) => {
-  //   const token = AsyncStorage.getItem('session');
-  //   try {
-  //     const response = await axios({
-  //       method: 'get',
-  //       url: 'http://3.34.178.136/api/chat/enter/' + roomId,
-  //       headers: {
-  //         token: token,
-  //       },
-  //     });
-  //     console.log(response.data);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
-  // const connectAndSub = async () => {
-  //   const token = await AsyncStorage.getItem('session');
-  //   ws.connect(
-  //     {
-  //       token: token,
-  //     },
-  //     function (frame) {
-  //       console.log('소캣연결성공', frame);
-  //       // ws.subscribe(
-  //       //   'http://3.34.178.136/sub/chat/room/' + roomId,
-  //       //   function (res) {
-  //       //     console.log(JSON.parse(res.body));
-  //       //   }
-  //       // );
-  //     }
-  //   );
-  // };
+  const enterChat = async (arg) => {
+    const token = AsyncStorage.getItem('session');
+    try {
+      const response = await axios({
+        method: 'get',
+        url: 'http://13.124.182.223/api/chat/enter/' + arg,
+        headers: {
+          token: token,
+        },
+      });
+      // console.log(response.data.results);
+      setMessages(response.data.results);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
-    // sockConnect();
-    connectServer();
-    // sockConnect();
-    // enterChatRoom();
-    // makingChatRoom();
-    // connectAndSub();
-    // ws.disconnect()
+    connecetToSub(roomInfo.roomId);
   }, []);
 
   const onSend = async (messages) => {
-    // console.log(messages[0].text);
     const token = await AsyncStorage.getItem('session');
     ws.send(
       '/pub/api/chat/message',
       {
         token: token,
       },
-      JSON.stringify({
-        type: 'TALK',
-        roomId: '3d3f74a1-f014-4ce6-b07d-ec9cbca8768b',
-        message: messages[0].text,
-        userName: '문형원',
-        userProfile: '내 이미지 주소',
-      })
+      JSON.stringify(messages[0])
     );
     Keyboard.dismiss();
   };
 
   return (
     <>
-      <ChatHeader navigation={navigation} />
+      <ChatHeader navigation={navigation} roomInfo={roomInfo} myInfo={myInfo} />
       <View style={{ flex: 1, backgroundColor: 'white' }}>
         <GiftedChat
           placeholder={'메시지를 입력해 주세요.'}
@@ -134,6 +102,13 @@ export default function ChatRoom({ navigation }) {
           textInputStyle={styles.input}
           messages={messages}
           onSend={(messages) => onSend(messages)}
+          user={{
+            _id: myInfo.id,
+            name: myInfo.username,
+            avatar: myInfo.image,
+            roomId: roomInfo.roomId,
+            type: 'TALK',
+          }}
         />
       </View>
     </>
