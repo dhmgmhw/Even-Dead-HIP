@@ -78,8 +78,8 @@ export default function HomeMain({ navigation }) {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       download();
-      userCheck();
       bannerLoad();
+      userCheck();
     });
     return unsubscribe;
   }, [navigation]);
@@ -108,6 +108,9 @@ export default function HomeMain({ navigation }) {
         }}
         keyExtractor={(item) => String(item.id)}
         onEndReachedThreshold={0.5}
+        ListFooterComponent={() => {
+          return <View style={{ height: 30 }}></View>;
+        }}
         ListHeaderComponent={() => {
           return (
             <>
