@@ -71,14 +71,14 @@ export default function MyInfoTab({ navigation }) {
     signOut(navigation);
   };
 
-  const delAccount = () => {
+  const delAccount = async () => {
     console.log('회원탈퇴 시도');
-    deleteAccount(navigation);
+    await deleteAccount(profile.id, navigation);
+    setDelOpener(!delOpener);
   };
 
   const download = async () => {
     const result = await getUserProfile();
-    // console.log(result);
     setprofile(result.results);
     setNickName(result.results.username);
     setImageUri(result.results.image);
@@ -118,6 +118,10 @@ export default function MyInfoTab({ navigation }) {
     setVisible(!visible);
     download();
     setName(nickName);
+  };
+
+  const toggleDel = () => {
+    setDelOpener(!delOpener);
   };
 
   const pickImage = async () => {
@@ -271,6 +275,19 @@ export default function MyInfoTab({ navigation }) {
                 />
               ) : null}
             </Overlay>
+            <Overlay isVisible={delOpener} onBackdropPress={toggleDel}>
+              <View style={styles.delBox}>
+                <Text style={styles.delText}>
+                  책과 콩나무에서 탈퇴하시겠습니까?
+                </Text>
+                <Text style={styles.delText}>
+                  이 작업은 되돌릴 수 없어요 ;(
+                </Text>
+                <Pressable onPress={delAccount} style={styles.delBtn}>
+                  <Text style={styles.delBtnText}>탈퇴할래요</Text>
+                </Pressable>
+              </View>
+            </Overlay>
           </View>
         </View>
       </View>
@@ -304,11 +321,9 @@ export default function MyInfoTab({ navigation }) {
         />
       </Pressable>
       <View style={styles.border}></View>
-      {/* <Pressable
+      <Pressable
         style={[styles.deal, { justifyContent: 'center', marginVertical: 20 }]}
-        onPress={() => {
-          delOpener();
-        }}>
+        onPress={toggleDel}>
         <Text
           style={[
             styles.downcompo,
@@ -321,7 +336,7 @@ export default function MyInfoTab({ navigation }) {
           ]}>
           회원 탈퇴
         </Text>
-      </Pressable> */}
+      </Pressable>
     </ScrollView>
   );
 }
@@ -360,7 +375,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   myprofile: {
-    // height: 150,
     flexDirection: 'column',
   },
   textInput: {
@@ -417,6 +431,13 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width * 0.9,
     height: Dimensions.get('window').height * 0.5,
   },
+  delBox: {
+    width: Dimensions.get('window').width * 0.9,
+    height: Dimensions.get('window').height * 0.2,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   nicknamefix: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -466,12 +487,8 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   pickpic: {
-    // alignItems: "center",
-    // justifyContent: "center",
     paddingVertical: 3,
     paddingHorizontal: 3,
-    // borderRadius: 4,
-    // elevation: 3,
   },
   editId: {
     borderRadius: 4,
@@ -479,12 +496,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     elevation: 3,
   },
-  // complete: {
-  //   borderRadius: 4,
-  //   paddingVertical: 5,
-  //   paddingHorizontal: 5,
-  //   elevation: 3,
-  // },
   seed: {
     marginTop: 20,
     justifyContent: 'center',
@@ -510,5 +521,20 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingLeft: 20,
     marginTop: 10,
+  },
+  delText: {
+    fontFamily: 'SansMedium',
+    fontSize: 20,
+  },
+  delBtnText: {
+    fontFamily: 'SansBold',
+    color: 'white',
+  },
+  delBtn: {
+    marginTop: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: 'red',
+    borderRadius: 5,
   },
 });
