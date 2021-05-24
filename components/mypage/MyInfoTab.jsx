@@ -16,6 +16,7 @@ import * as ImagePicker from 'expo-image-picker';
 
 import { Feather } from '@expo/vector-icons';
 import { ProgressBar } from 'react-native-paper';
+import * as Linking from 'expo-linking';
 
 import { uploadImg } from '../../config/PostingApi';
 
@@ -75,6 +76,14 @@ export default function MyInfoTab({ navigation }) {
     console.log('회원탈퇴 시도');
     await deleteAccount(profile.id, navigation);
     setDelOpener(!delOpener);
+  };
+
+  const addKakao = () => {
+    Linking.openURL('http://pf.kakao.com/_xhgVMs');
+  };
+
+  const goToGoogleForm = () => {
+    Linking.openURL('https://forms.gle/jNG6vBMeM1aefTWNA');
   };
 
   const download = async () => {
@@ -143,28 +152,20 @@ export default function MyInfoTab({ navigation }) {
   const levelSetter = (point) => {
     if (0 <= point < 600) {
       setLevel('콩');
-      return;
     } else if (600 <= point < 1200) {
       setLevel('새싹');
-      return;
     } else if (1200 <= point < 1800) {
       setLevel('줄기');
-      return;
     } else if (1800 <= point < 2400) {
       setLevel('가지');
-      return;
     } else if (2400 <= point < 3000) {
       setLevel('어린나무');
-      return;
     } else if (3000 <= point < 3600) {
       setLevel('큰나무');
-      return;
     } else if (3600 <= point < 4200) {
       setLevel('꽃');
-      return;
     } else if (4200 <= point) {
       setLevel('오두막');
-      return;
     }
   };
 
@@ -217,7 +218,7 @@ export default function MyInfoTab({ navigation }) {
               </View>
             </View>
             <Pressable style={styles.editbutton} onPress={toggleOverlay}>
-              <Text style={styles.editbuttonText}> 프로필 수정</Text>
+              <Text style={styles.editbuttonText}>프로필 수정</Text>
             </Pressable>
             <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
               <View style={styles.box}>
@@ -303,6 +304,26 @@ export default function MyInfoTab({ navigation }) {
       </View>
       <Pressable style={styles.deal} onPress={goTownChange}>
         <Text style={styles.downcompo}>동네 설정</Text>
+        <Feather
+          style={styles.rarrow}
+          name='chevron-right'
+          size={28}
+          color='black'
+        />
+      </Pressable>
+      <View style={styles.border}></View>
+      <Pressable style={styles.deal} onPress={addKakao}>
+        <Text style={styles.downcompo}>카카오 플친</Text>
+        <Feather
+          style={styles.rarrow}
+          name='chevron-right'
+          size={28}
+          color='black'
+        />
+      </Pressable>
+      <View style={styles.border}></View>
+      <Pressable style={styles.deal} onPress={goToGoogleForm}>
+        <Text style={styles.downcompo}>개발자에게 일침 :)</Text>
         <Feather
           style={styles.rarrow}
           name='chevron-right'
@@ -485,6 +506,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'SansBold',
     fontSize: 13,
+    includeFontPadding: false,
   },
   pickpic: {
     paddingVertical: 3,
@@ -525,10 +547,12 @@ const styles = StyleSheet.create({
   delText: {
     fontFamily: 'SansMedium',
     fontSize: 20,
+    includeFontPadding: false,
   },
   delBtnText: {
     fontFamily: 'SansBold',
     color: 'white',
+    includeFontPadding: false,
   },
   delBtn: {
     marginTop: 20,
