@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginVertical: 10,
     marginHorizontal: 15,
+    includeFontPadding: false,
   },
   oppositeUserBox: {
     width: 40,

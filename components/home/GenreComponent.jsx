@@ -75,36 +75,45 @@ export default function GenreComponent({
                   : require('../../assets/splash.png')
               }
             />
-            <View style={{ alignItems: 'center' }}>
+            <View
+              style={{
+                alignItems: 'center',
+                flexDirection: 'column',
+                justifyContent: 'space-around',
+              }}>
               <Text
                 style={{
                   fontFamily: 'SansMedium',
                   fontSize: 12,
                   color: '#4CB73B',
                   marginVertical: 10,
+                  includeFontPadding: false,
                 }}>
                 #{post.category}
               </Text>
               <Text numberOfLines={2} style={styles.modalTitle}>
                 {post.title}
               </Text>
-              <Text
-                numberOfLines={2}
-                style={{
-                  fontFamily: 'SansRegular',
-                  fontSize: 13,
-                  marginTop: 10,
-                }}>
-                {post.author} 지음 |
-              </Text>
-              <Text
-                numberOfLines={2}
-                style={{
-                  fontFamily: 'SansRegular',
-                  fontSize: 13,
-                }}>
-                {post.publisher} 출판
-              </Text>
+              <View>
+                <Text
+                  numberOfLines={2}
+                  style={{
+                    fontFamily: 'SansRegular',
+                    fontSize: 13,
+                    includeFontPadding: false,
+                  }}>
+                  {post.author} 지음 |
+                </Text>
+                <Text
+                  numberOfLines={2}
+                  style={{
+                    fontFamily: 'SansRegular',
+                    fontSize: 13,
+                    includeFontPadding: false,
+                  }}>
+                  {post.publisher} 출판
+                </Text>
+              </View>
             </View>
             <View style={styles.postedBox}>
               <View style={{ flexDirection: 'row' }}>
@@ -165,6 +174,7 @@ export default function GenreComponent({
                     fontFamily: 'SansBold',
                     fontSize: 16,
                     color: 'white',
+                    includeFontPadding: false,
                   }}>
                   가치 교환하기
                 </Text>
@@ -185,13 +195,14 @@ export default function GenreComponent({
             }
           />
           <View style={styles.cardTitleBox}>
-            <View>
+            <View style={{ justifyContent: 'space-between' }}>
               <Text
-                numberOfLines={2}
+                numberOfLines={1}
                 style={{
+                  maxWidth: diviceWidth * 0.6,
                   fontFamily: 'SansMedium',
                   fontSize: 14,
-                  maxWidth: '90%',
+                  includeFontPadding: false,
                 }}>
                 {post.title}
               </Text>
@@ -200,20 +211,30 @@ export default function GenreComponent({
                 style={{
                   fontFamily: 'SansRegular',
                   fontSize: 13,
-                  marginTop: 10,
+                  marginTop: 5,
+                  includeFontPadding: false,
                 }}>
                 {post.author}
               </Text>
             </View>
-            <Text
-              numberOfLines={1}
-              style={{ fontFamily: 'SansRegular', fontSize: 12 }}>
-              {post.town}
-            </Text>
+            {post.finish == 0 ? (
+              <Text
+                numberOfLines={1}
+                style={{
+                  fontFamily: 'SansRegular',
+                  fontSize: 12,
+                  includeFontPadding: false,
+                }}>
+                {post.town}
+              </Text>
+            ) : (
+              <View style={styles.doneBox}>
+                <Text style={styles.done}>교환완료</Text>
+              </View>
+            )}
           </View>
         </View>
       </View>
-      <View style={styles.bottomBorder}></View>
       {post.user.email == myEmail ? null : (
         <>
           {scrapList.includes(post.id) ? (
@@ -233,11 +254,7 @@ export default function GenreComponent({
           )}
         </>
       )}
-      {post.finish == 0 ? null : (
-        <View style={styles.doneBox}>
-          <Text style={styles.done}>교환완료</Text>
-        </View>
-      )}
+      <View style={styles.bottomBorder}></View>
     </Pressable>
   );
 }
@@ -264,7 +281,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   cardTitleBox: {
-    maxWidth: diviceWidth * 0.6,
     flexDirection: 'column',
     justifyContent: 'space-between',
     marginLeft: 10,
@@ -327,15 +343,29 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     backgroundColor: '#e5e5e5',
   },
-  postedTextBox: { marginLeft: 20 },
+  postedTextBox: {
+    marginLeft: 20,
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+  },
   status: {
     fontFamily: 'SansBold',
     fontSize: 18,
     color: 'white',
-    marginBottom: 10,
+    includeFontPadding: false,
   },
-  postedBy: { fontFamily: 'SansExtra', fontSize: 14, color: 'white' },
-  postedTown: { fontFamily: 'SansMedium', fontSize: 14, color: 'white' },
+  postedBy: {
+    fontFamily: 'SansExtra',
+    fontSize: 14,
+    color: 'white',
+    includeFontPadding: false,
+  },
+  postedTown: {
+    fontFamily: 'SansMedium',
+    fontSize: 14,
+    color: 'white',
+    includeFontPadding: false,
+  },
   goBtn: {
     width: 130,
     flexDirection: 'row',
@@ -355,9 +385,7 @@ const styles = StyleSheet.create({
     width: 80,
     borderRadius: 15,
     backgroundColor: '#54B65E',
-    position: 'absolute',
-    alignSelf: 'flex-end',
-    top: 20,
+    marginTop: 10,
   },
   done: {
     fontFamily: 'SansMedium',
