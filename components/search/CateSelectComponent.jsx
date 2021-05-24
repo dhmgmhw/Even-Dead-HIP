@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
     marginVertical: 3,
     marginHorizontal: 7,
-    borderRadius: 10,
+    borderRadius: 90,
   },
   blockLast: {
     flexDirection: 'row',
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
     marginVertical: 3,
     marginHorizontal: 7,
-    borderRadius: 10,
+    borderRadius: 90,
   },
   cateHeader: {
     color: '#4CB73B',
