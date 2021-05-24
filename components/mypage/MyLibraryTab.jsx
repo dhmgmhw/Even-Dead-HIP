@@ -3,9 +3,16 @@ import { StyleSheet, Text, View, ScrollView, Dimensions } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import MyBookComponent from './MyBookComponent';
 import { getMyPost } from '../../config/MyPageApi';
+import { Tab, Tabs, DefaultTabBar } from 'native-base';
+import MyScrap from './MyScrap';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
+
+const renderTabBar = (props) => {
+  props.tabStyle = Object.create(props.tabStyle);
+  return <DefaultTabBar {...props} />;
+};
 
 export default function MyLibraryTab({ navigation }) {
   const [myPosts, setMyPosts] = useState();
@@ -14,7 +21,7 @@ export default function MyLibraryTab({ navigation }) {
   const download = async () => {
     const response = await getMyPost();
     if (response.length > 0) {
-      setMyPosts(response);
+      setMyPosts(response.reverse());
       setLoading(false);
     } else {
       console.log('No Posts');
@@ -26,28 +33,73 @@ export default function MyLibraryTab({ navigation }) {
     download();
   }, []);
 
-  return (
-    <ScrollView style={styles.container}>
-      <View style={styles.tabTitleBox}>
-        <Feather name='book' size={28} color='black' />
-        <Text
-          style={{
-            fontFamily: 'SansBold',
-            fontSize: 18,
-            marginHorizontal: 10,
-          }}>
-          내 서재
-        </Text>
-      </View>
-      {loading ? null : (
-        <>
-          {myPosts.reverse().map((post, i) => {
-            return (
-              <MyBookComponent navigation={navigation} key={i} post={post} />
-            );
-          })}
-        </>
-      )}
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      download();
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  return loading ? null : (
+    <ScrollView bounces={false} style={styles.container}>
+      <Tabs
+        renderTabBar={renderTabBar}
+        tabBarUnderlineStyle={{
+          width: 0,
+        }}>
+        <Tab
+          heading='내 서재'
+          textStyle={styles.tabBarFont}
+          activeTextStyle={{ color: '#43a634' }}
+          tabStyle={styles.whiteBack}
+          activeTabStyle={styles.whiteBack}
+          tabContainerStyle={styles.tabBarContainer}>
+          {loading ? null : (
+            <>
+              {myPosts.map((post, i) => {
+                return (
+                  <MyBookComponent
+                    navigation={navigation}
+                    key={i}
+                    post={post}
+                  />
+                );
+              })}
+            </>
+          )}
+        </Tab>
+        <Tab
+          heading='교환완료'
+          textStyle={styles.tabBarFont}
+          tabStyle={styles.whiteBack}
+          activeTabStyle={styles.whiteBack}
+          activeTextStyle={{ color: '#43a634' }}
+          tabContainerStyle={styles.tabBarContainer}>
+          {loading ? null : (
+            <>
+              {myPosts.map((post, i) => {
+                console.log(post.finish);
+                return post.finish == 1 ? (
+                  <MyBookComponent
+                    navigation={navigation}
+                    key={i}
+                    post={post}
+                  />
+                ) : null;
+              })}
+            </>
+          )}
+        </Tab>
+        <Tab
+          heading='스크랩'
+          textStyle={styles.tabBarFont}
+          tabStyle={styles.whiteBack}
+          activeTabStyle={styles.whiteBack}
+          activeTextStyle={{ color: '#43a634' }}
+          tabContainerStyle={styles.tabBarContainer}>
+          <MyScrap navigation={navigation} />
+        </Tab>
+      </Tabs>
     </ScrollView>
   );
 }
@@ -56,11 +108,10 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
   },
-  tabTitleBox: {
-    width: diviceWidth,
-    height: 60,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+  tabBarFont: {
+    fontFamily: 'SansMedium',
+    fontSize: 14,
+    color: 'grey',
   },
+  whiteBack: { backgroundColor: '#EEF5ED' },
 });

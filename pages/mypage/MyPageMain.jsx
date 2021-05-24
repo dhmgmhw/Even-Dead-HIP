@@ -39,14 +39,6 @@ export default function MyPageMain({ navigation }) {
           activeTabStyle={styles.whiteBack}>
           <MyLibraryTab navigation={navigation} />
         </Tab>
-        <Tab
-          textStyle={styles.tabBarFont}
-          activeTextStyle={styles.tabBarFont}
-          heading='스크랩'
-          tabStyle={styles.whiteBack}
-          activeTabStyle={styles.whiteBack}>
-          <MyScrap navigation={navigation} />
-        </Tab>
       </Tabs>
     </View>
   );
