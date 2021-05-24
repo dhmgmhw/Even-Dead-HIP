@@ -55,9 +55,6 @@ export default function TradeSelectPage({ navigation, route }) {
     }
     await tradeConfirm(uploaderId, sendData.userId, postId, navigation);
   };
-  // 업로드 유저의 id = data[0].user.id
-  // 교환한 유저의 id = sendData.userId
-  // 게시글의 id = data[0].id
 
   return (
     <View style={{ backgroundColor: 'white' }}>

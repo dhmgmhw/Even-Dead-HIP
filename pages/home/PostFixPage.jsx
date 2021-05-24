@@ -371,6 +371,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: 'white',
     height: 45,
+    borderBottomWidth: 4,
+    borderColor: '#F2F2F2',
   },
   headerLComp: {
     height: 45,

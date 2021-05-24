@@ -126,7 +126,6 @@ export default function ChatPage({ navigation, route }) {
         data={messages}
         inverted
         renderItem={(message) => {
-          // console.log(message);
           return myInfo.email == message.item.email ? (
             <MyChatComponent
               key={message.id}

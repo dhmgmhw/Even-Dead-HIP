@@ -29,7 +29,6 @@ export default function ChatMain({ navigation }) {
 
   const loadChatRoom = async () => {
     const result = await getMyRoom();
-    // console.log(result);
     setChatRooms(result);
   };
 

@@ -2,11 +2,6 @@ import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 
 export default function OpponentChatComponent({ time, message, img }) {
-  useEffect(() => {
-    // console.log(time.split(' ')[1].substring(0, 5));
-    // console.log(time);
-  }, []);
-
   return (
     <View style={{ paddingBottom: 10, marginHorizontal: 20 }}>
       <View style={styles.oppositeChatBox}>

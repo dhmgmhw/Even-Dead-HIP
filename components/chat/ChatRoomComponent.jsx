@@ -26,13 +26,11 @@ export default function ChatRoomComponent({ navigation, profile, chatRoom }) {
 
   useEffect(() => {
     compLoader();
-    // console.log(profile);
   }, []);
 
   return (
     <Pressable
       onPress={() => {
-        // navigation.push('ChatRoom', [profile, chatRoom]);
         navigation.push('ChatPage', [profile, chatRoom]);
       }}
       style={styles.chatBox}>
@@ -103,9 +101,11 @@ const styles = StyleSheet.create({
     fontFamily: 'SansExtra',
     fontSize: 14,
     marginBottom: 10,
+    includeFontPadding: false,
   },
   chat: {
     fontFamily: 'SansMedium',
     fontSize: 14,
+    includeFontPadding: false,
   },
 });
