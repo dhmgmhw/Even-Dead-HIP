@@ -19,7 +19,7 @@ export default function MyScrap({ navigation }) {
 
   const download = async () => {
     const response = await getMyScrap();
-    setPosts(response);
+    setPosts(response.reverse());
   };
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -36,7 +36,7 @@ export default function MyScrap({ navigation }) {
     <ScrollView style={styles.container}>
       {posts ? (
         <>
-          {posts.reverse().map((post, i) => {
+          {posts.map((post, i) => {
             return (
               <Pressable
                 onPress={() => {
