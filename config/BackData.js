@@ -3,10 +3,6 @@ import axios from "axios"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 const host = "http://13.124.182.223"
-// const host = 'http://3.34.161.181'
-// const host = 'http://3.37.61.239'
-// const host = 'http://3.34.190.10'
-
 
 export async function register(
   username,
@@ -22,7 +18,7 @@ export async function register(
         username: username,
         password: password,
         email: email,
-        image: 'https://sanggubk2.s3.ap-northeast-2.amazonaws.com/e50d9568-9e45-4dec-9c3b-68fde0b333f7.jpg'
+        image: 'https://sanggubk2.s3.ap-northeast-2.amazonaws.com/e2e3abdc-4750-423f-89b1-8ab15022fdf1.jpg'
       },
     })
     console.log(result.data)

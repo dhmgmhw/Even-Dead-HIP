@@ -7,7 +7,6 @@ import SockJS from "sockjs-client";
 
 let sock = new SockJS('http://13.124.182.223/ws-stomp');
 let ws = Stomp.over(sock);
-// const host = 'http://13.124.182.223'
 const host = 'http://13.124.182.223'
 
 export async function getMyRoom() {
@@ -37,7 +36,6 @@ export async function sockConnect() {
             },
         });
         console.log(response.data);
-        // Welcome to SockJS!
     } catch (err) {
         console.log(err);
     }
@@ -59,9 +57,7 @@ export async function makingChatRoom(myEmail, youEmail, book) {
                 token: token,
             },
         });
-        // console.log(response.data)
         return (response.data.results);
-        // 여기에 방 정보가 담겨있어
     } catch (err) {
         console.log(err);
     }

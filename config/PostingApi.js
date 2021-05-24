@@ -3,10 +3,6 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const host = 'http://13.124.182.223'
-// const host = 'http://3.34.161.181'
-// const host = 'http://3.37.61.239'
-// const host = 'http://3.34.190.10'
-
 
 export async function uploadImg(data) {
     try {
@@ -15,7 +11,6 @@ export async function uploadImg(data) {
             url: host + '/api/images',
             data: data,
         });
-        // console.log(response.data)
         return response.data
     } catch (err) {
         console.log(err)
@@ -34,8 +29,6 @@ export async function postBook(data, navigation) {
             },
             data: data,
         });
-        // return response.data
-        // console.log(response.data)
         alert('게시글을 업로드했어요!')
         navigation.pop();
     } catch (err) {

@@ -3,10 +3,6 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const host = 'http://13.124.182.223'
-// const host = 'http://3.34.161.181'
-// const host = 'http://3.37.61.239'
-// const host = 'http://3.34.190.10'
-
 
 export async function searchBook(book) {
     try {
@@ -24,7 +20,6 @@ export async function searchBook(book) {
 
 export async function searchByCate(cate) {
     try {
-        // console.log(cate)
         const token = await AsyncStorage.getItem("session")
         const response = await axios({
             method: "post",
@@ -35,7 +30,6 @@ export async function searchByCate(cate) {
             },
             data: cate,
         });
-        // console.log(response.data)
         return response.data
     } catch (err) {
         console.log(err)
