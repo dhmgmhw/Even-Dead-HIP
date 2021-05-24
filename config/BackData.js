@@ -3,7 +3,7 @@ import axios from "axios"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 const host = "http://13.124.182.223"
-// const host = 'http://3.34.178.136'
+// const host = 'http://3.34.161.181'
 // const host = 'http://3.37.61.239'
 // const host = 'http://3.34.190.10'
 
@@ -26,8 +26,12 @@ export async function register(
       },
     })
     console.log(result.data)
-    navigation.pop()
-    Alert.alert("회원가입이 완료되었습니다.")
+    if (result.data.ok) {
+      navigation.pop()
+      Alert.alert("회원가입이 완료되었습니다.")
+    } else {
+      Alert.alert(result.data.msg)
+    }
   } catch (err) {
     console.log(err)
     Alert.alert("회원가입 할 수 없습니다.")
@@ -127,16 +131,17 @@ export async function signOut(navigation) {
   navigation.push("SignInPage")
 }
 
-export async function deleteAccount(navigation) {
+export async function deleteAccount(id, navigation) {
   const token = await AsyncStorage.getItem("session")
   try {
-    await axios({
+    const result = await axios({
       method: "delete",
-      url: host + '/api/townbooks/' + id,
+      url: host + '/api/users/' + id,
       headers: {
         token: token,
       },
     });
+    console.log(result.data)
     await AsyncStorage.clear()
     alert('계정 삭제 완료')
     navigation.push("SignInPage")
@@ -145,3 +150,5 @@ export async function deleteAccount(navigation) {
     alert('회원탈퇴 오류가 발생했습니다.')
   }
 }
+
+
