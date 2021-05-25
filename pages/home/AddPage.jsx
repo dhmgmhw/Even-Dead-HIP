@@ -251,6 +251,7 @@ export default function AddPage({ navigation }) {
               }}
             />
             <DropDownPicker
+              containerProps={{ bottom: 1 }}
               items={[
                 { label: 'S', value: 'S' },
                 { label: 'A', value: 'A' },
@@ -415,6 +416,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: 'white',
     height: 45,
+    borderBottomWidth: 4,
+    borderColor: '#F2F2F2',
   },
   headerLComp: {
     height: 45,
@@ -542,7 +545,7 @@ const styles = StyleSheet.create({
   bookDescBox: {
     padding: 10,
     height: 100,
-    marginHorizontal: 20,
+    marginHorizontal: 10,
     marginTop: 20,
     fontSize: 14,
   },
