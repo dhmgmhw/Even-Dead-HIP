@@ -25,7 +25,7 @@ export default function MyLibraryTab({ navigation }) {
       setLoading(false);
     } else {
       console.log('No Posts');
-      setLoading(true);
+      setLoading(false);
     }
   };
 
@@ -54,7 +54,7 @@ export default function MyLibraryTab({ navigation }) {
           tabStyle={styles.whiteBack}
           activeTabStyle={styles.whiteBack}
           tabContainerStyle={styles.tabBarContainer}>
-          {loading ? null : (
+          {myPosts ? (
             <>
               {myPosts.map((post, i) => {
                 return (
@@ -66,7 +66,7 @@ export default function MyLibraryTab({ navigation }) {
                 );
               })}
             </>
-          )}
+          ) : null}
         </Tab>
         <Tab
           heading='교환완료'
