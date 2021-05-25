@@ -41,6 +41,7 @@ export default function MyInfoTab({ navigation }) {
 
   const [level, setLevel] = useState('');
   const [levelImg, setLevelImg] = useState('');
+  const [progress, setProgress] = useState();
 
   useEffect(() => {
     getPermission();
@@ -93,6 +94,7 @@ export default function MyInfoTab({ navigation }) {
     setImageUri(result.results.image);
     levelSetter(result.results.point);
     setPoint(result.results.point);
+    progressSetter(result.results.point);
   };
 
   const upload = async () => {
@@ -150,30 +152,30 @@ export default function MyInfoTab({ navigation }) {
   };
 
   const levelSetter = (point) => {
-    if (0 <= point < 600) {
+    if (0 <= point && point < 600) {
       setLevel('콩');
-    } else if (600 <= point < 1200) {
+    } else if (600 <= point && point < 1200) {
       setLevel('새싹');
-    } else if (1200 <= point < 1800) {
+    } else if (1200 <= point && point < 1800) {
       setLevel('줄기');
-    } else if (1800 <= point < 2400) {
+    } else if (1800 <= point && point < 2400) {
       setLevel('가지');
-    } else if (2400 <= point < 3000) {
+    } else if (2400 <= point && point < 3000) {
       setLevel('어린나무');
-    } else if (3000 <= point < 3600) {
+    } else if (3000 <= point && point < 3600) {
       setLevel('큰나무');
-    } else if (3600 <= point < 4200) {
+    } else if (3600 <= point && point < 4200) {
       setLevel('꽃');
-    } else if (4200 <= point) {
+    } else {
       setLevel('오두막');
     }
   };
 
   const progressSetter = (data) => {
-    while (1 <= data / 100 / 6) {
-      data / 100 / 6 - 1;
+    while (1 <= data / 600) {
+      data -= 600;
     }
-    return data / 100 / 6;
+    setProgress(data / 600);
   };
 
   return (
@@ -298,7 +300,7 @@ export default function MyInfoTab({ navigation }) {
         </Text>
         <ProgressBar
           style={styles.seed}
-          progress={progressSetter(point)}
+          progress={progress}
           color={'#31B11C'}
         />
       </View>
