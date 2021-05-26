@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -36,11 +36,6 @@ export default function GenreComponent({
     await delScrapBook(post.id);
     await userCheck();
   };
-
-  useEffect(() => {
-    // console.log(scrapList);
-    // console.log(post.finish == 0);
-  }, []);
 
   return (
     <Pressable
@@ -117,17 +112,7 @@ export default function GenreComponent({
             </View>
             <View style={styles.postedBox}>
               <View style={{ flexDirection: 'row' }}>
-                <View
-                  style={{
-                    shadowColor: '#000',
-                    shadowOffset: {
-                      width: 0,
-                      height: 7,
-                    },
-                    shadowOpacity: 0.43,
-                    shadowRadius: 9.51,
-                    elevation: 15,
-                  }}>
+                <View style={styles.userImgShadow}>
                   <Image
                     style={styles.userImg}
                     resizeMode='cover'
@@ -342,6 +327,16 @@ const styles = StyleSheet.create({
     height: 70,
     borderRadius: 100,
     backgroundColor: '#e5e5e5',
+  },
+  userImgShadow: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 7,
+    },
+    shadowOpacity: 0.43,
+    shadowRadius: 9.51,
+    elevation: 15,
   },
   postedTextBox: {
     marginLeft: 20,
