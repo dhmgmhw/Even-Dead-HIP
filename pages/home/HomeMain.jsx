@@ -38,31 +38,14 @@ export default function HomeMain({ navigation }) {
   const [myImg, setMyImg] = useState();
   const [myPoint, setMyPoint] = useState();
 
-  const [refreshing, setRefreshing] = useState(false);
-
-  const wait = (timeout) => {
-    return new Promise((resolve) => setTimeout(resolve, timeout));
-  };
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    console.log('새로고침');
-    wait(1000).then(() => {
-      // download();
-      bannerLoad();
-      userCheck();
-      setRefreshing(false);
-    });
-  }, []);
-
   const userCheck = async () => {
     const myInfo = await getUserProfile();
-    setMyTown(myInfo.results.town);
-    setScrapList(myInfo.results.scrapList);
-    setMyEmail(myInfo.results.email);
-    setMyName(myInfo.results.username);
-    setMyImg(myInfo.results.image);
-    setMyPoint(myInfo.results.point);
+    await setMyTown(myInfo.results.town);
+    await setScrapList(myInfo.results.scrapList);
+    await setMyEmail(myInfo.results.email);
+    await setMyName(myInfo.results.username);
+    await setMyImg(myInfo.results.image);
+    await setMyPoint(myInfo.results.point);
   };
 
   const bannerLoad = async () => {
@@ -88,10 +71,7 @@ export default function HomeMain({ navigation }) {
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <ScrollView
         style={{ backgroundColor: 'white' }}
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }></ScrollView>
+        showsVerticalScrollIndicator={false}></ScrollView>
       <FlatList
         data={posts}
         renderItem={(post) => {
@@ -136,12 +116,13 @@ export default function HomeMain({ navigation }) {
                 style={{
                   shadowColor: '#000',
                   shadowOffset: {
-                    width: 1,
-                    height: 10,
+                    width: 0,
+                    height: 4,
                   },
                   shadowOpacity: 0.3,
-                  shadowRadius: 4,
-                  zIndex: 99,
+                  shadowRadius: 4.65,
+                  // elevation: 8,
+                  zIndex: 98,
                   backgroundColor: '#64BB35',
                 }}>
                 <View style={styles.mainTitleBox}>
@@ -230,21 +211,6 @@ export default function HomeMain({ navigation }) {
                   </Text>
                   <Text style={styles.mainTitleDesc3}>동네 이웃도 만나고</Text>
                   <Text style={styles.mainTitleDesc4}>같이하는 가치나눔</Text>
-                  <Ionicons
-                    name={'chevron-down'}
-                    size={25}
-                    style={{ color: 'white', top: 15 }}
-                  />
-                  <Ionicons
-                    name={'chevron-down'}
-                    size={25}
-                    style={{ color: 'lightgrey' }}
-                  />
-                  <Ionicons
-                    name={'chevron-down'}
-                    size={25}
-                    style={{ color: 'grey', bottom: 15 }}
-                  />
                 </View>
               </View>
               <Pressable
@@ -321,6 +287,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: 'white',
     marginTop: 20,
+    marginBottom: 150,
   },
   mainTitleText: {
     fontSize: 28,
