@@ -12,10 +12,6 @@ const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
 export default function MyBookComponent({ navigation, post }) {
-  useEffect(() => {
-    console.log(post);
-  }, []);
-
   return (
     <>
       <Pressable

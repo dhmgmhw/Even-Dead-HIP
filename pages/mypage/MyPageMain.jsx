@@ -5,7 +5,6 @@ import { Tab, Tabs, DefaultTabBar } from 'native-base';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import MyLibraryTab from '../../components/mypage/MyLibraryTab';
 import MyInfoTab from '../../components/mypage/MyInfoTab';
-import MyScrap from '../../components/mypage/MyScrap';
 
 const renderTabBar = (props) => {
   props.tabStyle = Object.create(props.tabStyle);

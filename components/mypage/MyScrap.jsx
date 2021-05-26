@@ -6,6 +6,7 @@ import {
   ScrollView,
   Dimensions,
   Pressable,
+  SafeAreaView,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { getMyScrap } from '../../config/MyPageApi';
@@ -19,7 +20,9 @@ export default function MyScrap({ navigation }) {
 
   const download = async () => {
     const response = await getMyScrap();
-    setPosts(response.reverse());
+    if (response != null) {
+      setPosts(response.reverse());
+    }
   };
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -33,7 +36,7 @@ export default function MyScrap({ navigation }) {
   }, []);
 
   return (
-    <ScrollView style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {posts ? (
         <>
           {posts.map((post, i) => {
@@ -49,7 +52,7 @@ export default function MyScrap({ navigation }) {
           })}
         </>
       ) : null}
-    </ScrollView>
+    </SafeAreaView>
   );
 }
 

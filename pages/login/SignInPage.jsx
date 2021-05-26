@@ -8,8 +8,6 @@ import {
   ActivityIndicator,
   Dimensions,
   TextInput,
-  Alert,
-  Button,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 

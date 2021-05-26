@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Dimensions } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  ActivityIndicator,
+  ScrollView,
+  Dimensions,
+} from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import MyBookComponent from './MyBookComponent';
 import { getMyPost } from '../../config/MyPageApi';
@@ -20,7 +26,7 @@ export default function MyLibraryTab({ navigation }) {
 
   const download = async () => {
     const response = await getMyPost();
-    if (response.length > 0) {
+    if (response.length != null) {
       setMyPosts(response.reverse());
       setLoading(false);
     } else {
@@ -40,7 +46,17 @@ export default function MyLibraryTab({ navigation }) {
     return unsubscribe;
   }, [navigation]);
 
-  return loading ? null : (
+  return loading ? (
+    <ActivityIndicator
+      style={{
+        position: 'absolute',
+        alignSelf: 'center',
+        top: '50%',
+      }}
+      size='large'
+      color='grey'
+    />
+  ) : (
     <ScrollView bounces={false} style={styles.container}>
       <Tabs
         renderTabBar={renderTabBar}
@@ -75,7 +91,7 @@ export default function MyLibraryTab({ navigation }) {
           activeTabStyle={styles.whiteBack}
           activeTextStyle={{ color: '#43a634' }}
           tabContainerStyle={styles.tabBarContainer}>
-          {loading ? null : (
+          {myPosts ? (
             <>
               {myPosts.map((post, i) => {
                 console.log(post.finish);
@@ -88,7 +104,7 @@ export default function MyLibraryTab({ navigation }) {
                 ) : null;
               })}
             </>
-          )}
+          ) : null}
         </Tab>
         <Tab
           heading='스크랩'

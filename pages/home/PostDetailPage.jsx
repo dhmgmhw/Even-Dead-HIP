@@ -53,6 +53,8 @@ export default function PostDetailPage({ navigation, route }) {
   const [bubbles, setBubbles] = useState();
 
   const [visible, setVisible] = useState(false);
+  const [delVisible, setDelVisible] = useState(false);
+
   const [innerImg, setInnerImg] = useState();
 
   const [description, setDescription] = useState('');
@@ -73,6 +75,10 @@ export default function PostDetailPage({ navigation, route }) {
     setVisible(!visible);
   };
 
+  const delToggle = () => {
+    setDelVisible(!delVisible);
+  };
+
   const leaveComment = async () => {
     setOnPageLoader(true);
     if (comment == '') {
@@ -91,7 +97,6 @@ export default function PostDetailPage({ navigation, route }) {
     setBubbles(res.comments);
     setData(res);
     setReady(false);
-    // console.log(detailData);
   };
 
   const userCheck = async () => {
@@ -102,7 +107,11 @@ export default function PostDetailPage({ navigation, route }) {
   };
 
   const makeChat = async () => {
-    const roomInfo = await makingChatRoom(myEmail, detailData.user.email);
+    const roomInfo = await makingChatRoom(
+      myEmail,
+      detailData.user.email,
+      detailData
+    );
     navigation.push('ChatPage', [myInfo, roomInfo]);
   };
 
@@ -117,11 +126,11 @@ export default function PostDetailPage({ navigation, route }) {
   };
 
   useEffect(() => {
+    console.log(detailData);
     const unsubscribe = navigation.addListener('focus', () => {
       download();
       userCheck();
       setTooltipControl(true);
-      // console.log(detailData.image);
     });
     return unsubscribe;
   }, [navigation]);
@@ -139,7 +148,7 @@ export default function PostDetailPage({ navigation, route }) {
       }}>
       <ImageBackground
         source={image}
-        blurRadius={3}
+        blurRadius={1}
         style={styles.imageBackground}
         imageStyle={{ opacity: 0.3 }}>
         <KeyboardAvoidingView
@@ -293,6 +302,9 @@ export default function PostDetailPage({ navigation, route }) {
               </Grid>
             </Swiper>
             <View style={styles.container}>
+              <Overlay isVisible={delVisible} onBackdropPress={delToggle}>
+                <Text>Hello from Overlay!</Text>
+              </Overlay>
               <View
                 style={{
                   flexDirection: 'row',
@@ -308,7 +320,11 @@ export default function PostDetailPage({ navigation, route }) {
                       marginRight: 15,
                     }}
                     resizeMode='cover'
-                    source={{ uri: data.townBook.user.image }}
+                    source={
+                      data.townBook.user.image
+                        ? { uri: data.townBook.user.image }
+                        : require('../../assets/userimg.png')
+                    }
                   />
                   <View>
                     <Text
@@ -404,34 +420,33 @@ export default function PostDetailPage({ navigation, route }) {
               </View>
             </View>
           </ScrollView>
-          {detailData.user.email == myEmail ? null : (
-            <Pressable
-              style={
-                data.townBook.finish === 1
-                  ? styles.chatBox
-                  : [styles.chatBox, { backgroundColor: '#4CB73B' }]
-              }
-              onPress={() => {
-                {
-                  data.townBook.finish === 1 ? null : makeChat();
-                }
-              }}>
-              <Text style={styles.chatBtnText}>가치 교환하기</Text>
-            </Pressable>
-          )}
-
-          {onPageLoader ? (
-            <ActivityIndicator
-              style={{
-                position: 'absolute',
-                alignSelf: 'center',
-                top: '50%',
-              }}
-              size='large'
-              color='grey'
-            />
-          ) : null}
         </KeyboardAvoidingView>
+        {detailData.user.email == myEmail ? null : (
+          <Pressable
+            style={
+              data.townBook.finish === 1
+                ? styles.chatBox
+                : [styles.chatBox, { backgroundColor: '#4CB73B' }]
+            }
+            onPress={() => {
+              {
+                data.townBook.finish === 1 ? null : makeChat();
+              }
+            }}>
+            <Text style={styles.chatBtnText}>가치 교환하기</Text>
+          </Pressable>
+        )}
+        {onPageLoader ? (
+          <ActivityIndicator
+            style={{
+              position: 'absolute',
+              alignSelf: 'center',
+              top: '50%',
+            }}
+            size='large'
+            color='grey'
+          />
+        ) : null}
       </ImageBackground>
     </TouchableWithoutFeedback>
   );

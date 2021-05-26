@@ -30,7 +30,6 @@ export default function CommentBubbleComponent({ post, download }) {
 
   useEffect(() => {
     checkEmail();
-    // console.log(post);
   }, []);
 
   const fixComment = async () => {
@@ -50,10 +49,7 @@ export default function CommentBubbleComponent({ post, download }) {
   };
 
   return (
-    <Pressable
-      onPress={() => {
-        // console.log(post.contents);
-      }}>
+    <Pressable onPress={() => {}}>
       <View style={styles.bubbleBox}>
         <View style={styles.userImgBox}>
           <Image

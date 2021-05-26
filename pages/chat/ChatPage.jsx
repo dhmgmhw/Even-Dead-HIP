@@ -4,7 +4,6 @@ import {
   View,
   Dimensions,
   ActivityIndicator,
-  Keyboard,
   KeyboardAvoidingView,
   Text,
   FlatList,
@@ -14,7 +13,6 @@ import {
 } from 'react-native';
 
 import { getStatusBarHeight } from 'react-native-status-bar-height';
-import ChatInputComponent from '../../components/chat/ChatInputComponent';
 import MyChatComponent from '../../components/chat/MyChatComponent';
 import OpponentChatComponent from '../../components/chat/OpponentChatComponent';
 import ChatHeader from '../../components/chat/ChatHeader';
@@ -41,8 +39,8 @@ export default function ChatPage({ navigation, route }) {
   const [isLoading, setIsLoading] = useState(true);
 
   const connecetToSub = async () => {
-    await enterChat(roomInfo.roomId);
     await sockConnect();
+    await enterChat(roomInfo.roomId);
     await connectServer();
   };
 
@@ -68,12 +66,12 @@ export default function ChatPage({ navigation, route }) {
           );
         } else {
           console.log('재연결중입니다...');
-          setTimeout(connectServer, 1000);
           setIsLoading(true);
+          setTimeout(connectServer, 500);
         }
       },
       function (error) {
-        alert(error);
+        alert('서버와의 접속이 끊겼습니다');
       }
     );
   };
@@ -114,8 +112,11 @@ export default function ChatPage({ navigation, route }) {
   };
 
   useEffect(() => {
-    connecetToSub(roomInfo.roomId);
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      connecetToSub(roomInfo.roomId);
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <KeyboardAvoidingView
@@ -133,12 +134,7 @@ export default function ChatPage({ navigation, route }) {
               message={message.item.message}
             />
           ) : (
-            <OpponentChatComponent
-              key={message.id}
-              time={message.item.timenow}
-              message={message.item.message}
-              img={message.item.userProfile}
-            />
+            <OpponentChatComponent key={message.id} message={message.item} />
           );
         }}
         keyExtractor={(item) => String(item.id)}
