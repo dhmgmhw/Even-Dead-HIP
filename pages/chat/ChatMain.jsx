@@ -29,7 +29,7 @@ export default function ChatMain({ navigation }) {
 
   const loadChatRoom = async () => {
     const result = await getMyRoom();
-    setChatRooms(result);
+    setChatRooms(result.reverse());
   };
 
   useEffect(() => {
@@ -52,10 +52,10 @@ export default function ChatMain({ navigation }) {
       </Pressable>
       <ScrollView
         style={styles.container}
-        contentContainerStyle={{ marginTop: 20 }}>
+        contentContainerStyle={{ marginTop: 20, paddingBottom: 40 }}>
         {chatRooms ? (
           <>
-            {chatRooms.reverse().map((chatRoom, i) => {
+            {chatRooms.map((chatRoom, i) => {
               return (
                 <ChatRoomComponent
                   key={i}
@@ -66,7 +66,11 @@ export default function ChatMain({ navigation }) {
               );
             })}
           </>
-        ) : null}
+        ) : (
+          <View style={{ height: 300, width: 300, backgroundColor: 'red' }}>
+            <Text style={styles.info}>채팅방이 없습니다</Text>
+          </View>
+        )}
       </ScrollView>
     </>
   );
@@ -142,5 +146,9 @@ const styles = StyleSheet.create({
   chat: {
     fontFamily: 'SansMedium',
     fontSize: 14,
+  },
+  info: {
+    fontFamily: 'SansMedium',
+    fontSize: 60,
   },
 });
