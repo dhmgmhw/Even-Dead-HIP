@@ -544,7 +544,7 @@ const styles = StyleSheet.create({
   },
   bookDescBox: {
     padding: 10,
-    height: 100,
+    height: 200,
     marginHorizontal: 10,
     marginTop: 20,
     fontSize: 14,
