@@ -40,7 +40,6 @@ export default function MyInfoTab({ navigation }) {
   const [point, setPoint] = useState(0);
 
   const [level, setLevel] = useState('');
-  const [levelImg, setLevelImg] = useState('');
   const [progress, setProgress] = useState();
 
   useEffect(() => {
@@ -56,6 +55,10 @@ export default function MyInfoTab({ navigation }) {
 
   const goTownChange = () => {
     navigation.push('TownChangePage');
+  };
+
+  const goToTeam = () => {
+    navigation.push('ProjectTeam', navigation);
   };
 
   const getPermission = async () => {
@@ -101,14 +104,17 @@ export default function MyInfoTab({ navigation }) {
     setIsLoading(true);
     if (name == '') {
       Alert.alert('바꿀 닉네임을 작성해 주세요!');
+      setIsLoading(false);
       return;
     }
     if (name.length > 6) {
       Alert.alert('닉네임은 최대 6자까지 가능합니다.');
+      setIsLoading(false);
       return;
     }
     if (imageUri == '') {
       Alert.alert('바꿀 사진을 선택해 주세요!');
+      setIsLoading(false);
       return;
     } else {
       const formData = new FormData();
@@ -287,7 +293,7 @@ export default function MyInfoTab({ navigation }) {
                   이 작업은 되돌릴 수 없어요 ;(
                 </Text>
                 <Pressable onPress={delAccount} style={styles.delBtn}>
-                  <Text style={styles.delBtnText}>탈퇴할래요</Text>
+                  <Text style={styles.delBtnText}>회원탈퇴</Text>
                 </Pressable>
               </View>
             </Overlay>
@@ -303,6 +309,13 @@ export default function MyInfoTab({ navigation }) {
           progress={progress}
           color={'#31B11C'}
         />
+        <Text style={styles.pointText}>
+          다음 단계까지{' '}
+          <Text style={{ fontFamily: 'SansExtra' }}>
+            {(point - 600) * -1}포인트{' '}
+          </Text>
+          남았습니다
+        </Text>
       </View>
       <Pressable style={styles.deal} onPress={goTownChange}>
         <Text style={styles.downcompo}>동네 설정</Text>
@@ -324,8 +337,18 @@ export default function MyInfoTab({ navigation }) {
         />
       </Pressable>
       <View style={styles.border}></View>
+      <Pressable style={styles.deal} onPress={goToTeam}>
+        <Text style={styles.downcompo}>프로젝트 팀</Text>
+        <Feather
+          style={styles.rarrow}
+          name='chevron-right'
+          size={28}
+          color='black'
+        />
+      </Pressable>
+      <View style={styles.border}></View>
       <Pressable style={styles.deal} onPress={goToGoogleForm}>
-        <Text style={styles.downcompo}>개발자에게 일침 :)</Text>
+        <Text style={styles.downcompo}>설문조사</Text>
         <Feather
           style={styles.rarrow}
           name='chevron-right'
@@ -562,5 +585,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: 'red',
     borderRadius: 5,
+  },
+  pointText: {
+    fontFamily: 'SansMedium',
+    color: '#4CB73B',
+    textAlign: 'center',
+    marginTop: 10,
   },
 });
