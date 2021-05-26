@@ -20,11 +20,13 @@ export default function MainUserBox({ navigation, myName, myImg, myPoint }) {
   const [level, setLevel] = useState('콩');
   const [levelImg, setLevelImg] = useState('');
   const [progress, setProgress] = useState();
+  const [point, setPoint] = useState();
 
   const load = async () => {
     const result = await getUserProfile();
     levelSetter(result.results.point);
     progressSetter(result.results.point);
+    pointSetter(result.results.point);
   };
 
   useEffect(() => {
@@ -36,6 +38,13 @@ export default function MainUserBox({ navigation, myName, myImg, myPoint }) {
       data -= 600;
     }
     setProgress(data / 600);
+  };
+
+  const pointSetter = (data) => {
+    while (600 <= data) {
+      data -= 600;
+    }
+    setPoint(data);
   };
 
   const levelSetter = (point) => {
@@ -128,14 +137,31 @@ export default function MainUserBox({ navigation, myName, myImg, myPoint }) {
       <View
         style={{
           backgroundColor: 'white',
-          padding: 20,
+          paddingHorizontal: 20,
         }}>
-        <Text style={styles.title}></Text>
+        <Text style={styles.pointText}>
+          다음 단계까지{' '}
+          <Text style={{ fontFamily: 'SansExtra' }}>
+            {(point - 600) * -1}포인트{' '}
+          </Text>
+          남았습니다
+        </Text>
         <ProgressBar
           style={styles.seed}
           progress={progress}
           color={'#31B11C'}
         />
+        <Text
+          style={[
+            styles.pointText,
+            {
+              textAlign: 'left',
+              marginHorizontal: 20,
+              marginTop: 5,
+            },
+          ]}>
+          내 포인트 : {myPoint}
+        </Text>
       </View>
       <View style={styles.decoyBox}>
         <Button
@@ -224,6 +250,7 @@ const styles = StyleSheet.create({
   },
   decoyBox: {
     height: 60,
+    bottom: 1,
   },
   innerTopDecoyBox: {
     backgroundColor: 'white',
@@ -233,5 +260,11 @@ const styles = StyleSheet.create({
     height: 30,
     backgroundColor: '#64BB35',
     zIndex: 99,
+  },
+  pointText: {
+    fontFamily: 'SansMedium',
+    color: '#4CB73B',
+    textAlign: 'center',
+    marginBottom: 20,
   },
 });
