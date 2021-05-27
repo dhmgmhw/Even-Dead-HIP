@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
     backgroundColor: '#F5F5F5',
   },
-  bookTitle: { fontFamily: 'SansBold', fontSize: 14, width: '50%' },
+  bookTitle: { fontFamily: 'SansBold', fontSize: 14, width: '80%' },
   author: { fontFamily: 'SansRegular', fontSize: 12, width: '50%' },
   bookImg: { height: 120, width: 90, borderRadius: 5 },
   guideBox: {

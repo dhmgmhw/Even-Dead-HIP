@@ -514,7 +514,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    marginTop: 10,
+    marginTop: 5,
     fontFamily: 'SCDream6',
     color: '#434343',
   },
