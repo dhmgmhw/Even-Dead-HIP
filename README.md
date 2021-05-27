@@ -62,3 +62,12 @@ _Back-end github_ : https://github.com/39world/urbookmybook-back
 - 교환시 포인트를 제공함으로써 포인트를 쌓아 콩나무를 키우는 모습을 구현함으로써 유저에게 하여금 서비스 참여 및 재방문을 유도
 #### 프로필 수정
 - formData를 이용한 프로필 수정
+
+---
+### 시연영상 🎬
+https://www.youtube.com/watch?v=5ARyzQe7ass&ab_channel=%EA%B0%95%EC%83%81%EA%B5%AC
+
+---
+### 백엔드 깃헙 🤼
+
+_Back-end github_ : https://github.com/39world/urbookmybook-back
