@@ -33,7 +33,7 @@
     },
     "android": {
       "versionCode": 3,
-      "package": "com.checknbook.ybmb",
+      "package": "com.conner_kim.ybmb",
       "permissions": [
         "CAMERA",
         "READ_EXTERNAL_STORAGE",
