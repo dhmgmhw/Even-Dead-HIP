@@ -53,7 +53,7 @@ export default function ChatMain({ navigation }) {
       <ScrollView
         style={styles.container}
         contentContainerStyle={{ marginTop: 20, paddingBottom: 40 }}>
-        {chatRooms ? (
+        {chatRooms.length != 0 ? (
           <>
             {chatRooms.map((chatRoom, i) => {
               return (
@@ -67,9 +67,7 @@ export default function ChatMain({ navigation }) {
             })}
           </>
         ) : (
-          <View style={{ height: 300, width: 300, backgroundColor: 'red' }}>
-            <Text style={styles.info}>채팅방이 없습니다</Text>
-          </View>
+          <Text style={styles.info}>진행중인 채팅이 없어요</Text>
         )}
       </ScrollView>
     </>
@@ -149,6 +147,9 @@ const styles = StyleSheet.create({
   },
   info: {
     fontFamily: 'SansMedium',
-    fontSize: 60,
+    fontSize: 18,
+    textAlign: 'center',
+    marginTop: 20,
+    color: 'grey',
   },
 });

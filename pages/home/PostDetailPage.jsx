@@ -19,19 +19,15 @@ import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
 
-import Swiper from 'react-native-swiper-hooks';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import ImageBlurLoading from 'react-native-image-blur-loading';
 import * as Linking from 'expo-linking';
-import SockJS from 'sockjs-client';
 
 import CommentBubbleComponent from '../../components/home/CommentBubbleComponent';
 import { deletePost, postComment, postDetail } from '../../config/PostingApi';
-import { Grid } from 'native-base';
 import { Alert } from 'react-native';
 import { getUserProfile } from '../../config/BackData';
 import { delScrapBook, postScrapBook } from '../../config/MyPageApi';
 import { makingChatRoom } from '../../config/SocketApi';
+import PhotoSwiper from '../../components/home/PhotoSwiper';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
@@ -54,8 +50,6 @@ export default function PostDetailPage({ navigation, route }) {
 
   const [visible, setVisible] = useState(false);
   const [delVisible, setDelVisible] = useState(false);
-
-  const [innerImg, setInnerImg] = useState();
 
   const [description, setDescription] = useState('');
 
@@ -224,7 +218,7 @@ export default function PostDetailPage({ navigation, route }) {
                                     }
                                   }}>
                                   <Text style={styles.tooltipText}>
-                                    거래완료
+                                    교환완료
                                   </Text>
                                 </Pressable>
                               )}
@@ -242,65 +236,7 @@ export default function PostDetailPage({ navigation, route }) {
                 </View>
               </View>
             </View>
-            <Swiper
-              height={340}
-              width={210}
-              showPagination={true}
-              paginationSelectedColor={'#438732'}
-              paginationPosition={'bottom'}
-              autoplay={false}
-              loop={false}
-              paginationSelectedSize={8}
-              outerContainerStyle={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginBottom: 40,
-                marginTop: 20,
-              }}>
-              <View style={styles.bookImageBox}>
-                <Image
-                  style={styles.bookImage}
-                  resizeMode='cover'
-                  PlaceholderContent={<ActivityIndicator />}
-                  source={
-                    detailData.image
-                      ? { uri: detailData.image }
-                      : require('../../assets/splash.png')
-                  }
-                />
-              </View>
-              <Grid style={styles.bookImageBox}>
-                {detailData.captureImages.map((photo, i) => {
-                  return (
-                    <Pressable
-                      key={i}
-                      onPress={() => {
-                        toggleOverlay();
-                        setInnerImg(photo);
-                      }}>
-                      <ImageBlurLoading
-                        style={styles.InnerBookImage}
-                        resizeMode='cover'
-                        source={{ uri: photo }}
-                        thumbnailSource={{ uri: photo }}
-                        withIndicator
-                      />
-                      <Overlay
-                        isVisible={visible}
-                        onBackdropPress={toggleOverlay}>
-                        <ImageBlurLoading
-                          style={styles.overlayImage}
-                          resizeMode='contain'
-                          source={{ uri: innerImg }}
-                          thumbnailSource={{ uri: photo }}
-                          withIndicator
-                        />
-                      </Overlay>
-                    </Pressable>
-                  );
-                })}
-              </Grid>
-            </Swiper>
+            <PhotoSwiper detailData={detailData} />
             <View style={styles.container}>
               <Overlay isVisible={delVisible} onBackdropPress={delToggle}>
                 <Text>Hello from Overlay!</Text>
@@ -398,6 +334,7 @@ export default function PostDetailPage({ navigation, route }) {
                       return (
                         <CommentBubbleComponent
                           key={i}
+                          navigation={navigation}
                           post={post}
                           download={download}
                         />
@@ -433,6 +370,11 @@ export default function PostDetailPage({ navigation, route }) {
                 data.townBook.finish === 1 ? null : makeChat();
               }
             }}>
+            {data.townBook.finish === 1 ? (
+              <Text style={styles.chatBtnText}>가치 교환완료</Text>
+            ) : (
+              <Text style={styles.chatBtnText}>가치 교환하기</Text>
+            )}
             <Text style={styles.chatBtnText}>가치 교환하기</Text>
           </Pressable>
         )}
@@ -458,28 +400,6 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     justifyContent: 'center',
     backgroundColor: 'black',
-  },
-  bookImageBox: {
-    height: 300,
-    width: 210,
-    borderRadius: 5,
-    marginBottom: 50,
-    flexWrap: 'wrap',
-  },
-  bookImage: {
-    height: 300,
-    width: 210,
-    borderRadius: 5,
-    alignSelf: 'center',
-  },
-  InnerBookImage: {
-    height: 105,
-    width: 105,
-    borderWidth: 1,
-  },
-  overlayImage: {
-    height: diviceWidth,
-    width: diviceWidth,
   },
   container: {
     width: diviceWidth,

@@ -87,7 +87,7 @@ export default function HomeMain({ navigation }) {
           );
         }}
         keyExtractor={(item) => String(item.id)}
-        onEndReachedThreshold={0.5}
+        onEndReachedThreshold={0.1}
         ListFooterComponent={() => {
           return <View style={{ height: 30 }}></View>;
         }}
@@ -121,7 +121,6 @@ export default function HomeMain({ navigation }) {
                   },
                   shadowOpacity: 0.3,
                   shadowRadius: 4.65,
-                  // elevation: 8,
                   zIndex: 98,
                   backgroundColor: '#64BB35',
                 }}>

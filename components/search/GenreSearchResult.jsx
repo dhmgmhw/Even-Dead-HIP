@@ -19,7 +19,7 @@ export default function GenreSearchResult({ navigation, post }) {
     <Pressable
       style={styles.cardBox}
       onPress={() => {
-        navigation.navigate('PostDetailPage', post);
+        navigation.push('PostDetailPage', post);
       }}>
       <View style={styles.card}>
         <View style={styles.cardFlex}>

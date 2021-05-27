@@ -48,6 +48,7 @@ export default function ChatPage({ navigation, route }) {
     console.log('연결중입니다...');
     let sock = new SockJS('http://13.124.182.223/ws-stomp');
     let ws = Stomp.over(sock);
+
     const token = await AsyncStorage.getItem('session');
     ws.connect(
       {
@@ -71,7 +72,9 @@ export default function ChatPage({ navigation, route }) {
         }
       },
       function (error) {
-        alert('서버와의 접속이 끊겼습니다');
+        console.log('재연결중입니다...');
+        setIsLoading(true);
+        setTimeout(connectServer, 500);
       }
     );
   };

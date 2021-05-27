@@ -41,7 +41,6 @@ export default function GenreComponent({
     <Pressable
       style={styles.cardBox}
       onPress={() => {
-        // navigation.navigate('PostDetailPage', post);
         setModalVisible(!modalVisible);
       }}>
       <Modal

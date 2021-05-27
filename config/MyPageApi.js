@@ -2,7 +2,8 @@ import { Alert } from "react-native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const host = 'http://13.124.182.223'
+const host = "http://13.124.182.223"
+// const host = "http://3.34.161.181"
 
 export async function getMyPost() {
     const token = await AsyncStorage.getItem("session")
@@ -14,7 +15,6 @@ export async function getMyPost() {
                 token: token,
             },
         });
-        // console.log(response.data.results)
         return response.data.results
     } catch (err) {
         console.log(err)
@@ -36,10 +36,7 @@ export async function tradeConfirm(masterUserId, otherUserId, townBookId, naviga
                 otherUserId, otherUserId
             },
         });
-        // return response.data
-        console.log(response.data)
         navigation.replace('TradeConfirmPage')
-        // console.log(response.data.msg)
     } catch (err) {
         console.log(err)
         alert('교환완료를 할 수 없어요:(')
@@ -56,9 +53,7 @@ export async function postScrapBook(townBookId) {
                 token: token,
             },
         });
-        // return response.data
         console.log(response.data)
-        // navigation.replace('TradeConfirmPage')
         alert('스크랩 완료, 마이페이지에서 확인해주세요!')
     } catch (err) {
         console.log(err)

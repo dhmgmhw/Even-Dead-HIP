@@ -20,7 +20,7 @@ export default function MainUserBox({ navigation, myName, myImg, myPoint }) {
   const [level, setLevel] = useState('콩');
   const [levelImg, setLevelImg] = useState('');
   const [progress, setProgress] = useState();
-  const [point, setPoint] = useState();
+  const [point, setPoint] = useState(0);
 
   const load = async () => {
     const result = await getUserProfile();

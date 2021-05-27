@@ -89,7 +89,7 @@ export async function getUserProfile() {
         token: token,
       },
     })
-    console.log("조회 완료")
+    // console.log("조회 완료")
     return result.data
   } catch (err) {
     console.log(err)

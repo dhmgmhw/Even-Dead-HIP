@@ -38,10 +38,7 @@ export default function OurTownPage({ navigation }) {
         }}
         rightComponent={''}
       />
-      <ScrollView
-        style={styles.container}
-        // contentContainerStyle={{ paddingHorizontal: 10 }}
-      >
+      <ScrollView style={styles.container}>
         <Grid style={{ flexWrap: 'wrap' }}>
           {posts.map((post, i) => {
             return (

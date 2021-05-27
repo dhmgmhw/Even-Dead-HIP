@@ -23,11 +23,8 @@ const ForceInset = {
 export default function MultiFixPage({ navigation, route }) {
   const func = route.params;
 
-  useEffect(() => {}, []);
-
   const onDone = (data) => {
     func(data);
-    // console.log(data);
   };
 
   const goBack = () => {
@@ -43,8 +40,6 @@ export default function MultiFixPage({ navigation, route }) {
           <AssetsSelector
             options={{
               manipulate: {
-                // width: 200,
-                // height: 200,
                 compress: 0,
               },
               assetsType: ['photo'],
