@@ -3,12 +3,10 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
   Pressable,
   Image,
   ActivityIndicator,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ChatRoomComponent({ navigation, profile, chatRoom }) {
   const [chatUser, setChatUser] = useState('');
