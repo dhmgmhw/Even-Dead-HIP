@@ -7,6 +7,7 @@ import {
   Pressable,
   Image,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
@@ -23,9 +24,19 @@ export default function ChatHeader({ navigation, roomInfo, myInfo }) {
   const [visible, setVisible] = useState(false);
 
   const confirmChange = async () => {
-    // tradeConfirm(roomInfo.user[1].id,roomInfo.user[0].id,책아이디,navigation)
-    console.log(roomInfo);
+    if (roomInfo.townBook.user.id == myInfo.id) {
+      await tradeConfirm(
+        roomInfo.user[1].id,
+        roomInfo.user[0].id,
+        roomInfo.townBook.id,
+        navigation
+      );
+    } else {
+      alert('교환 확인은 작성자만 할 수 있습니다');
+      return;
+    }
   };
+
   return roomInfo.user.length == 1 ? (
     <Text style={styles.doneMark}>서비스를 탈퇴한 유저입니다</Text>
   ) : (
@@ -50,19 +61,25 @@ export default function ChatHeader({ navigation, roomInfo, myInfo }) {
           </Text>
         </View>
         <View style={styles.headerRComp}>
-          <Ionicons
-            onPress={toggleOverlay}
-            name={'ellipsis-vertical'}
-            size={20}
-            color={'black'}
-          />
+          {roomInfo.townBook.finish == 0 ? (
+            <Ionicons
+              onPress={toggleOverlay}
+              name={'ellipsis-vertical'}
+              size={20}
+              color={'black'}
+            />
+          ) : (
+            <View style={styles.doneBox}>
+              <Text style={styles.done}>교환완료</Text>
+            </View>
+          )}
           <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
             <View style={styles.tootipBox}>
               <Text
                 style={[styles.infoText, { fontSize: 20, marginVertical: 20 }]}>
                 가치교환 확인
               </Text>
-              <Text style={styles.infoText}>교환을 완료하셨습니끼?</Text>
+              <Text style={styles.infoText}>교환을 완료하셨습니까?</Text>
               <Text style={styles.infoText}>
                 가치교환을 완료하면 작성자에겐 150포인트,
               </Text>
@@ -182,5 +199,20 @@ const styles = StyleSheet.create({
     color: '#438732',
     textAlign: 'center',
     top: '10%',
+  },
+  doneBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 25,
+    width: 80,
+    borderRadius: 15,
+    backgroundColor: '#54B65E',
+    marginTop: 10,
+  },
+  done: {
+    fontFamily: 'SansMedium',
+    fontSize: 12,
+    color: 'white',
   },
 });
