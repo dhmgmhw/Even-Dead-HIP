@@ -59,7 +59,6 @@ export async function makingChatRoom(myEmail, youEmail, book) {
                 token: token,
             },
         });
-        // console.log(response.data)
         return (response.data.results);
     } catch (err) {
         console.log(err);

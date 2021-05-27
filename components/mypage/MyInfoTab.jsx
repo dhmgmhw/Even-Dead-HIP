@@ -86,10 +86,6 @@ export default function MyInfoTab({ navigation }) {
     Linking.openURL('http://pf.kakao.com/_xhgVMs');
   };
 
-  const goToGoogleForm = () => {
-    Linking.openURL('https://forms.gle/jNG6vBMeM1aefTWNA');
-  };
-
   const download = async () => {
     const result = await getUserProfile();
     setprofile(result.results);
@@ -123,6 +119,7 @@ export default function MyInfoTab({ navigation }) {
         type: 'image/jpeg',
         name: 'image.jpg',
       });
+
       let getUri = await uploadImg(formData);
       await changeUserProfile(name, getUri[0]);
       setVisible(false);
@@ -339,16 +336,6 @@ export default function MyInfoTab({ navigation }) {
       <View style={styles.border}></View>
       <Pressable style={styles.deal} onPress={goToTeam}>
         <Text style={styles.downcompo}>프로젝트 팀</Text>
-        <Feather
-          style={styles.rarrow}
-          name='chevron-right'
-          size={28}
-          color='black'
-        />
-      </Pressable>
-      <View style={styles.border}></View>
-      <Pressable style={styles.deal} onPress={goToGoogleForm}>
-        <Text style={styles.downcompo}>설문조사</Text>
         <Feather
           style={styles.rarrow}
           name='chevron-right'

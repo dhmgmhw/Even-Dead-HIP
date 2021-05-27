@@ -14,7 +14,7 @@ import { getUserPosts } from '../../config/PostingApi';
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
 
-export default function OpponentChatComponent({ message }) {
+export default function OpponentChatComponent({ navigation, message }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [posts, setPosts] = useState();
 

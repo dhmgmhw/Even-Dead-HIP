@@ -44,6 +44,13 @@ export default function ChatPage({ navigation, route }) {
     await connectServer();
   };
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      connecetToSub(roomInfo.roomId);
+    });
+    return unsubscribe;
+  }, [navigation]);
+
   const connectServer = async () => {
     console.log('연결중입니다...');
     let sock = new SockJS('http://13.124.182.223/ws-stomp');
@@ -114,13 +121,6 @@ export default function ChatPage({ navigation, route }) {
     await enterChat(roomInfo.roomId);
   };
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      connecetToSub(roomInfo.roomId);
-    });
-    return unsubscribe;
-  }, [navigation]);
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
@@ -137,7 +137,11 @@ export default function ChatPage({ navigation, route }) {
               message={message.item.message}
             />
           ) : (
-            <OpponentChatComponent key={message.id} message={message.item} />
+            <OpponentChatComponent
+              key={message.id}
+              navigation={navigation}
+              message={message.item}
+            />
           );
         }}
         keyExtractor={(item) => String(item.id)}
