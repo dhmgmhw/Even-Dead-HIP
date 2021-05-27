@@ -33,7 +33,7 @@ export default function MultiAddPage({ navigation, route }) {
           <AssetsSelector
             options={{
               manipulate: {
-                compress: 0,
+                compress: 0.1,
               },
               assetsType: ['photo'],
               maxSelections: 3,
