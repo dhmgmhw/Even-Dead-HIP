@@ -7,15 +7,15 @@
 
 ### 프로젝트 개요 ✨
 
-**Insight** -- 함께 독서하며 추천하는 오프라인 도서 교환 서비스
-**Keyword** -- #가까운 #가치 #발견
-**Value** -- 같이하는 가치나눔
+**Insight** -- 함께 독서하며 추천하는 오프라인 도서 교환 서비스<br>
+**Keyword** -- #가까운 #가치 #발견<br>
+**Value** -- 같이하는 가치나눔<br>
 
 ### 프로젝트 멤버 👩‍💻
 
-**Front** (React Native) :  김지하, 문형원
-**Back** (Spring) : 강상구, 이정빈, 천재승, 임다희
-**Design** (UXUI) : 최지예
+**Front** (React Native) :  김지하, 문형원<br>
+**Back** (Spring) : 강상구, 이정빈, 천재승, 임다희<br>
+**Design** (UXUI) : 최지예<br>
 
 _Back-end github_ : https://github.com/39world/urbookmybook-back
 
@@ -27,9 +27,9 @@ _Back-end github_ : https://github.com/39world/urbookmybook-back
 
 ### 개발도구 및 환경 🔧
 
-- Expo
-- JavaScript
-- React Native
+- Expo<br>
+- JavaScript<br>
+- React Native<br>
 - Figma
 ---
 ### View 설계 🚧
