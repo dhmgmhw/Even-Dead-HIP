@@ -23,6 +23,7 @@ export default function ChatRoomComponent({ navigation, profile, chatRoom }) {
       setUserImg(chatRoom.user[1].image);
     }
   };
+  // chatRoom.user[0]  -- [1]
 
   useEffect(() => {
     compLoader();
