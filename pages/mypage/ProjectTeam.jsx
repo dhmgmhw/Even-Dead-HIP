@@ -73,7 +73,7 @@ export default function ProjectTeam({ navigation }) {
             <Text style={styles.teamInfo}>cjy001113@gmail.com</Text>
           </View>
         </View>
-        <Text style={styles.title}>Design (UXUI)</Text>
+        <Text style={styles.title}>Back (Spring Boot)</Text>
         <View style={styles.userCard}>
           <Image
             style={styles.profileimg}

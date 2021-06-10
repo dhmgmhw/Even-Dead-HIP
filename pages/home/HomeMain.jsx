@@ -12,7 +12,7 @@ import {
   Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
+import { StatusBar } from 'expo-status-bar';
 import GenreComponent from '../../components/home/GenreComponent';
 import MainUserBox from '../../components/home/MainUserBox';
 
@@ -40,12 +40,12 @@ export default function HomeMain({ navigation }) {
 
   const userCheck = async () => {
     const myInfo = await getUserProfile();
-    await setMyTown(myInfo.results.town);
-    await setScrapList(myInfo.results.scrapList);
-    await setMyEmail(myInfo.results.email);
-    await setMyName(myInfo.results.username);
-    await setMyImg(myInfo.results.image);
-    await setMyPoint(myInfo.results.point);
+    setMyTown(myInfo.results.town);
+    setScrapList(myInfo.results.scrapList);
+    setMyEmail(myInfo.results.email);
+    setMyName(myInfo.results.username);
+    setMyImg(myInfo.results.image);
+    setMyPoint(myInfo.results.point);
   };
 
   const bannerLoad = async () => {
@@ -69,6 +69,7 @@ export default function HomeMain({ navigation }) {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <StatusBar style='black' backgroundColor='#ffffff' />
       <ScrollView
         style={{ backgroundColor: 'white' }}
         showsVerticalScrollIndicator={false}></ScrollView>
