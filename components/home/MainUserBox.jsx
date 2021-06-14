@@ -31,7 +31,7 @@ export default function MainUserBox({ navigation, myName, myImg, myPoint }) {
 
   useEffect(() => {
     load();
-  }, []);
+  });
 
   const progressSetter = (data) => {
     while (1 <= data / 600) {
@@ -92,40 +92,8 @@ export default function MainUserBox({ navigation, myName, myImg, myPoint }) {
             <Text style={styles.town}>얻을 수 있어요!</Text>
           </View>
         </View>
-        <View
-          style={{
-            width: 100,
-            height: 100,
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: 100,
-            backgroundColor: '#54B65E',
-            shadowColor: '#000',
-            shadowOffset: {
-              width: 0,
-              height: 5,
-            },
-            shadowOpacity: 0.36,
-            shadowRadius: 6.68,
-            elevation: 11,
-          }}>
-          <View
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: '#f4f4f4',
-              height: 80,
-              width: 80,
-              borderRadius: 100,
-              shadowColor: '#000',
-              shadowOffset: {
-                width: 0,
-                height: 2,
-              },
-              shadowOpacity: 0.36,
-              shadowRadius: 6.68,
-              elevation: 11,
-            }}>
+        <View style={styles.levelBack}>
+          <View style={styles.levelIconBackground}>
             <Image
               style={styles.userImg}
               resizeMode='contain'
@@ -266,5 +234,37 @@ const styles = StyleSheet.create({
     color: '#4CB73B',
     textAlign: 'center',
     marginBottom: 20,
+  },
+  levelBack: {
+    width: 100,
+    height: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 100,
+    backgroundColor: '#54B65E',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.36,
+    shadowRadius: 6.68,
+    elevation: 11,
+  },
+  levelIconBackground: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#f4f4f4',
+    height: 80,
+    width: 80,
+    borderRadius: 100,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.36,
+    shadowRadius: 6.68,
+    elevation: 11,
   },
 });
