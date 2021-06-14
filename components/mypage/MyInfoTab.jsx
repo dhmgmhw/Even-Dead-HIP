@@ -21,7 +21,10 @@ import * as Linking from 'expo-linking';
 import { uploadImg } from '../../config/PostingApi';
 
 import { deleteAccount, getUserProfile, signOut } from '../../config/BackData';
-import { changeUserProfile } from '../../config/BackData';
+import {
+  changeUserProfile,
+  changeUserProfileWithFormData,
+} from '../../config/BackData';
 
 import { Overlay } from 'react-native-elements';
 import { Alert } from 'react-native';
@@ -127,6 +130,46 @@ export default function MyInfoTab({ navigation }) {
       download();
     }
   };
+
+  const uploadWithFormData = async () => {
+    setIsLoading(true);
+    if (name == '') {
+      Alert.alert('바꿀 닉네임을 작성해 주세요!');
+      setIsLoading(false);
+      return;
+    }
+    if (name.length > 6) {
+      Alert.alert('닉네임은 최대 6자까지 가능합니다.');
+      setIsLoading(false);
+      return;
+    }
+    if (imageUri == '') {
+      Alert.alert('바꿀 사진을 선택해 주세요!');
+      setIsLoading(false);
+      return;
+    } else {
+      const formData = new FormData();
+      if (imageUri == profile.image) {
+        formData.append('userData', JSON.stringify({ username: name }));
+        await changeUserProfileWithFormData(formData);
+        setVisible(false);
+        setIsLoading(false);
+        download();
+      } else {
+        formData.append('file', {
+          uri: imageUri,
+          type: 'image/jpeg',
+          name: 'image.jpg',
+        });
+        formData.append('userData', JSON.stringify({ username: name }));
+        await changeUserProfileWithFormData(formData);
+        setVisible(false);
+        setIsLoading(false);
+        download();
+      }
+    }
+  };
+  // 폼데이터 업로드 수정
 
   const toggleOverlay = () => {
     setVisible(!visible);
