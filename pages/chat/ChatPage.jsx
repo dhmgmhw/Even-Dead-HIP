@@ -45,11 +45,11 @@ export default function ChatPage({ navigation, route }) {
   };
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      connecetToSub(roomInfo.roomId);
-    });
-    return unsubscribe;
-  }, [navigation]);
+    connecetToSub(roomInfo.roomId);
+    return function cleanup() {
+      ws.disconnect();
+    };
+  }, []);
 
   const connectServer = async () => {
     console.log('연결중입니다...');
