@@ -25,10 +25,10 @@ export default function SignUpPage({ navigation }) {
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
 
-  const checkEmail = (email) => {
+  const checkEmail = (testCase) => {
     let reg_email =
       /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
-    if (!reg_email.test(email)) {
+    if (!reg_email.test(testCase)) {
       return false;
     } else {
       return true;
