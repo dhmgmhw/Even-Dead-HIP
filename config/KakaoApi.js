@@ -21,3 +21,19 @@ export async function getSearchBook(searchTitle) {
         Alert.alert(error);
     }
 }
+
+export async function getTown(x, y) {
+    try {
+        const response = await axios({
+            method: "get",
+            url: `https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x=${x}&y=${y}`,
+            headers: {
+                Authorization: `KakaoAK ${APIkey}`,
+            },
+        });
+        return response.data;
+    } catch (err) {
+        const error = err.response.data.error || err.message;
+        Alert.alert(error);
+    }
+}

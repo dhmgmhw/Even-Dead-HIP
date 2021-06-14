@@ -8,11 +8,15 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   Keyboard,
+  ActivityIndicator,
 } from 'react-native';
+import * as Location from 'expo-location';
+import { Ionicons } from '@expo/vector-icons';
 
 import { Container } from 'native-base';
 
 import { signdetail } from '../../config/BackData';
+import { getTown } from '../../config/KakaoApi';
 
 const seoul = [
   '종로구',
@@ -44,6 +48,23 @@ const seoul = [
 
 export default function TownChangePage({ navigation }) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [update, setUpdate] = useState(false);
+
+  const getLocation = async () => {
+    setUpdate(true);
+    try {
+      await Location.requestForegroundPermissionsAsync();
+      const locationData = await Location.getCurrentPositionAsync();
+      const x = locationData['coords']['longitude'];
+      const y = locationData['coords']['latitude'];
+      const res = await getTown(x, y);
+      setSearchQuery(res.documents[0].region_2depth_name);
+      setUpdate(false);
+    } catch (error) {
+      Alert.alert('위치를 찾을 수가 없습니다.');
+      setUpdate(false);
+    }
+  };
 
   const submitRegion = async () => {
     if (searchQuery === '') {
@@ -66,7 +87,22 @@ export default function TownChangePage({ navigation }) {
         Keyboard.dismiss();
       }}>
       <Container style={styles.container}>
-        <Text style={styles.setarea}>지역을 설정해주세요</Text>
+        <Text style={styles.setArea}>지역을 설정해주세요</Text>
+        <Text style={styles.textInfo}>
+          책과 콩나무는 서울특별시를 한정으로 운영중입니다.
+        </Text>
+        {update ? (
+          <ActivityIndicator
+            style={{
+              position: 'absolute',
+              alignSelf: 'center',
+              top: '50%',
+              zIndex: 4001,
+            }}
+            size='large'
+            color='grey'
+          />
+        ) : null}
         <View
           style={{
             backgroundColor: '#F5F5F5',
@@ -75,7 +111,7 @@ export default function TownChangePage({ navigation }) {
             alignItems: 'center',
             justifyContent: 'center',
             borderRadius: 15,
-            margin: 20,
+            marginHorizontal: 20,
           }}>
           <TextInput
             style={{
@@ -87,21 +123,15 @@ export default function TownChangePage({ navigation }) {
               alignSelf: 'center',
               paddingHorizontal: 10,
             }}
-            placeholder='지역명 입력 예) 강남구'
+            placeholder='직접 입력하기 예) 강남구'
             onChangeText={onChangeSearch}
             value={searchQuery}
           />
         </View>
-        <Text
-          style={{
-            fontFamily: 'SCDream6',
-            fontSize: 12,
-            alignSelf: 'center',
-            paddingHorizontal: 10,
-            color: '#e0e0e0',
-          }}>
-          책과 콩나무는 서울특별시를 한정으로 운영중입니다.
-        </Text>
+        <Pressable onPress={getLocation} style={styles.setTownBtn}>
+          <Text style={styles.setTown}>우리동네 찾기</Text>
+          <Ionicons name={'map-sharp'} color={'#438732'} size={24} />
+        </Pressable>
         <Pressable
           style={{
             width: 130,
@@ -130,12 +160,34 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 50,
   },
-  setarea: {
+  setArea: {
     marginTop: 150,
-    marginBottom: 50,
+    marginBottom: 15,
     fontSize: 18,
     fontFamily: 'SCDream6',
     color: '#23A40E',
     alignSelf: 'center',
+  },
+  textInfo: {
+    fontFamily: 'SCDream6',
+    fontSize: 12,
+    alignSelf: 'center',
+    paddingHorizontal: 10,
+    color: '#e0e0e0',
+    marginBottom: 20,
+  },
+  setTown: {
+    fontSize: 13,
+    fontFamily: 'SCDream6',
+    color: '#23A40E',
+    marginHorizontal: 5,
+  },
+  setTownBtn: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    borderColor: '#23A40E',
+    marginHorizontal: 20,
+    marginVertical: 10,
   },
 });
