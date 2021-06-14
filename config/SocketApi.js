@@ -5,7 +5,6 @@ import Stomp from "stompjs";
 import SockJS from "sockjs-client";
 
 const host = "http://13.124.182.223"
-// const host = "http://13.124.182.223"
 
 let sock = new SockJS('http://13.124.182.223/ws-stomp');
 let ws = Stomp.over(sock);

@@ -45,8 +45,6 @@ const seoul = [
 export default function TownChangePage({ navigation }) {
   const [searchQuery, setSearchQuery] = useState('');
 
-  useEffect(() => {}, []);
-
   const submitRegion = async () => {
     if (searchQuery === '') {
       Alert.alert('우리동네를 입력해 주세요!');

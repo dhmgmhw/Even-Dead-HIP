@@ -8,11 +8,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import CustomNavigator from '../../components/AddPage/CustomTopNavigator';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
-const ForceInset = {
-  top: 'never',
-  bottom: 'never',
-};
-
 export default function MultiAddPage({ navigation, route }) {
   const func = route.params;
 
@@ -23,11 +18,10 @@ export default function MultiAddPage({ navigation, route }) {
   const goBack = () => {
     navigation.pop();
   };
-  const [image, setimage] = useState();
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView forceInset={ForceInset} style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <StatusBarPlaceHolder />
         <View style={styles.container}>
           <AssetsSelector
@@ -63,7 +57,7 @@ export default function MultiAddPage({ navigation, route }) {
                 goBackText: '뒤로',
                 selectedText: 'Selected',
                 midTextColor: 'blue',
-                buttonTextStyle: textStyle,
+                buttonTextStyle: styles.textStyle,
                 backFunction: goBack,
                 doneFunction: (data) => {
                   onDone(data);
@@ -73,16 +67,10 @@ export default function MultiAddPage({ navigation, route }) {
             }}
           />
         </View>
-        <Text>{image}</Text>
       </SafeAreaView>
     </SafeAreaProvider>
   );
 }
-
-const textStyle = {
-  color: 'black',
-  fontFamily: 'SCDream5',
-};
 
 const styles = StyleSheet.create({
   container: {
@@ -90,5 +78,9 @@ const styles = StyleSheet.create({
     marginTop: 30,
     bottom: getStatusBarHeight() / 2,
     marginTop: Platform.OS === 'ios' ? 0 : 30,
+  },
+  textStyle: {
+    color: 'black',
+    fontFamily: 'SCDream5',
   },
 });

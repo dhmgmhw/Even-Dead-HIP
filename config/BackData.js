@@ -45,7 +45,6 @@ export async function login(email, password, navigation) {
         password: password,
       },
     })
-    console.log(result.data)
     if (result.data.ok) {
       await AsyncStorage.setItem("session", result.data.results.token)
       await AsyncStorage.setItem("email", result.data.results.email)
@@ -89,7 +88,6 @@ export async function getUserProfile() {
         token: token,
       },
     })
-    // console.log("조회 완료")
     return result.data
   } catch (err) {
     console.log(err)
@@ -99,7 +97,6 @@ export async function getUserProfile() {
 
 export async function changeUserProfile(username, image) {
   try {
-    console.log(username, image)
     const token = await AsyncStorage.getItem("session")
     const result = await axios({
       method: "put",
