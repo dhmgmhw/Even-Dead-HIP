@@ -148,7 +148,7 @@ export default function PostDetailPage({ navigation, route }) {
         <KeyboardAvoidingView
           behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
           <ScrollView showsVerticalScrollIndicator={false}>
-            <StatusBar style='light' />
+            <StatusBar style='light' backgroundColor='#000000' />
             <View style={styles.statusAvoid}></View>
             <View style={styles.mainHeader}>
               <View style={styles.headerLComp}>

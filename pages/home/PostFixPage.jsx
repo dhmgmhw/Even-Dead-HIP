@@ -17,6 +17,7 @@ import {
 import { Overlay } from 'react-native-elements';
 import { Item } from 'native-base';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
+import { StatusBar } from 'expo-status-bar';
 
 import DropDownPicker from 'react-native-dropdown-picker';
 
@@ -116,6 +117,7 @@ export default function PostFixPage({ navigation, route }) {
         Keyboard.dismiss();
       }}>
       <View style={{ backgroundColor: 'white', height: diviceHeight }}>
+        <StatusBar style='black' backgroundColor='#ffffff' />
         <KeyboardAvoidingView behavior='position'>
           <View style={styles.statusAvoid}></View>
           <View style={styles.mainHeader}>
