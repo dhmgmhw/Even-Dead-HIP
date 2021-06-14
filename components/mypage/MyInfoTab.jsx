@@ -122,7 +122,6 @@ export default function MyInfoTab({ navigation }) {
         type: 'image/jpeg',
         name: 'image.jpg',
       });
-
       let getUri = await uploadImg(formData);
       await changeUserProfile(name, getUri[0]);
       setVisible(false);
@@ -544,7 +543,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    marginTop: 5,
+    marginTop: 10,
     fontFamily: 'SCDream6',
     color: '#434343',
   },
