@@ -15,15 +15,20 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
-import { Header, Overlay } from 'react-native-elements';
+import { Overlay } from 'react-native-elements';
 import { Item } from 'native-base';
+import { StatusBar } from 'expo-status-bar';
 
 import DropDownPicker from 'react-native-dropdown-picker';
 
 import { Ionicons } from '@expo/vector-icons';
 import { getSearchBook } from '../../config/KakaoApi';
 import KakaoResultCardComponent from '../../components/home/KakaoResultCardComponent';
-import { uploadImg, postBook } from '../../config/PostingApi';
+import {
+  uploadImg,
+  postBook,
+  postBookWithFormData,
+} from '../../config/PostingApi';
 
 const diviceWidth = Dimensions.get('window').width;
 const diviceHeight = Dimensions.get('window').height;
@@ -52,8 +57,9 @@ export default function AddPage({ navigation }) {
 
   const [books, setBooks] = useState(['blank']);
 
-  const makePerfectSentence = (str = '') =>
-    str.slice(0, str.lastIndexOf('.') + 1) || '작품 소개가 없습니다.';
+  const makePerfectSentence = (str = '') => {
+    return str.slice(0, str.lastIndexOf('.') + 1) || '작품 소개가 없습니다.';
+  };
 
   const toggleFinder = () => {
     setFinderOpen(!finderOpen);
@@ -127,12 +133,63 @@ export default function AddPage({ navigation }) {
     }
   };
 
+  const uploadWithFormData = async () => {
+    console.log('업로드 준비중!');
+    setUploader(true);
+    if (title == '') {
+      Alert.alert('등록할 책을 선택해 주세요');
+      setUploader(false);
+      return;
+    } else if (genreInfo == '') {
+      Alert.alert('해쉬태그를 선택해 주세요');
+      setUploader(false);
+      return;
+    } else if (stateInfo == '') {
+      Alert.alert('책의 상태를 선택해 주세요');
+      setUploader(false);
+      return;
+    } else if (imageUri == '') {
+      Alert.alert('사진을 최소 한 장 선택해 주세요');
+      setUploader(false);
+      return;
+    } else if (contentInfo == '') {
+      Alert.alert('책을 간단히 소개해 주세요');
+      setUploader(false);
+      return;
+    } else {
+      let data = {
+        title: title,
+        author: author,
+        category: genreInfo,
+        description: story,
+        image: bookImg,
+        status: stateInfo,
+        price: priceInfo,
+        contentInfo: contentInfo,
+        webUrl: webUrl,
+        publisher: publisher,
+      };
+      const formData = new FormData();
+      for (let i = 0; i < imageUri.length; i++) {
+        formData.append('files', {
+          uri: imageUri[i].uri,
+          type: 'image/jpeg',
+          name: 'image' + i + '.jpg',
+        });
+      }
+      formData.append('townBookData', JSON.stringify(data));
+      await postBookWithFormData(formData, navigation);
+    }
+  };
+  // 폼데이터 업로드 수정코드
+
   return (
     <TouchableWithoutFeedback
       onPress={() => {
         Keyboard.dismiss();
       }}>
       <View style={{ backgroundColor: 'white', height: diviceHeight }}>
+        <StatusBar style='black' backgroundColor='#ffffff' />
         <KeyboardAvoidingView behavior='position'>
           <View style={styles.statusAvoid}></View>
           <View style={styles.mainHeader}>
@@ -373,9 +430,10 @@ export default function AddPage({ navigation }) {
                             setPublisher(book.publisher);
                             setPublishedInfo(book.datetime);
                             setPriceInfo(book.price);
+                            setWebUrl(book.url);
                             setFinderOpen(false);
                             setSwitcher(true);
-                            setWebUrl(book.url);
+                            console.log(makePerfectSentence(book.contents));
                           }}>
                           <KakaoResultCardComponent book={book} />
                         </Pressable>

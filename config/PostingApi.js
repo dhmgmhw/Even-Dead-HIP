@@ -3,7 +3,6 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const host = "http://13.124.182.223"
-// const host = "http://3.34.161.181"
 
 export async function uploadImg(data) {
     try {
@@ -37,6 +36,27 @@ export async function postBook(data, navigation) {
         alert('게시글을 올릴 수 없어요:(')
     }
 }
+
+export async function postBookWithFormData(data, navigation) {
+    const token = await AsyncStorage.getItem("session")
+    try {
+        await axios({
+            method: "POST",
+            url: host + '/api/townbooks',
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                token: token
+            },
+            data: data,
+        });
+        alert('게시글을 업로드했어요!')
+        navigation.pop();
+    } catch (err) {
+        console.log(err)
+        alert('게시글을 올릴 수 없어요:(')
+    }
+}
+
 
 export async function postDetail(id) {
     try {
